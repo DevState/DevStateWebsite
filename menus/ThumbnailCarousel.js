@@ -57,7 +57,7 @@
 	ThumbnailCarousel.prototype.setImages = function(images){
 		this.images = images;
 		this.setFullThumbSize(images[0]);
-		this.radius = this.width / 2 - this.fullThumbSize.width;
+		this.radius = this.width / 2 - this.fullThumbSize.width/2;
 		this.segmentRadian = SimpleGeometry.PI2 / this.images.length;
 		this.currentIndex = 0;
 		this.firstRender();
@@ -196,7 +196,7 @@
 
 		var arrowHeight = 18;
 		var arrowWidth = 10;
-		var margin = 52;
+		var margin = 5;
 		
 		//left arrow graphic
 		this.context2d.moveTo(this.x + arrowWidth + margin, this.y + this.height/2 );

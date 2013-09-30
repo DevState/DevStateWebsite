@@ -1,0 +1,314 @@
+<!Doctype html>
+<html lang="en" >
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" />
+		<title>Flash To Canvas Workshops</title>
+
+		<style>
+			
+		</style>
+
+		
+		<!-- Common javascript files -->
+		<script type="text/javascript" src="common/SimpleGeometry.js" ></script>
+		<script type="text/javascript" src="common/ImageStore.js" ></script>
+		
+		<script type="text/javascript">
+
+			var blobD = [{x:22 , y:16},{x:111 , y:17},{x:137 , y:42},{x:136 , y:154},{x:110 , y:180},{x:22 , y:179},{x:23 , y:147},{x:38 , y:148},{x:38 , y:49},{x:22 , y:49}];
+			var blobDInner = [{x:72 , y:49},{x:104 , y:50},{x:104 , y:147},{x:72 , y:146}];
+			var blobE = [{x:148 , y:16},{x:263 , y:17},{x:263 , y:65},{x:230 , y:65},{x:230 , y:49},{x:198 , y:49},{x:198 , y:81},{x:229 , y:82},{x:230 , y:114},{x:197 , y:115},{x:197 , y:146},{x:230 , y:148},{x:230 , y:130},{x:263 , y:131},{x:263 , y:180},{x:148 , y:180},{x:148 , y:147},{x:165 , y:147},{x:165 , y:49},{x:149 , y:49}];
+			var blobV = [{x:274 , y:17},{x:337 , y:17},{x:337 , y:49},{x:323 , y:49},{x:340 , y:112},{x:356 , y:49},{x:343 , y:49},{x:342 , y:16},{x:406 , y:17},{x:406 , y:49},{x:389 , y:49},{x:355 , y:180},{x:324 , y:179},{x:291 , y:49},{x:275 , y:49}];
+			var blobS = [{x:442 , y:16},{x:491 , y:17},{x:515 , y:42},{x:515 , y:64},{x:484 , y:64},{x:483 , y:49},{x:451 , y:49},{x:451 , y:81},{x:490 , y:81},{x:515 , y:108},{x:515 , y:108},{x:516 , y:154},{x:490 , y:180},{x:444 , y:179},{x:417 , y:154},{x:417 , y:131},{x:449 , y:132},{x:449 , y:147},{x:481 , y:147},{x:483 , y:115},{x:444 , y:115},{x:417 , y:88},{x:417 , y:42}];
+			var blobT = [{x:527 , y:17},{x:658 , y:16},{x:658 , y:64},{x:626 , y:65},{x:626 , y:49},{x:609 , y:49},{x:609 , y:147},{x:626 , y:147},{x:625 , y:179},{x:560 , y:179},{x:560 , y:148},{x:577 , y:148},{x:576 , y:50},{x:561 , y:50},{x:560 , y:63},{x:528 , y:65}];
+			var blobA = [{x:719 , y:17},{x:752 , y:17},{x:785 , y:147},{x:801 , y:147},{x:801 , y:179},{x:738 , y:179},{x:738 , y:147},{x:751 , y:147},{x:747 , y:131},{x:724 , y:131},{x:718 , y:147},{x:732 , y:147},{x:733 , y:178},{x:670 , y:179},{x:670 , y:147},{x:686 , y:147}];
+			var blobTAInnner = [{x:736 , y:82},{x:739 , y:97},{x:731 , y:98}];
+			var blobT2 = [{x:812 , y:15},{x:943 , y:16},{x:943 , y:66},{x:912 , y:65},{x:910 , y:48},{x:894 , y:49},{x:894 , y:146},{x:910 , y:147},{x:911 , y:179},{x:845 , y:179},{x:846 , y:148},{x:862 , y:147},{x:862 , y:48},{x:845 , y:49},{x:845 , y:63},{x:812 , y:63}];
+			var blobE2 =  [{x:955 , y:17},{x:1069 , y:16},{x:1069 , y:64},{x:1037 , y:66},{x:1037 , y:49},{x:1005 , y:50},{x:1005 , y:81},{x:1036 , y:81},{x:1037 , y:112},{x:1004 , y:115},{x:1005 , y:147},{x:1037 , y:147},{x:1037 , y:130},{x:1069 , y:130},{x:1069 , y:179},{x:955 , y:180},{x:955 , y:147},{x:971 , y:147},{x:971 , y:50},{x:956 , y:49}];;
+		
+			var originalBlobs = [blobD, blobDInner, blobE, blobV, blobS, blobT, blobA, blobTAInnner, blobT2, blobE2];
+			var blobNames = ["blobD", "blobDInner", "blobE", "blobV", "blobS", "blobT", "blobA", "blobTAInnner", "blobT2", "blobE2"];
+			
+			var horizontalBlobLines = new Array();
+			horizontalBlobLines[0] = [{x:22 , y:16},{x:111 , y:17},{x:148 , y:16},{x:263 , y:17},{x:274 , y:17},{x:337 , y:17},{x:342 , y:16},{x:406 , y:17},{x:442 , y:16},{x:491 , y:17},{x:527 , y:17},{x:658 , y:16},{x:719 , y:17},{x:752 , y:17},{x:812 , y:15},{x:943 , y:16},{x:955 , y:17},{x:1069 , y:16}];
+			horizontalBlobLines[1] = [{x:22 , y:49},{x:38 , y:49},{x:72 , y:49},{x:104 , y:50},{x:149 , y:49},{x:165 , y:49},{x:198 , y:49},{x:230 , y:49},{x:275 , y:49},{x:291 , y:49},{x:323 , y:49},{x:337 , y:49},{x:343 , y:49},{x:356 , y:49},{x:389 , y:49},{x:406 , y:49},{x:451 , y:49},{x:483 , y:49},{x:561 , y:50},{x:576 , y:50},{x:609 , y:49},{x:626 , y:49},{x:845 , y:49},{x:862 , y:48},{x:894 , y:49},{x:910 , y:48},{x:956 , y:49},{x:971 , y:50},{x:1005 , y:50},{x:1037 , y:49}];
+			horizontalBlobLines[2] = [{x:230 , y:65},{x:263 , y:65},{x:484 , y:64},{x:515 , y:64},{x:528 , y:65},{x:560 , y:63},{x:626 , y:65},{x:658 , y:64},{x:812 , y:63},{x:845 , y:63},{x:912 , y:65},{x:943 , y:66},{x:1037 , y:66},{x:1069 , y:64}];
+			horizontalBlobLines[3] = [{x:198 , y:81},{x:229 , y:82},{x:451 , y:81},{x:490 , y:81},{x:1005 , y:81},{x:1036 , y:81}];
+			horizontalBlobLines[4] = [{x:197 , y:115},{x:230 , y:114},{x:340 , y:112},{x:444 , y:115},{x:483 , y:115},{x:1004 , y:115},{x:1037 , y:112}];
+			horizontalBlobLines[5] = [{x:230 , y:130},{x:263 , y:131},{x:417 , y:131},{x:449 , y:132},{x:724 , y:131},{x:747 , y:131},{x:1037 , y:130},{x:1069 , y:130}];
+			horizontalBlobLines[6] = [{x:23 , y:147},{x:38 , y:148},{x:72 , y:146},{x:104 , y:147},{x:148 , y:147},{x:165 , y:147},{x:197 , y:146},{x:230 , y:148},{x:449 , y:147},{x:481 , y:147},{x:560 , y:148},{x:577 , y:148},{x:609 , y:147},{x:626 , y:147},{x:670 , y:147},{x:686 , y:147},{x:718 , y:147},{x:732 , y:147},{x:738 , y:147},{x:751 , y:147},{x:846 , y:148},{x:862 , y:147},{x:894 , y:146},{x:910 , y:147},{x:955 , y:147},{x:971 , y:147},{x:1005 , y:147},{x:1037 , y:147}];
+			horizontalBlobLines[7] = [{x:22 , y:179},{x:110 , y:180},{x:148 , y:180},{x:263 , y:180},{x:324 , y:179},{x:355 , y:180},{x:444 , y:179},{x:490 , y:180},{x:560 , y:179},{x:625 , y:179},{x:670 , y:179},{x:733 , y:178},{x:738 , y:179},{x:801 , y:179},{x:845 , y:179},{x:911 , y:179},{x:955 , y:180},{x:1069 , y:179}];
+			
+			var imageStore;
+			var canvas;
+			var context2d;
+			
+			function init(){
+				//console.log("init()");
+				//setUpClickCapture();
+				//setUpCaptureHorizontalLinePoints();
+				
+				createCanvas();
+				//renderHorizontalBlobLines();
+				setInterval(transformAndRenderLogo,2000);
+				transformAndRenderLogo();
+			}
+			
+			var copiedBlobs;
+			
+			function transformAndRenderLogo(){
+				context2d.clearRect(0,0,canvas.width, canvas.height);
+				copiedBlobs = copyBlobs(originalBlobs);
+				transformLinesToOval(copiedBlobs);
+				renderBlobs(copiedBlobs);			
+			}
+			
+			
+			//========================:: TRANSFORM METHODS ::===============================			
+			
+			function transformLinesToOval(blobs){
+				var center = new SimpleGeometry.Point(550,10);
+				var hRadius = 600+Math.random()*500;
+				var vIncrement = 5+Math.random()*15;
+				
+				context2d.fillStyle = "#00FF00";
+				//do not transform top and bottom lines
+				var line, x, y, radian, point;
+				for(var i=1; i<horizontalBlobLines.length-1; i++){
+					line = horizontalBlobLines[i];
+					vRadius = line[0].y-center.y + vIncrement;
+					for(var j=0; j<line.length; j++){
+					
+						point = findClosestPoint(line[j].x,line[j].y, blobs);
+												
+						//x = center.x + Math.cos(radian) * hRadius;
+						//x - center.x = Math.cos(radian) * hRadius;
+						//(x - center.x)/hRadius = Math.cos(radian)
+						radian  = Math.acos((point.x - center.x) / hRadius);
+						point.y = center.y + Math.sin(radian) * vRadius;
+						
+					}
+					
+				}
+				
+			}
+			
+			
+			//========================:: RENDER METHODS ::===============================
+			
+			function renderHorizontalBlobLines(){
+				var line;
+				context2d.fillStyle = "#FF0000";
+				for(var i=0; i<horizontalBlobLines.length; i++){
+					line = horizontalBlobLines[i];
+					for(var j=0; j<line.length; j++){
+						context2d.fillRect(line[j].x, line[j].y, 3 ,3);
+					}
+				}
+			}
+			
+			function renderBlobs(blobs){
+								
+				context2d.strokeStyle = "#000000";
+				context2d.lineWidth = 3;
+				
+				context2d.shadowColor = "#AAAAAA";
+								
+				for(var i=0; i<blobs.length; i++){
+					renderBlob(blobs[i], i);
+				}
+			}
+			
+			function getBlobFillStyle(index){
+				if(index ==1 || index==7){
+					return "#FFFFFF";
+				}
+				var gradient = context2d.createLinearGradient(0, 0, 0, canvas.height);
+				gradient.addColorStop(0, "#CCCCFF");
+				gradient.addColorStop(1, "#000044");
+				return gradient;
+			}
+			
+			function renderBlob(blob, index){
+				context2d.beginPath();
+				context2d.moveTo(blob[0].x, blob[0].y);
+				
+				context2d.fillStyle = getBlobFillStyle(index);
+				
+				//render lines
+				for (var i = 1; i < blob.length; i++) {
+					context2d.lineTo(blob[i].x, blob[i].y);
+				}
+				context2d.lineTo(blob[0].x, blob[0].y);
+				
+				context2d.shadowOffsetX = 3;
+				context2d.shadowOffsetY = 3;
+				context2d.shadowBlur    = 3;
+
+				context2d.fill();
+				
+				context2d.shadowOffsetX = 0;
+				context2d.shadowOffsetY = 0;
+				context2d.shadowBlur    = 0;
+				context2d.stroke();
+				context2d.closePath();
+			}
+			
+			
+			
+			
+			
+			
+			//========================:: RECORD LINES FROM RENDERED BLOBS ::===============================
+			
+			function setUpCaptureHorizontalLinePoints(){
+				canvas.addEventListener("click", function(event){canvasHLClickHandler(event)}, false);//"mousedown"
+				rawBlobLines = new Array();
+				startNewBlobLine();
+			}
+			
+			function outputBlobLines(){
+				var code = "";
+				for(var i=0; i<rawBlobLines.length; i++){
+					code+= ("\t\t\tvar line"+i+" = ["+rawBlobLines[i]+"];\n");
+				}
+				alert(code);
+			}
+			
+			var rawBlobLines;
+			function startNewBlobLine(){
+				if(currentBlobLine){
+					rawBlobLines[rawBlobLines.length] = currentBlobLine;
+					outputBlobLines();
+				}
+				currentBlobLine = new Array();
+			}
+			
+			var currentBlobLine;
+			
+			function canvasHLClickHandler(event){
+				var x = event.pageX - this.canvas.offsetLeft;
+				var y = event.pageY - this.canvas.offsetTop;
+				if(y > 300){
+					startNewBlobLine();
+					return;
+				}
+				var matchingPoint = findClosestPoint(x,y, originalBlobs);
+				if(matchingPoint){
+					currentBlobLine.push(matchingPoint);
+				}else{
+					alert("no matching point found, try again.");
+				}
+			}
+			
+			function findClosestPoint(x,y,blobs){
+				var point;
+				var blob;
+				var target = new SimpleGeometry.Point(x,y);
+				var point = new SimpleGeometry.Point();
+				for (var i = 0; i < blobs.length; i++) {
+					blob = blobs[i];
+					for (var j = 0; j < blob.length; j++) {
+						point.x = blob[j].x;
+						point.y = blob[j].y;
+						if(SimpleGeometry.distanceBetweenTwoPoints(point,target) < 4){
+							//return point;
+							return blob[j];
+						}
+					}
+				}
+			}
+			
+			function copyBlobs(blobs){
+				var blobsCopy  = new Array();
+				var point;
+				var blob;
+				var blobCopy;
+				for (var i = 0; i < blobs.length; i++) {
+					blob = blobs[i];
+					blobCopy = new Array();
+					for (var j = 0; j < blob.length; j++) {
+						blobCopy[j] = {x: blob[j].x,  y: blob[j].y};
+					}
+					blobsCopy[i] = blobCopy;
+				}
+				return blobsCopy;
+			}
+
+			
+			
+			
+			
+			
+			
+			//========================:: RECORD POINTS FROM IMAGE ::===============================
+			
+			function setUpClickCapture(){
+				imageStore = new ImageStore();
+				imageStore.loadImages(["assets/test/logo.jpg"], function(event){imageStoreLoadComplete()});
+			}
+			
+			function createCanvas(){
+				canvas = document.createElement('canvas');
+				canvas.width = 1100; 
+				canvas.height = 400;
+				context2d = this.canvas.getContext("2d");
+				canvas.style.position = "absolute";
+				context2d.fillStyle = "#CCCCCC";
+				context2d.fillRect(0,300,1100,100);
+				context2d.fillStyle = "#FFFFFF";
+				document.body.appendChild(canvas);
+			}
+		
+			function imageStoreLoadComplete(){
+				//console.log("imageStoreLoadComplete()");
+				createCanvas();
+				canvas.addEventListener("click", function(event){canvasClickHandler(event)}, false);
+				context2d.drawImage(imageStore.images[0],0,0);
+				rawBlobs = new Array();
+				startNewBlob();
+			}
+			
+			function outputBlobs(){
+				var code = "";
+				for(var i=0; i<rawBlobs.length; i++){
+					code+= ("\t\t\tvar "+blobNames[i]+" = ["+rawBlobs[i]+"];\n");
+				}
+				alert(code);
+			}
+			
+			var rawBlobs;
+			function startNewBlob(){
+				if(currentBlob){
+					rawBlobs[rawBlobs.length] = currentBlob;
+					outputBlobs();
+				}
+				currentBlob = new Array();
+			}
+			
+			var currentBlob;
+			function canvasClickHandler(event){
+				var x = event.pageX - this.canvas.offsetLeft;
+				var y = event.pageY - this.canvas.offsetTop;
+				if(y > 300){
+					startNewBlob();
+					return;
+				}
+				var point = new SimpleGeometry.Point(x,y);
+				currentBlob.push(point);
+			}
+			
+			document.onreadystatechange = function() {
+				if (document.readyState === 'complete'){
+					init();
+				}
+			}
+			
+		</script>
+		
+	</head>
+	<body >
+
+	</body>
+</html>

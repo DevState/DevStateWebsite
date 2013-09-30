@@ -31,6 +31,11 @@
 		this.document.body.appendChild(this.canvas);//later on this should be a div, the created canvas should adopt the sizes of the div
 	}
 	
+	//override in demos where multiple canvases are used, return canvases in correct stack z-sort order
+	AbstractDemo.prototype.getCaptureCanvases = function(){
+		return [this.canvas];
+	}
+	
 	AbstractDemo.prototype.run = function(){
 		this.clear();	
 	}
@@ -109,7 +114,7 @@
 	//================::PIE CHART::===================
 	
 	PieChartDemo = function(x, y, width, height, document){
-		AbstractDemo.call(this,0, 0, 400, 400, document); //call super constructor.
+		AbstractDemo.call(this, x, y, width, height, document); //call super constructor.
 		this.toolTip = "Click link to create random data, click pie chart to open/close";
 	}
 	
@@ -119,16 +124,17 @@
 	
 	PieChartDemo.prototype.createPieChart = function(){
 		this.showReflection = true;
-		return new PieChart(this.x+30,this.y+30,this.width/2-60,this.height/2-60);
+		var pie = new PieChart(this.x, this.y, this.width, this.height*.6, 10);
+		this.reflectionCaptureRect = new SimpleGeometry.Rectangle(pie.center.x-pie.radius, pie.center.y-pie.radius, pie.radius*2, pie.radius*2);
+		return pie;
 	}
 	
 	PieChartDemo.prototype.run = function(){
-		this.pieChart = this.createPieChart()
-		this.reflection = new Image();
+		this.pieChart = this.createPieChart();
 		var _this = this;
 		this.canvas.addEventListener("click", function(event){_this.canvasClickHandler(event)}, false);//"mousedown"
-		this.pieChartOpen=true;
-		this.animator=new UnitAnimator(1000,20,function() {_this.updatePieChart()} , function(event){_this.updatePieChartComplete(1);});
+		this.pieChartOpen = true;
+		this.animator = new UnitAnimator(1000, 20, function() {_this.updatePieChart()});
 		this.animator.start();
 	}
 	
@@ -141,36 +147,26 @@
 	
 	PieChartDemo.prototype.renderPieChart = function(animationPercent){
 		this.clear();
-		this.pieChart.render(this.context2d,animationPercent);
+		this.pieChart.render(this.context2d, animationPercent);
 		if(!this.showReflection){
 			return;
 		}
-		ImageEffects.renderReflectionImage(this.reflection, this.canvas, this.width,this.height);
-		this.context2d.drawImage(this.reflection,0,-57);	
+		ImageEffects.renderReflection(this.canvas, this.reflectionCaptureRect);
 	}
-	
-	PieChartDemo.prototype.updatePieChartComplete = function(animationPercent){
-		var _this = this;
-		setTimeout(function(){_this.renderPieChart(animationPercent)},50);
-	}
-	
+		
 	PieChartDemo.prototype.canvasClickHandler = function(event){
 		if(this.animator.isAnimating()){
 			return;
 		}
 		var _this = this;
 		var callback = this.pieChartOpen ? function(event){_this.updatePieChartReverse();} : function(event){_this.updatePieChart();}
-		var callbackComplete = this.pieChartOpen ? function(event){_this.updatePieChartComplete(0);} : function(event){_this.updatePieChartComplete(1);}
-		this.animator.reset(1000,20,callback, callbackComplete );
+		this.animator.reset(1000,20,callback );
 		this.animator.start();
-		this.pieChartOpen=!this.pieChartOpen;
+		this.pieChartOpen =!this.pieChartOpen;
 	}
-	
-	
 	
 	PieChartDemo.prototype.customTearDown = function(){
 		delete this.pieChart;
-		delete this.reflection;
 	}
 	
 	window.PieChartDemo = PieChartDemo;
@@ -184,7 +180,7 @@
 	//================::DONUT CHART::===================
 	
 	DonutChartDemo = function(x, y, width, height, document){
-		PieChartDemo.call(this,0, 0, 400, 400, document); //call super constructor.
+		PieChartDemo.call(this, x, y, width, height, document); //call super constructor.
 		this.toolTip = "Click link to create random data, click donut chart to open/close";
 	}
 	
@@ -193,10 +189,10 @@
 	DonutChartDemo.prototype.constructor = PieChartDemo;
 	
 	DonutChartDemo.prototype.createPieChart = function(){
-		//console.log("DonutChartDemo.prototype.createPieChart()");
-		return new DonutChart(this.x+30,this.y+30,this.width-60,this.height-60,.3);
-		//return new DonutChart(this.x+35,this.y+30,this.width/2-60,this.height/2-60,.3);
 		this.showReflection = false;
+		//console.log("DonutChartDemo.prototype.createPieChart()");
+		return new DonutChart(this.x,this.y,this.width,this.height);
+		//return new DonutChart(this.x+35,this.y+30,this.width/2-60,this.height/2-60,.3);
 	}
 	
 	window.DonutChartDemo = DonutChartDemo;
@@ -210,7 +206,7 @@
 	//================::LINE CHART::===================
 	
 	LineChartDemo = function(x, y, width, height, document){
-		AbstractDemo.call(this,0, 0, 600, 300, document); //call super constructor.
+		AbstractDemo.call(this, x, y, width, height, document); //call super constructor.
 		this.toolTip = "Click link to create random data, click line chart to open/close";
 	}
 	
@@ -219,7 +215,7 @@
 	LineChartDemo.prototype.constructor = AbstractDemo;
 	
 	LineChartDemo.prototype.run = function(){
-		this.lineChart = new LineChart(10, 10, this.width-10, this.height-10);
+		this.lineChart = new LineChart(this.x, this.y, this.width, this.height);
 		var _this = this;
 		this.canvas.addEventListener("click", function(event){_this.canvasClickHandler(event)}, false);//"mousedown"
 		this.lineChartOpen = true;
@@ -260,7 +256,7 @@
 	//================::BAR CHART::===================
 	
 	BarChartDemo = function(x, y, width, height, document){
-		AbstractDemo.call(this,0, 0, 600, 300, document); //call super constructor.
+		AbstractDemo.call(this, x, y, width, height, document); //call super constructor.
 		this.toolTip = "Click link to create random data, click bar chart to open/close";
 	}
 	
@@ -269,7 +265,7 @@
 	BarChartDemo.prototype.constructor = AbstractDemo;
 	
 	BarChartDemo.prototype.run = function(){
-		this.barChart = new BarChart(10, 10, this.width-10, this.height-10);
+		this.barChart = new BarChart(this.x, this.y, this.width, this.height);
 		var _this = this;
 		this.canvas.addEventListener("click", function(event){_this.canvasClickHandler(event)}, false);//"mousedown"
 		this.barChartOpen = true;
@@ -310,7 +306,7 @@
 	//================::BASIC SLIDESHOW::===================
 
 	BasicSlideShowDemo = function(x, y, width, height, document){
-		AbstractDemo.call(this,0, 0, 400, 400, document); //call super constructor.
+		AbstractDemo.call(this, x, y, width, height, document); //call super constructor.
 		this.toolTip = "Click left or right arrows to slide to next/previous image";
 	}
 	
@@ -319,7 +315,8 @@
 	BasicSlideShowDemo.prototype.constructor = AbstractDemo;
 	
 	BasicSlideShowDemo.prototype.run = function(){
-		this.basicSlideShow = new BasicSlideShow(10, 10, this.width-10, this.height-10, this.context2d);
+		//this.basicSlideShow = new BasicSlideShow(10, 10, this.width-10, this.height-10, this.context2d);
+		this.basicSlideShow = new BasicSlideShow(this.x, this.y, this.width, this.height, this.context2d);
 		var _this = this;
 		this.canvas.addEventListener("click", function(event){_this.canvasClickHandler(event)}, false);//"mousedown"
 		var urls=new Array(
@@ -373,23 +370,14 @@
 	//================::THUMBNAIL CAROUSEL::===================
 
 	ThumbnailCarouselDemo = function(x, y, width, height, document){
-		AbstractDemo.call(this,0, 0, 450, 450, document); //call super constructor.
+		AbstractDemo.call(this, x, y, width, height, document); //call super constructor.
 		this.toolTip = "Click arrows to rotate carousel, click active thumb to load photo";
 	}
 	
 	//subclass extends superclass
 	ThumbnailCarouselDemo.prototype = Object.create(AbstractDemo.prototype);
 	ThumbnailCarouselDemo.prototype.constructor = AbstractDemo;
-	
-	ThumbnailCarouselDemo.prototype.preSetUp = function(){
-		this.imageCanvas = document.createElement('canvas');
-		this.imageCanvas.width = this.width; 
-		this.imageCanvas.height = this.height;
-		this.imageCanvasContext = this.imageCanvas.getContext("2d");
-		this.imageCanvas.style.position = "absolute";
-		this.document.body.appendChild(this.imageCanvas);
-	}
-	
+		
 	ThumbnailCarouselDemo.prototype.run = function(){
 		var _this = this;
 		this.canvas.addEventListener("click", function(event){_this.canvasClickHandler(event)}, false);//"mousedown"
@@ -413,14 +401,9 @@
 	
 	ThumbnailCarouselDemo.prototype.useLoadedImageStoreImages = function(){
 		//console.log("ThumbnailCarouselDemo.useLoadedImageStoreImages()");
-		this.thumbnailCarousel = new ThumbnailCarousel(	0, this.height - this.imageStore.images[0].height-35, 
+		this.thumbnailCarousel = new ThumbnailCarousel(	this.x, this.y + this.height/2 - this.imageStore.images[0].height/2, 
 														this.width, this.imageStore.images[0].height+10, this.context2d);
 		this.thumbnailCarousel.setImages(this.imageStore.images);
-		
-		this.ImageEffectFader = new ImageEffectFader(0, 0, this.width, this.height, this.imageCanvasContext);
-		
-		var source = this.imageStore.images[0].src.split("/");
-		this.ImageEffectFader.setImage( "assets/instagramPhotos/"+source[source.length-1] );
 	}
 	
 	ThumbnailCarouselDemo.prototype.canvasClickHandler = function(event){
@@ -430,8 +413,7 @@
 		if(this.thumbnailCarousel.hotSpot.containsPoint(point)){
 			var image = this.thumbnailCarousel.getCurrentImage();
 			var source = image.src.split("/");
-			//console.log(source[source.length-1]);
-			this.ImageEffectFader.setImage( "assets/instagramPhotos/"+source[source.length-1] );
+			console.log(source[source.length-1]);
 			return;
 		}
 		if(this.thumbnailCarousel.containsPoint(point)){
@@ -445,9 +427,6 @@
 	
 	ThumbnailCarouselDemo.prototype.customTearDown = function(){
 		delete this.thumbnailCarousel;
-		this.document.body.removeChild(this.imageCanvas);
-		delete this.imageCanvasContext;
-		delete this.imageCanvas;
 	}
 	
 	window.ThumbnailCarouselDemo = ThumbnailCarouselDemo;
@@ -457,11 +436,58 @@
 	
 	
 	
+	//================::IMAGE FADER::===================	
+	
+	ImageFaderDemo = function(x, y, width, height, document){
+		AbstractDemo.call(this, x, y, width, height, document); //call super constructor.
+		this.toolTip = "Click image to fade effect random image";
+	}
+	//subclass extends superclass
+	ImageFaderDemo.prototype = Object.create(AbstractDemo.prototype);
+	ImageFaderDemo.prototype.constructor = AbstractDemo;	
+	
+	ImageFaderDemo.prototype.run = function(){
+		this.urls=new Array(
+			"assets/instagramPhotos/paperWeight.jpg",
+			"assets/instagramPhotos/peacock.jpg",
+			"assets/instagramPhotos/rufus.jpg",
+			"assets/instagramPhotos/sakBeer.jpg",
+			"assets/instagramPhotos/SakEU.jpg",
+			"assets/instagramPhotos/sakirisChips.jpg",
+			"assets/instagramPhotos/silverTower.jpg",
+			"assets/instagramPhotos/oneWay.jpg",
+			"assets/instagramPhotos/botaniqueLady.jpg",
+			"assets/instagramPhotos/snowBallLantern.jpg",
+			"assets/instagramPhotos/springSnow.jpg",
+			"assets/instagramPhotos/Keon0FucksGiven.jpg",
+			"assets/instagramPhotos/sunny.jpg");
+		var _this = this;
+		this.canvas.addEventListener("click", function(event){_this.canvasClickHandler(event)}, false);//"mousedown"
+		this.ImageEffectFader = new ImageEffectFader(this.x, this.y, this.width, this.height, this.context2d);
+		this.showRandomImage();
+	}
+
+	ImageFaderDemo.prototype.showRandomImage = function(){
+		this.ImageEffectFader.setImage( this.urls[Math.floor(Math.random()*this.urls.length)] );	
+	}
+	
+	ImageFaderDemo.prototype.canvasClickHandler = function(event){
+		this.showRandomImage();
+	}
+	
+	ImageFaderDemo.prototype.customTearDown = function(){
+		delete this.ImageEffectFader;
+	}
+	
+	window.ImageFaderDemo = ImageFaderDemo;
+	
+	
+	
 	
 	//================::WANDERER::===================
 	
 	WandererDemo = function(x, y, width, height, document){
-		AbstractDemo.call(this,0, 0, 450, 400, document); //call super constructor.
+		AbstractDemo.call(this, x, y, width, height, document); //call super constructor.
 		this.toolTip = "The two colors are complementary";
 	}
 	
@@ -488,7 +514,9 @@
 		var _this = this;
 
 		//TODO : Move to abstract demo
-		this.wanderer = new Wanderer(new SimpleGeometry.Circle(this.canvas.width/2, this.canvas.height/2, Math.min(this.canvas.width, this.canvas.height) / 2 - 80) );
+		this.wanderer = new Wanderer(new SimpleGeometry.Circle(	this.x + this.canvas.width/2, 
+																this.y + this.canvas.height/2, 
+																Math.min(this.canvas.width, this.canvas.height) / 2 - 80) );
 		this.wanderer.start();
 		
 		this.colorWanderer = new Wanderer(new SimpleGeometry.Circle(252,255,200));
@@ -544,7 +572,7 @@
 	//================::BLOCK SET ANIMATOR::===================
 
 	BlockSetAnimatorDemo = function(x, y, width, height, document){
-		AbstractDemo.call(this,0, 0, 600, 400, document); //call super constructor.
+		AbstractDemo.call(this, x, y, width, height, document); //call super constructor.
 		this.toolTip = "Click on canvas for a new random animation";
 	}
 	
@@ -553,13 +581,10 @@
 	BlockSetAnimatorDemo.prototype.constructor = AbstractDemo;
 	
 	BlockSetAnimatorDemo.prototype.run = function(){
-		this.intro = true;
-		this.blockSetAnimator = new BlockSetAnimator(50,this.canvas.height/2);
 		var _this = this;
 		this.canvas.addEventListener("click", function(event){_this.canvasClickHandler(event)}, false);//"mousedown"
 		var urls=new Array(
 			"assets/instagramThumbs/paperWeight.jpg",
-			"assets/instagramThumbs/rufus.jpg",
 			"assets/instagramThumbs/sakBeer.jpg",
 			"assets/instagramThumbs/SakEU.jpg",
 			"assets/instagramThumbs/sakirisChips.jpg");
@@ -569,6 +594,8 @@
 		
 	BlockSetAnimatorDemo.prototype.useLoadedImageStoreImages = function(){
 		//console.log("BlockSetAnimatorDemo.useLoadedImageStoreImages()",this.imageStore.images.length);
+		this.intro = true;
+		this.blockSetAnimator = new BlockSetAnimator(this.x, this.y+this.height/2 - this.imageStore.images[0].height/2, this.width, this.height);
 		this.blockSetAnimator.setImages(this.imageStore.images);
 		this.runRandomAnimation();
 	}
@@ -641,7 +668,7 @@
 	//================::TEXT EFFECT::===================
 
 	TextEffectDemo = function(x, y, width, height, document){
-		AbstractDemo.call(this,0, 0, 600, 400, document); //call super constructor.
+		AbstractDemo.call(this, x, y, width, height, document); //call super constructor.
 		this.toolTip = "Click on canvas for a new random animation";
 	}
 	
@@ -651,11 +678,11 @@
 	
 	TextEffectDemo.prototype.run = function(){
 		this.intro = true;
-		this.blockSetAnimator = new BlockSetAnimator(50,this.canvas.height/2);
 		var _this = this;
 		this.canvas.addEventListener("click", function(event){_this.canvasClickHandler(event)}, false);//"mousedown"
 		var textChopper = new TextChopper();
 		var images = textChopper.createImagesFromString(this.document,"CANVAS",80, "#AAAAFF", "#000044");
+		this.blockSetAnimator = new BlockSetAnimator( this.x , this.y + this.height/2 - images[0].height/2, this.width, this.height);
 		this.blockSetAnimator.setImages(images);
 		this.runRandomAnimation();
 	}

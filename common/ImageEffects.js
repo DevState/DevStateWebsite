@@ -135,40 +135,45 @@
 		return effect(image, width, height);
 	}
 	
-	
-	ImageEffects.renderReflectionImage = function(image, targetCanvas, width, height, r,b,g){
+	//captureRect must contain the properties x, y, width, height
+	ImageEffects.renderReflection = function(canvas, captureRect, space, r,b,g){
+		if(!space){
+			space = 5;
+		}
 		if(!r){
 			r,g,b = "0xFF";
 		}
-		
-		image.width = targetCanvas.width;
-		image.height = targetCanvas.height;
-		image.src = targetCanvas.toDataURL();
 
-		/*
-		var gradient = context.createLinearGradient(0, 0, 0, height);// linear gradient from start to end of line
-		gradient.addColorStop(0, SimpleGeometry.getRgbaStyleString(r,g,b,1));
-		gradient.addColorStop(1, SimpleGeometry.getRgbaStyleString(r,g,b,0));
-		context.fillRect(0,0,width,height);
-		context.fillStyle = gradient;
-		*/
-		
-		// reflect image
-		var context = targetCanvas.getContext("2d");
-		context.translate(0, height);
+		context = canvas.getContext("2d");
+		//move and flip vertically
+		context.translate(captureRect.x, captureRect.y + captureRect.height*2 + space);
 		context.scale(1, -1);
-		context.drawImage(image, 0, 0, 200, 100);
-
-		// add gradient
-		var grad = context.createLinearGradient(0, 0, 0, targetCanvas.height);
-		grad.addColorStop(0.3, 'rgb(255,255,255)');
-		grad.addColorStop(0.7, 'rgba(255,255,255,0)');
-
-		context.fillStyle = grad;
-		context.translate(0,0);
-		context.fillRect(0, 0, targetCanvas.width, targetCanvas.height);
 		
+		context.drawImage(	canvas, captureRect.x, captureRect.y, captureRect.width, captureRect.height, 
+							0, 0, captureRect.width, captureRect.height);//img,sx,sy,swidth,sheight,x,y,width,height
+		
+		SimpleGeometry.setIdentityMatrixToContext(context);
+		
+		var gradient = context.createLinearGradient(captureRect.x, captureRect.y + captureRect.height + space, captureRect.x, captureRect.y + captureRect.height*1.5);
+		gradient.addColorStop(0.1, "rgba(255,255,255,0)");
+		gradient.addColorStop(0.5, "rgba(255,255,255,.7)");
+		gradient.addColorStop(1, "rgb(255,255,255)");
+
+		context.fillStyle = gradient;
+		context.fillRect(captureRect.x, captureRect.y + captureRect.height + space, captureRect.width, captureRect.height);
+			
     }
+	
+	ImageEffects.resizeImageDestructive = function(image, resizeCanvas, width, height){
+		if(!resizeCanvas){
+			resizeCanvas = document.createElement('canvas');
+		}
+		resizeCanvas.width = width;
+		resizeCanvas.height = height;
+		var context = resizeCanvas.getContext("2d");
+		context.drawImage(image,0,0,width,height);
+		image.src = resizeCanvas.toDataURL();
+	}
 	
 	
 	window.ImageEffects=ImageEffects;

@@ -29,12 +29,18 @@
 			
 		</style>
 
+		<!-- Gif Encoder -->
+		<script src="gifEncoder/b64.js"></script>
+		<script src="gifEncoder/LZWEncoder.js"></script>
+		<script src="gifEncoder/NeuQuant.js"></script>
+		<script src="gifEncoder/GIFEncoder.js"></script>
 		
 		<!-- Common javascript files -->
 		<script type="text/javascript" src="common/SimpleGeometry.js" ></script>
 		<script type="text/javascript" src="common/UnitAnimator.js" ></script>
 		<script type="text/javascript" src="common/SimpleLoaderGraphic.js" ></script><!-- TODO : MOVE -->
 		<script type="text/javascript" src="common/ImageStore.js" ></script>
+		<script type="text/javascript" src="common/DemoCaptureTool.js" ></script>
 		<script type="text/javascript" src="common/ImageEffects.js" ></script>
 		<script type="text/javascript" src="common/Wanderer.js" ></script><!-- TODO : MOVE -->
 		<script type="text/javascript" src="common/BlockSetAnimator.js" ></script><!-- TODO : MOVE -->
@@ -57,18 +63,23 @@
 		
 		<!-- Demos -->
 		<script type="text/javascript" src="demos/Demos.js" ></script>
+		
 
 
 		
 		<script type="text/javascript">
 
 			var demos = ["PieChart", "DonutChart", "LineChart", 
-						"BarChart", "BasicSlideShow", "ThumbnailCarousel" ,"Wanderer", 
-						 "BlockSetAnimator", "TextEffect"];
+						"BarChart", "BasicSlideShow", "ThumbnailCarousel" ,"ImageFader", 
+						"Wanderer","BlockSetAnimator", "TextEffect"];
 			var currentDemo;
+			var captureCheckBox;
+			var demoWidth = 400;
+			var demoHeight = 400;
 			
 			function init(){
 				//console.log("init()");
+				captureCheckBox = document.getElementById("captureCheckbox");
 				createDemosMenu();
 				if(!window.location.hash) {
 					return;
@@ -98,10 +109,20 @@
 					currentDemo.tearDown();
 				}
 				//console.log("showDemo() ",demoName+"Demo");
-				currentDemo = new this[demoName+"Demo"](0,0,600,400,document);
+				currentDemo = new this[demoName+"Demo"](0,0,demoWidth,demoHeight,document);
 				currentDemo.run();
 				var toolTip = document.getElementById("toolTip");
 				toolTip.innerHTML = currentDemo.toolTip;
+				if(captureCheckBox.checked){
+					captureDemo();
+				}
+			}
+			
+			function captureDemo(){
+				var captureOutputImage = document.getElementById("captureOutput");
+				console.log(captureOutputImage);
+				var captureTool = new DemoCaptureTool(100, 6000, currentDemo.getCaptureCanvases(), captureOutputImage);
+				captureTool.start();
 			}
 						
 			document.onreadystatechange = function() {
@@ -114,6 +135,7 @@
 		
 	</head>
 	<body >
+		<img id="captureOutput" >
 		<h1 style="font-family: ArchivoBlack;" >Flash To Canvas Workshops</h1>
 		<!--<p>
 Canvas centric.  There are endless libraries, yet without a knowledge of javascript you can get stuck.
@@ -134,6 +156,9 @@ Days of flash websites are long gone. On mobile it's all text and simple gesture
 		<nav id="demosNavigation" style="font-family: sans-serif;">
 				<ul id="demosList" />
 		</nav>	
-		<p id="toolTip" style="font-family: sans-serif; color:#FF5555; " />
+		<span>
+			<input type="checkbox"  id="captureCheckbox" >capture<br>
+			<p id="toolTip" style="font-family: sans-serif; color:#FF5555; " />
+		</span>
 	</body>
 </html>

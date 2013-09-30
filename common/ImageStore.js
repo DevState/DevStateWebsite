@@ -42,7 +42,9 @@
 		//console.log("ImageStore.prototype.loadNextImage() : ",this.urls[this.currentLoadIndex]);
 		var image = new Image();
 		var _this = this;
-		image.onload = function(){_this.imageLoadComplete()};
+		image.onload = function(){
+			_this.imageLoadComplete();
+		};
 
 		var url = this.urls[this.currentLoadIndex]
 		image.onerror = function(){
@@ -55,6 +57,9 @@
 	
 	ImageStore.prototype.imageLoadComplete = function(){
 		//console.log("ImageStore.imageLoadComplete()");
+		for(var i=0; i<this.images.length; i++){
+			this.images[i].onload = undefined;
+		}
 		if(this.updateCallback != undefined){
 			this.updateCallback();
 		}

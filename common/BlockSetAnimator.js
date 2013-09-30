@@ -3,7 +3,8 @@
 
 (function (window){
 	
-	BlockSetAnimator=function(x,y){
+	//width and height are used for sizing/scaling to fit.
+	BlockSetAnimator=function(x, y, width, height){
 		SimpleGeometry.Point.call(this,x,y); //call super constructor.
 		this.easingFunction = UnitAnimator.easeOutSine;
 		this.animator = new UnitAnimator(1000,20);
@@ -15,6 +16,9 @@
 	BlockSetAnimator.prototype.constructor = SimpleGeometry.Point;
 		
 	BlockSetAnimator.prototype.frameRate = 20;
+	BlockSetAnimator.prototype.margin = 0;
+	//include possiblitity for alignement (centered by default)
+	//also set widths and heights
 
 	BlockSetAnimator.prototype.intervalId ;//make private
 

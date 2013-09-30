@@ -91,7 +91,7 @@
 	}
 	
 	SimpleGeometry.Point.prototype.toString=function(){
-		return "Point{x:"+this.x+" , y:"+this.y+"}";
+		return "{x:"+this.x+" , y:"+this.y+"}";
 	}
 	
 	SimpleGeometry.distanceBetweenTwoPoints=function( point1, point2 ){

@@ -52,13 +52,17 @@
 	//values is a multi dimentional Array with values
 	BasicSlideShow.prototype.setImages=function(images){
 		this.images = images;
+		var resizeCanvas = document.createElement('canvas');
+		for(var i=0; i<this.images.length; i++){
+			ImageEffects.resizeImageDestructive(this.images[i] , resizeCanvas, this.width , this.height);
+		}
 		this.currentIndex=0;
 		this.skipToIndex(this.currentIndex);
 	}
 
 	BasicSlideShow.prototype.skipToIndex=function(index){
-		//add some fail safes in case sliding is active
-		this.context2d.drawImage(this.images[index],this.x,this.y,this.width,this.height);
+		//add a fail safe in case sliding is active
+		this.context2d.drawImage(this.images[index],this.x,this.y, this.width, this.height);
 		this.currentIndex=index;
 		this.drawArrows();
 	}

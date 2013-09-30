@@ -41,17 +41,21 @@
 		this.intervalId = setInterval(function(){_this.rotate();},this.frameRate);
 	}
 	
+	//TODO : rename to stop
 	SimpleLoaderGraphic.prototype.pause = function(){
 		if(!isNaN(this.intervalId)){
 			clearInterval(this.intervalId);
 		}
+		this.updateHandler = undefined;
 		delete this.intervalId;
 	}
 	
 	SimpleLoaderGraphic.prototype.rotate=function(){
 		this.radian += this.velocity;
 		this.radian = SimpleGeometry.constrainRadianTo2PI(this.radian);
-		this.updateHandler();
+		if(this.updateHandler){
+			this.updateHandler();
+		}
 	}	
 
 	SimpleLoaderGraphic.prototype.linearGradientStart = new SimpleGeometry.Point();
