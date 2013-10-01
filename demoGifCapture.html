@@ -1,0 +1,164 @@
+<!Doctype html>
+<html lang="en" >
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" />
+		<title>DevState : Finest Canvas and WebGL Workshops</title>
+
+		<style>
+		
+			@font-face {
+				font-family: 'ArchivoBlack';
+				src: url('assets/fonts/ArchivoBlack-Regular.otf?') format("opentype");
+			}
+
+			ul{
+				padding: 0px;
+				margin: 0px;
+				max-width: 800px;
+			}
+		
+			li{
+				display:inline;
+				margin: 3px;
+			}
+			p{
+				max-height:80px;
+				max-width:800px;
+			}
+			
+		</style>
+
+		<!-- Gif Encoder -->
+		<script src="gifEncoder/b64.js"></script>
+		<script src="gifEncoder/LZWEncoder.js"></script>
+		<script src="gifEncoder/NeuQuant.js"></script>
+		<script src="gifEncoder/GIFEncoder.js"></script>
+		
+		<!-- Common javascript files -->
+		<script type="text/javascript" src="common/SimpleGeometry.js" ></script>
+		<script type="text/javascript" src="common/UnitAnimator.js" ></script>
+		<script type="text/javascript" src="common/SimpleLoaderGraphic.js" ></script><!-- TODO : MOVE -->
+		<script type="text/javascript" src="common/ImageStore.js" ></script>
+		<script type="text/javascript" src="common/DemoCaptureTool.js" ></script>
+		<script type="text/javascript" src="common/ImageEffects.js" ></script>
+		<script type="text/javascript" src="common/Wanderer.js" ></script><!-- TODO : MOVE -->
+		<script type="text/javascript" src="common/BlockSetAnimator.js" ></script><!-- TODO : MOVE -->
+		
+		<!-- Charting javascript files -->
+		<script type="text/javascript" src="charting/PieChart.js" ></script>
+		<script type="text/javascript" src="charting/ChartBackground.js" ></script>
+		<script type="text/javascript" src="charting/LineChart.js" ></script>
+		<script type="text/javascript" src="charting/BarChart.js" ></script>
+		
+		<!-- Slideshow javascript files -->
+		<script type="text/javascript" src="slideShows/BasicSlideShow.js" ></script>
+		<script type="text/javascript" src="slideShows/ImageEffectFader.js" ></script>
+		
+		<!-- Menu javascript files -->
+		<script type="text/javascript" src="menus/ThumbnailCarousel.js" ></script>
+		
+		<!-- Text Effects javascript files -->
+		<script type="text/javascript" src="textEffects/TextChopper.js" ></script>
+		
+		<!-- Demos -->
+		<script type="text/javascript" src="demos/Demos.js" ></script>
+		
+
+
+		
+		<script type="text/javascript">
+
+			var demos = ["PieChart", "DonutChart", "LineChart", 
+						"BarChart", "BasicSlideShow", "ThumbnailCarousel" ,"ImageFader", 
+						"Wanderer","BlockSetAnimator", "TextEffect"];
+			var currentDemo;
+			var captureCheckBox;
+			var demoWidth = 400;
+			var demoHeight = 400;
+			
+			function init(){
+				//console.log("init()");
+				captureCheckBox = document.getElementById("captureCheckbox");
+				createDemosMenu();
+				if(!window.location.hash) {
+					return;
+				}
+				var demoName = window.location.hash.split("#")[1];
+				if(demos.indexOf(demoName)>-1){
+					showDemo(demoName);
+				}
+			}
+			
+			function createDemosMenu(){
+				var list = document.getElementById("demosList");
+				var li;
+				for(var i = 0 ; i < demos.length; i++){
+					li = document.createElement('li');
+					li.innerHTML = "<a href='#"+demos[i]+"' onclick='demoLinkClickHandler(event)' >"+demos[i]+"</a>";
+					list.appendChild(li);
+				}
+			}
+			
+			function demoLinkClickHandler(event){
+				showDemo(event.target.hash.split("#")[1]);
+			}
+			
+			function showDemo(demoName){
+				if(currentDemo){
+					currentDemo.tearDown();
+				}
+				//console.log("showDemo() ",demoName+"Demo");
+				currentDemo = new this[demoName+"Demo"](0,0,demoWidth,demoHeight,document);
+				currentDemo.run();
+				var toolTip = document.getElementById("toolTip");
+				toolTip.innerHTML = currentDemo.toolTip;
+				if(captureCheckBox.checked){
+					captureDemo();
+				}
+			}
+			
+			function captureDemo(){
+				var captureOutputImage = document.getElementById("captureOutput");
+				console.log(captureOutputImage);
+				var captureTool = new DemoCaptureTool(100, 6000, currentDemo.getCaptureCanvases(), captureOutputImage);
+				captureTool.start();
+			}
+						
+			document.onreadystatechange = function() {
+				if (document.readyState === 'complete'){
+					init();
+				}
+			}
+			
+		</script>
+		
+	</head>
+	<body >
+		<img id="captureOutput" >
+		<h1 style="font-family: ArchivoBlack;" >DevState : Finest Canvas and WebGL Workshops</h1>
+		<!--<p>
+Canvas centric.  There are endless libraries, yet without a knowledge of javascript you can get stuck.
+Tutorials/video trainings don't let you stop and ask questions.
+Seasoned pro, spent over 10 years in the trenches.  A list of valuable "flash tricks" which are applicable to the canvas.
+For Canvas Games.
+Days of flash websites are long gone. On mobile it's all text and simple gestures, we want simple. Yet in apps we expect photorealistic rendering and animation. There is a place for dynamic visual content.
+		</p> 
+		<nav id="siteNavigation">
+				<ul>
+					<li><a href="http://www.sakri.net"  class="navigationLink" >About</a></li>
+					<li><a href="http://www.sakri.net"  class="navigationLink" >Pricing</a></li>
+					<li><a href="http://www.sakri.net"  class="navigationLink" >Availability</a></li>
+					<li><a href="http://www.sakri.net"  class="navigationLink" >Reviews</a></li>
+					<li><a href="http://www.sakri.net"  class="navigationLink" >Contact</a></li>
+				</ul>
+		</nav>	-->
+		<nav id="demosNavigation" style="font-family: sans-serif;">
+				<ul id="demosList" />
+		</nav>	
+		<span>
+			<input type="checkbox"  id="captureCheckbox" >capture<br>
+			<p id="toolTip" style="font-family: sans-serif; color:#FF5555; " />
+		</span>
+	</body>
+</html>

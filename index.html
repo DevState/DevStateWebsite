@@ -1,164 +1,126 @@
-<!Doctype html>
-<html lang="en" >
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" />
-		<title>Flash To Canvas Workshops</title>
 
-		<style>
-		
-			@font-face {
-				font-family: 'ArchivoBlack';
-				src: url('assets/fonts/ArchivoBlack-Regular.otf?') format("opentype");
-			}
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>DevState: Finest Canvas & WebGL workshops</title>
 
-			ul{
-				padding: 0px;
-				margin: 0px;
-				max-width: 800px;
-			}
-		
-			li{
-				display:inline;
-				margin: 3px;
-			}
-			p{
-				max-height:80px;
-				max-width:800px;
-			}
-			
-		</style>
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="-1">	
+<meta name="viewport" content="width=device-width,initial-scale=1">
 
-		<!-- Gif Encoder -->
-		<script src="gifEncoder/b64.js"></script>
-		<script src="gifEncoder/LZWEncoder.js"></script>
-		<script src="gifEncoder/NeuQuant.js"></script>
-		<script src="gifEncoder/GIFEncoder.js"></script>
+<link rel="stylesheet" href="./css/fonts.css">
+<link rel="stylesheet" href="./css/styles.css">
+<script src="./js/h5utils.js"></script>
+
+</head>
+<body bgcolor="#FFFFFF">
+	
+<div id="container">
+	
+	<div id="holder">
+
+	</div>
+	
+	<div id="fontLoader" class="handwriting size2">
 		
-		<!-- Common javascript files -->
-		<script type="text/javascript" src="common/SimpleGeometry.js" ></script>
-		<script type="text/javascript" src="common/UnitAnimator.js" ></script>
-		<script type="text/javascript" src="common/SimpleLoaderGraphic.js" ></script><!-- TODO : MOVE -->
-		<script type="text/javascript" src="common/ImageStore.js" ></script>
-		<script type="text/javascript" src="common/DemoCaptureTool.js" ></script>
-		<script type="text/javascript" src="common/ImageEffects.js" ></script>
-		<script type="text/javascript" src="common/Wanderer.js" ></script><!-- TODO : MOVE -->
-		<script type="text/javascript" src="common/BlockSetAnimator.js" ></script><!-- TODO : MOVE -->
+		<font color="#FFFFFF"> .</font>
 		
-		<!-- Charting javascript files -->
-		<script type="text/javascript" src="charting/PieChart.js" ></script>
-		<script type="text/javascript" src="charting/ChartBackground.js" ></script>
-		<script type="text/javascript" src="charting/LineChart.js" ></script>
-		<script type="text/javascript" src="charting/BarChart.js" ></script>
-		
-		<!-- Slideshow javascript files -->
-		<script type="text/javascript" src="slideShows/BasicSlideShow.js" ></script>
-		<script type="text/javascript" src="slideShows/ImageEffectFader.js" ></script>
-		
-		<!-- Menu javascript files -->
-		<script type="text/javascript" src="menus/ThumbnailCarousel.js" ></script>
-		
-		<!-- Text Effects javascript files -->
-		<script type="text/javascript" src="textEffects/TextChopper.js" ></script>
-		
-		<!-- Demos -->
-		<script type="text/javascript" src="demos/Demos.js" ></script>
-		
+	</div>	
+
+</div>
+
+<div id="subscriber"></div>
 
 
-		
-		<script type="text/javascript">
+<script type="text/javascript">
 
-			var demos = ["PieChart", "DonutChart", "LineChart", 
-						"BarChart", "BasicSlideShow", "ThumbnailCarousel" ,"ImageFader", 
-						"Wanderer","BlockSetAnimator", "TextEffect"];
-			var currentDemo;
-			var captureCheckBox;
-			var demoWidth = 400;
-			var demoHeight = 400;
-			
-			function init(){
-				//console.log("init()");
-				captureCheckBox = document.getElementById("captureCheckbox");
-				createDemosMenu();
-				if(!window.location.hash) {
-					return;
-				}
-				var demoName = window.location.hash.split("#")[1];
-				if(demos.indexOf(demoName)>-1){
-					showDemo(demoName);
-				}
-			}
-			
-			function createDemosMenu(){
-				var list = document.getElementById("demosList");
-				var li;
-				for(var i = 0 ; i < demos.length; i++){
-					li = document.createElement('li');
-					li.innerHTML = "<a href='#"+demos[i]+"' onclick='demoLinkClickHandler(event)' >"+demos[i]+"</a>";
-					list.appendChild(li);
-				}
-			}
-			
-			function demoLinkClickHandler(event){
-				showDemo(event.target.hash.split("#")[1]);
-			}
-			
-			function showDemo(demoName){
-				if(currentDemo){
-					currentDemo.tearDown();
-				}
-				//console.log("showDemo() ",demoName+"Demo");
-				currentDemo = new this[demoName+"Demo"](0,0,demoWidth,demoHeight,document);
-				currentDemo.run();
-				var toolTip = document.getElementById("toolTip");
-				toolTip.innerHTML = currentDemo.toolTip;
-				if(captureCheckBox.checked){
-					captureDemo();
-				}
-			}
-			
-			function captureDemo(){
-				var captureOutputImage = document.getElementById("captureOutput");
-				console.log(captureOutputImage);
-				var captureTool = new DemoCaptureTool(100, 6000, currentDemo.getCaptureCanvases(), captureOutputImage);
-				captureTool.start();
-			}
-						
-			document.onreadystatechange = function() {
-				if (document.readyState === 'complete'){
-					init();
-				}
-			}
-			
-		</script>
+var mailNode = id( 'subscriber' );
+
+function checkEmail( emailAddress ) {
+
+  var sQtext = '[^\\x0d\\x22\\x5c\\x80-\\xff]';
+  var sDtext = '[^\\x0d\\x5b-\\x5d\\x80-\\xff]';
+  var sAtom = '[^\\x00-\\x20\\x22\\x28\\x29\\x2c\\x2e\\x3a-\\x3c\\x3e\\x40\\x5b-\\x5d\\x7f-\\xff]+';
+  var sQuotedPair = '\\x5c[\\x00-\\x7f]';
+  var sDomainLiteral = '\\x5b(' + sDtext + '|' + sQuotedPair + ')*\\x5d';
+  var sQuotedString = '\\x22(' + sQtext + '|' + sQuotedPair + ')*\\x22';
+  var sDomain_ref = sAtom;
+  var sSubDomain = '(' + sDomain_ref + '|' + sDomainLiteral + ')';
+  var sWord = '(' + sAtom + '|' + sQuotedString + ')';
+  var sDomain = sSubDomain + '(\\x2e' + sSubDomain + ')*';
+  var sLocalPart = sWord + '(\\x2e' + sWord + ')*';
+  var sAddrSpec = sLocalPart + '\\x40' + sDomain; // complete RFC822 email address spec
+  var sValidEmail = '^' + sAddrSpec + '$'; // as whole string
+
+  var reValidEmail = new RegExp(sValidEmail);
+
+  if (reValidEmail.test(emailAddress)) {
+    return true;
+  }
+
+  return false;
+  
+}
+
+
+function transfer() {
+
+	var userMail = document.getElementById("mailField").value;
+	
+	if ( checkEmail( userMail ) ) {
+	
+		 var formData = new FormData();
+		 formData.append( 'ml', document.getElementById("mailField").value );
 		
-	</head>
-	<body >
-		<img id="captureOutput" >
-		<h1 style="font-family: ArchivoBlack;" >Flash To Canvas Workshops</h1>
-		<!--<p>
-Canvas centric.  There are endless libraries, yet without a knowledge of javascript you can get stuck.
-Tutorials/video trainings don't let you stop and ask questions.
-Seasoned pro, spent over 10 years in the trenches.  A list of valuable "flash tricks" which are applicable to the canvas.
-For Canvas Games.
-Days of flash websites are long gone. On mobile it's all text and simple gestures, we want simple. Yet in apps we expect photorealistic rendering and animation. There is a place for dynamic visual content.
-		</p> 
-		<nav id="siteNavigation">
-				<ul>
-					<li><a href="http://www.sakri.net"  class="navigationLink" >About</a></li>
-					<li><a href="http://www.sakri.net"  class="navigationLink" >Pricing</a></li>
-					<li><a href="http://www.sakri.net"  class="navigationLink" >Availability</a></li>
-					<li><a href="http://www.sakri.net"  class="navigationLink" >Reviews</a></li>
-					<li><a href="http://www.sakri.net"  class="navigationLink" >Contact</a></li>
-				</ul>
-		</nav>	-->
-		<nav id="demosNavigation" style="font-family: sans-serif;">
-				<ul id="demosList" />
-		</nav>	
-		<span>
-			<input type="checkbox"  id="captureCheckbox" >capture<br>
-			<p id="toolTip" style="font-family: sans-serif; color:#FF5555; " />
-		</span>
-	</body>
+		 var xhr = new XMLHttpRequest();
+		 xhr.open('POST','./subscribe.php');
+		 xhr.onload = function() {
+		 
+			if( this.status == 200 ) {
+				
+			    mailNode.innerHTML = 'SUBSCRIBE & STAY INFORMED:&nbsp;<input type="text" name="eMail" id="mailField" /><a href="javascript:transfer();">&nbsp;Submit.</a>&nbsp;<font color="#FF0000">THANK YOU!</font> ';
+				
+			}
+			
+		 }
+		 xhr.send( formData );	
+	
+	} else {
+		
+		alert( 'You must be kidding! \nThat´s not a valid mailaddress at all...\n;)' );
+	
+	}
+	
+}
+function decorate() {
+
+	mailNode.style.position 	   = 'fixed';
+	mailNode.style.display  	   = 'table-cell';
+	mailNode.style.textAlign       = 'center';	 
+	mailNode.style.verticalAlign   = 'middle';
+	mailNode.style.width    	   = '100%';
+	mailNode.style.height   	   = '20px';
+	mailNode.style.bottom   	   = '14px';
+	mailNode.style.backgroundColor = '#FFFFFF';
+	mailNode.style.zIndex          = 2;
+	
+	mailNode.classList.add('handwriting');
+	mailNode.classList.add('size16');
+	
+	mailNode.innerHTML = 'SUBSCRIBE & STAY INFORMED:&nbsp;<input type="text" name="eMail" id="mailField" /><a href="javascript:transfer();">&nbsp;Submit.</a>';
+}
+
+var readyStateCheckInterval = setInterval( function() {
+    
+	if (document.readyState === "complete") {
+        decorate();
+        clearInterval(readyStateCheckInterval);
+    }
+}, 10);
+
+
+</script>
+
+</body>
 </html>
