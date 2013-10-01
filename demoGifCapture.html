@@ -114,14 +114,40 @@
 				var toolTip = document.getElementById("toolTip");
 				toolTip.innerHTML = currentDemo.toolTip;
 				if(captureCheckBox.checked){
-					captureDemo();
+					if(currentDemo.customCaptureControls){
+						showCustomCaptureButtons(true);					
+					}else{
+						showCustomCaptureButtons(false);
+						captureDemo();
+					}
+				}else{
+					showCustomCaptureButtons(false);				
 				}
+			}
+			
+			function showCustomCaptureButtons(show){
+				document.getElementById("startDemoCaptureButton").disabled = document.getElementById("endDemoCaptureButton").disabled = !show;
+			}
+			
+			function startCaptureDemoHandler(event){
+				var captureOutputImage = document.getElementById("captureOutput");
+				captureTool = new DemoCaptureTool(100, 20000, currentDemo.getCaptureCanvases(), captureOutputImage);
+				currentDemo.startCustomCaptureAnimation();
+				captureTool.start();
+			}
+			
+			function endCaptureDemoHandler(event){
+				captureTool.stop();
+			}
+			
+			function captureDemoPngHandler(event){
+				var captureOutputImage = document.getElementById("capturePngOutput");
+				DemoCaptureTool.capturePng(currentDemo.getCaptureCanvases(), captureOutputImage);
 			}
 			
 			function captureDemo(){
 				var captureOutputImage = document.getElementById("captureOutput");
-				console.log(captureOutputImage);
-				var captureTool = new DemoCaptureTool(100, 6000, currentDemo.getCaptureCanvases(), captureOutputImage);
+				captureTool = new DemoCaptureTool(100, currentDemo.captureDuration, currentDemo.getCaptureCanvases(), captureOutputImage);
 				captureTool.start();
 			}
 						
@@ -135,7 +161,10 @@
 		
 	</head>
 	<body >
-		<img id="captureOutput" >
+		<span>
+			<img id="captureOutput" >
+			<img id="capturePngOutput" >
+		</span>
 		<h1 style="font-family: ArchivoBlack;" >DevState : Finest Canvas and WebGL Workshops</h1>
 		<!--<p>
 Canvas centric.  There are endless libraries, yet without a knowledge of javascript you can get stuck.
@@ -157,7 +186,10 @@ Days of flash websites are long gone. On mobile it's all text and simple gesture
 				<ul id="demosList" />
 		</nav>	
 		<span>
-			<input type="checkbox"  id="captureCheckbox" >capture<br>
+			<input type="checkbox"  id="captureCheckbox" >capture</input>
+			<button type="button" id="startDemoCaptureButton" disabled="true" onclick="startCaptureDemoHandler()">start</button>
+			<button type="button" id="endDemoCaptureButton"  disabled="true" onclick="endCaptureDemoHandler()">stop</button>
+			<button type="button" id="capturePngButton"  onclick="captureDemoPngHandler()">screen shot</button>
 			<p id="toolTip" style="font-family: sans-serif; color:#FF5555; " />
 		</span>
 	</body>

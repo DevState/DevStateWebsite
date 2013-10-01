@@ -6,6 +6,8 @@
 	AbstractDemo = function(x, y, width, height, document){
 		SimpleGeometry.Rectangle.call(this,x,y,width,height); //call super constructor.
 		this.document = document;
+		this.customCaptureControls = false;
+		this.captureDuration = 6000;
 		this.setUpDemo();
 	}
 	
@@ -98,6 +100,10 @@
 	
 	AbstractDemo.prototype.customTearDown = function(){
 		//console.log("AbstractDemo.customTearDown()");
+	}
+	
+	AbstractDemo.prototype.startCustomCaptureAnimation = function(){
+		console.log("AbstractDemo.prototype.startCustomCaptureAnimation() must be overriden by subclasses");
 	}
 	
 	window.AbstractDemo = AbstractDemo;
@@ -309,6 +315,7 @@
 	BasicSlideShowDemo = function(x, y, width, height, document){
 		AbstractDemo.call(this, x, y, width, height, document); //call super constructor.
 		this.toolTip = "Click left or right arrows to slide to next/previous image";
+		this.customCaptureControls = true;
 	}
 	
 	//subclass extends superclass
@@ -356,6 +363,10 @@
 		}
 	}
 	
+	BasicSlideShowDemo.prototype.startCustomCaptureAnimation = function(){
+		this.basicSlideShow.next();
+	}
+	
 	BasicSlideShowDemo.prototype.customTearDown = function(){
 		delete this.basicSlideShow;
 	}
@@ -373,6 +384,7 @@
 	ThumbnailCarouselDemo = function(x, y, width, height, document){
 		AbstractDemo.call(this, x, y, width, height, document); //call super constructor.
 		this.toolTip = "Click arrows to rotate carousel, click active thumb to load photo";
+		this.customCaptureControls = true;
 	}
 	
 	//subclass extends superclass
@@ -426,6 +438,10 @@
 		}
 	}
 	
+	ThumbnailCarouselDemo.prototype.startCustomCaptureAnimation = function(){
+		this.thumbnailCarousel.next();
+	}
+	
 	ThumbnailCarouselDemo.prototype.customTearDown = function(){
 		delete this.thumbnailCarousel;
 	}
@@ -442,6 +458,7 @@
 	ImageFaderDemo = function(x, y, width, height, document){
 		AbstractDemo.call(this, x, y, width, height, document); //call super constructor.
 		this.toolTip = "Click image to fade effect random image";
+		this.customCaptureControls = true;
 	}
 	//subclass extends superclass
 	ImageFaderDemo.prototype = Object.create(AbstractDemo.prototype);
@@ -476,6 +493,10 @@
 		this.showRandomImage();
 	}
 	
+	ImageFaderDemo.prototype.startCustomCaptureAnimation = function(){
+		this.showRandomImage();
+	}
+	
 	ImageFaderDemo.prototype.customTearDown = function(){
 		delete this.ImageEffectFader;
 	}
@@ -490,6 +511,7 @@
 	WandererDemo = function(x, y, width, height, document){
 		AbstractDemo.call(this, x, y, width, height, document); //call super constructor.
 		this.toolTip = "The two colors are complementary";
+		this.customCaptureControls = true;
 	}
 	
 	//subclass extends superclass
@@ -575,6 +597,7 @@
 	BlockSetAnimatorDemo = function(x, y, width, height, document){
 		AbstractDemo.call(this, x, y, width, height, document); //call super constructor.
 		this.toolTip = "Click on canvas for a new random animation";
+		this.captureDuration = 20000;
 	}
 	
 	//subclass extends superclass
@@ -682,6 +705,7 @@
 	TextEffectDemo = function(x, y, width, height, document){
 		AbstractDemo.call(this, x, y, width, height, document); //call super constructor.
 		this.toolTip = "Click on canvas for a new random animation";
+		this.captureDuration = 20000;
 	}
 	
 	//subclass extends superclass
