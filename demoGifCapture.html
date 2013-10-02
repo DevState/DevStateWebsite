@@ -131,13 +131,14 @@
 			
 			function startCaptureDemoHandler(event){
 				var captureOutputImage = document.getElementById("captureOutput");
-				captureTool = new DemoCaptureTool(100, 20000, currentDemo.getCaptureCanvases(), captureOutputImage);
+				captureTool = new DemoCaptureTool(currentDemo.captureFrameRate, currentDemo.gifPlaybackFrameRate, currentDemo.getCaptureCanvases(), captureOutputImage);
 				currentDemo.startCustomCaptureAnimation();
 				captureTool.start();
 			}
 			
 			function endCaptureDemoHandler(event){
-				captureTool.stop();
+				console.log("endCaptureDemoHandler()");
+				captureTool.stopOnNextCapture();
 			}
 			
 			function captureDemoPngHandler(event){
@@ -147,7 +148,8 @@
 			
 			function captureDemo(){
 				var captureOutputImage = document.getElementById("captureOutput");
-				captureTool = new DemoCaptureTool(100, currentDemo.captureDuration, currentDemo.getCaptureCanvases(), captureOutputImage);
+				captureTool = new DemoCaptureTool(currentDemo.captureFrameRate, currentDemo.gifPlaybackFrameRate, currentDemo.getCaptureCanvases(), captureOutputImage);
+				currentDemo.captureCompleteCallBack = endCaptureDemoHandler;
 				captureTool.start();
 			}
 						

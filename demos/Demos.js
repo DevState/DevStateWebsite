@@ -7,7 +7,8 @@
 		SimpleGeometry.Rectangle.call(this,x,y,width,height); //call super constructor.
 		this.document = document;
 		this.customCaptureControls = false;
-		this.captureDuration = 6000;
+		this.captureFrameRate = 300; //frames for generated gifs are captured at this rate
+		this.gifPlaybackFrameRate = 100;//generated gifs play at this speed
 		this.setUpDemo();
 	}
 	
@@ -19,7 +20,7 @@
 
 	//subclasses override this incase of custom set ups (additional canvas etc.)
 	AbstractDemo.prototype.preSetUp = function(){}
-	
+
 	//subclasses override this incase of custom set ups
 	AbstractDemo.prototype.setUpDemo = function(){
 		this.preSetUp();
@@ -106,6 +107,12 @@
 		console.log("AbstractDemo.prototype.startCustomCaptureAnimation() must be overriden by subclasses");
 	}
 	
+	AbstractDemo.prototype.animationComplete = function(){
+		if(this.captureCompleteCallBack){
+			this.captureCompleteCallBack();
+		}
+	}
+	
 	window.AbstractDemo = AbstractDemo;
 	
 	
@@ -122,6 +129,7 @@
 	PieChartDemo = function(x, y, width, height, document){
 		AbstractDemo.call(this, x, y, width, height, document); //call super constructor.
 		this.toolTip = "Click link to create random data, click pie chart to open/close";
+		this.gifPlaybackFrameRate = 200;
 	}
 	
 	//subclass extends superclass
@@ -140,7 +148,7 @@
 		var _this = this;
 		this.canvas.addEventListener("click", function(event){_this.canvasClickHandler(event)}, false);//"mousedown"
 		this.pieChartOpen = true;
-		this.animator = new UnitAnimator(1000, 20, function() {_this.updatePieChart()});
+		this.animator = new UnitAnimator(1000, 20, function() {_this.updatePieChart()}, function() {_this.animationComplete()});
 		this.animator.start();
 	}
 	
@@ -214,6 +222,7 @@
 	LineChartDemo = function(x, y, width, height, document){
 		AbstractDemo.call(this, x, y, width, height, document); //call super constructor.
 		this.toolTip = "Click link to create random data, click line chart to open/close";
+		this.gifPlaybackFrameRate = 200;
 	}
 	
 	//subclass extends superclass
@@ -225,7 +234,7 @@
 		var _this = this;
 		this.canvas.addEventListener("click", function(event){_this.canvasClickHandler(event)}, false);//"mousedown"
 		this.lineChartOpen = true;
-		this.animator=new UnitAnimator(1000,20,function() {_this.updateLineChart()});
+		this.animator=new UnitAnimator(1000,20,function() {_this.updateLineChart()}, function() {_this.animationComplete()});
 		this.animator.start();
 	}	
 	
@@ -264,25 +273,53 @@
 	BarChartDemo = function(x, y, width, height, document){
 		AbstractDemo.call(this, x, y, width, height, document); //call super constructor.
 		this.toolTip = "Click link to create random data, click bar chart to open/close";
+		this.gifPlaybackFrameRate = 200;
 	}
 	
 	//subclass extends superclass
 	BarChartDemo.prototype = Object.create(AbstractDemo.prototype);
 	BarChartDemo.prototype.constructor = AbstractDemo;
 	
+	BarChartDemo.prototype.preSetUp = function(){
+		this.backGroundCanvas = this.document.createElement('canvas');
+		//console.log("BarChartDemo.preSetUp() ",this.backGroundCanvas);
+		this.backGroundCanvas.width = this.width; 
+		this.backGroundCanvas.height = this.height;
+		this.backGroundCanvasContext2d = this.backGroundCanvas.getContext("2d");
+		this.backGroundCanvas.style.position = "absolute";
+		this.document.body.appendChild(this.backGroundCanvas);//later on this should be a div, the created canvas should adopt the sizes of the div	
+	}
+	BarChartDemo.prototype.getCaptureCanvases = function(){
+		return [this.backGroundCanvas, this.canvas];
+	}
+	
 	BarChartDemo.prototype.run = function(){
-		this.barChart = new BarChart(this.x, this.y, this.width, this.height);
+		var extrude = 12;
+		this.barChart = new BarChart(this.x + 10, this.y+extrude, this.width-extrude, this.height-extrude);
+		this.barChart.extrudeWidth = extrude;
 		var _this = this;
 		this.canvas.addEventListener("click", function(event){_this.canvasClickHandler(event)}, false);//"mousedown"
 		this.barChartOpen = true;
-		this.animator = new UnitAnimator(1500,20,function() {_this.updateBarChart()});
+		this.animator = new UnitAnimator(1500,20,function() {_this.updateBarChart()}, function() {_this.animationComplete()});
 		//this.animator.start(UnitAnimator.getRandomEasingFunction());
 		this.animator.start(UnitAnimator.easeOutSine);
 	}
 
+	BarChartDemo.prototype.createBackground = function(){
+		this.background = new ChartBackground(this.x, this.y, this.width, this.height);
+		this.background.renderFalse3d = true;
+		this.background.false3DExtrusion = this.barChart.extrudeWidth;
+		this.background.legendMargin = this.barChart.extrudeWidth + 3;
+		this.background.render(this.backGroundCanvasContext2d, 0, this.barChart.max);
+	}
+	
 	BarChartDemo.prototype.updateBarChart = function(){
 		this.clear();
 		this.barChart.render(this.context2d, this.animator.getAnimationPercent());
+		//TODO : move this somewhere smarter
+		if(!this.background){
+			this.createBackground();
+		}
 	}
 	BarChartDemo.prototype.updateBarChartReverse = function(){
 		this.clear();
@@ -301,6 +338,9 @@
 	
 	BarChartDemo.prototype.customTearDown = function(){
 		delete this.barChart;
+		this.document.body.removeChild(this.backGroundCanvas);
+		delete this.backGroundCanvasContext2d;
+		delete this.backGroundCanvas;
 	}
 	
 	window.BarChartDemo = BarChartDemo;
@@ -597,7 +637,6 @@
 	BlockSetAnimatorDemo = function(x, y, width, height, document){
 		AbstractDemo.call(this, x, y, width, height, document); //call super constructor.
 		this.toolTip = "Click on canvas for a new random animation";
-		this.captureDuration = 20000;
 	}
 	
 	//subclass extends superclass
@@ -676,7 +715,7 @@
 			demo.blockSetAnimator.setAnimation(transformB, transformA);
 		}
 		demo.blockSetAnimator.setEasingFunction(easingFunction);
-		demo.blockSetAnimator.start (2000, 250, function(){demo.animationComplete()} , function(){demo.animationUpdate()});
+		demo.blockSetAnimator.start (2000, 250, function(){demo.blockSetAnimationComplete()} , function(){demo.animationUpdate()});
 		demo.intro = !demo.intro;
 	}
 	
@@ -685,8 +724,9 @@
 		this.blockSetAnimator.render(this.context2d);
 	}
 	
-	BlockSetAnimatorDemo.prototype.animationComplete = function(){
-		//console.log("BlockSetAnimatorDemo.animationComplete()");
+	BlockSetAnimatorDemo.prototype.blockSetAnimationComplete = function(){
+		//console.log("BlockSetAnimatorDemo.blockSetAnimationComplete()");
+		this.animationComplete();
 	}
 	
 	BlockSetAnimatorDemo.prototype.customTearDown = function(){
@@ -705,7 +745,6 @@
 	TextEffectDemo = function(x, y, width, height, document){
 		AbstractDemo.call(this, x, y, width, height, document); //call super constructor.
 		this.toolTip = "Click on canvas for a new random animation";
-		this.captureDuration = 20000;
 	}
 	
 	//subclass extends superclass
@@ -735,8 +774,9 @@
 		this.blockSetAnimator.render(this.context2d);
 	}
 	
-	TextEffectDemo.prototype.animationComplete = function(){
-		//console.log("TextEffectDemo.animationComplete()");
+	TextEffectDemo.prototype.blockSetAnimationComplete = function(){
+		//console.log("TextEffectDemo.blockSetAnimationComplete()");
+		this.animationComplete();
 	}
 	
 	TextEffectDemo.prototype.customTearDown = function(){

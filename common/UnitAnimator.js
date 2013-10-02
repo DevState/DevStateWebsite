@@ -192,7 +192,7 @@
 			return;
 		}
 		this.dispatchUpdate();
-	}	
+	}
 	
 	UnitAnimator.prototype.dispatchUpdate = function(){
 		if(this.updateCallBack){

@@ -1,9 +1,10 @@
 (function (window){
 
 
-	DemoCaptureTool = function(captureFrameRate, duration, canvases, outputImage){
+	DemoCaptureTool = function(captureFrameRate, playbackFrameRate, canvases, outputImage){
+		console.log("DemoCaptureTool constructor ",captureFrameRate, playbackFrameRate);
 		this.captureFrameRate = captureFrameRate;
-		this.duration = duration;
+		this.playbackFrameRate = playbackFrameRate;
 		this.canvases = canvases;
 		this.outputImage = outputImage;
 		
@@ -11,27 +12,34 @@
 		this.captureCanvas.width = canvases[0].width;
 		this.captureCanvas.height = canvases[0].height;
 		this.captureContext = this.captureCanvas.getContext("2d");
+		this.stopping = false;
 	}
 		
 	DemoCaptureTool.prototype.start = function(){
+		//console.log("DemoCaptureTool.start()");
 		this.numCaptures = 0;
 		var _this = this;
 		this.intervalId = setInterval(function(){_this.capture();}, this.captureFrameRate);
 		
 		this.gifEncoder = new GIFEncoder();
 		this.gifEncoder.setRepeat(0); //auto-loop
-		this.gifEncoder.setDelay(40);
+		this.gifEncoder.setDelay(this.playbackFrameRate);
 		this.gifEncoder.start();
 	}
 	
 	DemoCaptureTool.prototype.stop = function(){
-		clearInterval(this.intervalId);
 		//console.log("DemoCaptureTool.stop()");
+		clearInterval(this.intervalId);
 		this.gifEncoder.finish();
 		this.outputImage.src = 'data:image/gif;base64,'+encode64(this.gifEncoder.stream().getData());
 	}
 	
+	DemoCaptureTool.prototype.stopOnNextCapture = function(){
+		this.stopping = true;
+	}
+	
 	DemoCaptureTool.prototype.capture = function(){
+		//console.log("DemoCaptureTool.capture()");
 		this.captureContext.fillStyle="#FFFFFF";
 		this.captureContext.fillRect(0,0,this.captureCanvas.width,this.captureCanvas.height);
 		var context, canvas;
@@ -42,7 +50,7 @@
 		//var image = this.captureCanvas.toDataURL("image/png").replace("image/png", "image/octet-stream"); //http://stackoverflow.com/questions/10673122/how-to-save-canvas-as-an-image-with-canvas-todataurl
 		this.gifEncoder.addFrame(this.captureContext);
 		this.numCaptures++;
-		if(this.numCaptures*this.captureFrameRate >= this.duration){
+		if(this.stopping){
 			clearInterval(this.intervalId);
 			//console.log("DemoCaptureTool.capture(), complete");
 			this.gifEncoder.finish();

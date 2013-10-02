@@ -3,9 +3,8 @@
 
 	//set up event dispatching?  EventDispatcher
 
-	BarChart=function(x,y,width,height,barWidth){
+	BarChart = function(x, y, width, height, barWidth){
 		SimpleGeometry.Rectangle.call(this,x,y,width,height); //call super constructor.
-		this.background=new ChartBackground(x,y,width,height);
 		if(!isNaN(barWidth)){
 			this.barWidth=barWidth;
 		}
@@ -17,14 +16,14 @@
 	
 	//values is an Array of numbers greater than 0
 	//max must be bigger than or equal to biggest number in values
-	BarChart.prototype.setValues=function(values, max){
+	BarChart.prototype.setValues = function(values, max){
 		this.values=values;
 		this.max=max;
 	}
 	
-	BarChart.prototype.setRandomValues=function(){
+	BarChart.prototype.setRandomValues = function(){
 		var values = new Array();
-		var total = 4 + Math.floor(Math.random()*4);//between 4 and 8
+		var total = 3 + Math.floor(Math.random()*3);//between 4 and 8
 		while(total > 0){
 			values.push(10 + Math.floor(Math.random()*90));
 			total--;
@@ -33,33 +32,25 @@
 	}
 	
 	//colors must be an array in the format ["#FF00FF","#FF00CC"...]
-	BarChart.prototype.setBarColors=function(colors){
+	BarChart.prototype.setBarColors = function(colors){
 		this.colors=colors;	
 	}
-	BarChart.prototype.setRandomColors=function(){
+	BarChart.prototype.setRandomColors = function(){
 		this.colors = new Array();
 		while(this.colors.length != this.values.length){
 			this.colors.push(SimpleGeometry.getRandomFillStyleColor());
 		}
 	}
 	
-	//shared with other components, inherit?
-	BarChart.prototype.setBgColors=function(bgColor,bgStrokeColor){
-		this.background.setBgColors(bgColor,bgStrokeColor);
-	}
-	BarChart.prototype.setNumberOfBackgroundLines=function(lines){
-		this.background.numberOfBackgroundLines = lines;
-	}
-	
 	//move, Line Chart uses the same, maybe move to ChartBackground? Rename ChartBackground to ChartUtil?
-	BarChart.prototype.calculateYPosition=function(value,animationPercent){
+	BarChart.prototype.calculateYPosition = function(value,animationPercent){
 		return SimpleGeometry.interpolate( SimpleGeometry.normalize(value, 0, this.max) * animationPercent, this.getBottom(), this.y)
 	}
 	BarChart.prototype.renderPoint=new SimpleGeometry.Point();//TODO make static
 
-	BarChart.prototype.extrudeWidth = 5;
+	BarChart.prototype.extrudeWidth = 6;
 	
-	BarChart.prototype.render=function(context,animationPercent){
+	BarChart.prototype.render = function(context,animationPercent){
 		if(!this.values){
 			this.setRandomValues();
 		}
@@ -69,7 +60,6 @@
 		if(isNaN(animationPercent)){
 			animationPercent = 1;
 		}
-		this.background.render(context, 0, this.max);
 		if(!this.barWidth){
 			this.barWidth = (this.width/2)/this.values.length;
 		}
@@ -98,8 +88,8 @@
 			context.beginPath();
 			context.moveTo(this.renderPoint.x+this.barWidth, this.renderPoint.y);
 			context.lineTo(this.renderPoint.x+this.extrudeWidth+this.barWidth, this.renderPoint.y-this.extrudeWidth);
-			context.lineTo(this.renderPoint.x+this.extrudeWidth+this.barWidth, this.height-this.extrudeWidth);
-			context.lineTo(this.renderPoint.x+this.barWidth, this.height);
+			context.lineTo(this.renderPoint.x+this.extrudeWidth+this.barWidth, this.y+this.height-this.extrudeWidth);
+			context.lineTo(this.renderPoint.x+this.barWidth, this.y+this.height);
 			context.lineTo(this.renderPoint.x+this.barWidth, this.renderPoint.y);
 			context.closePath();
 			
