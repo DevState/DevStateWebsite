@@ -56,7 +56,16 @@
 			context.stroke();
 			context.closePath();
 			yPos+=gap;
+			
+			context.shadowColor = SimpleGeometry.getRgbaStyleString(0x00,0x00,0x00,.4);
+			context.shadowOffsetX = 1;
+			context.shadowOffsetY = 1;
+			context.shadowBlur    = 2;
 			context.fillText (Math.round(legend), this.x+4 , this.y+roundedYPos);
+			context.shadowOffsetX = 0;
+			context.shadowOffsetY = 0;
+			context.shadowBlur    = 0;
+			
 			legend-=legendIncrement;
 		}
 		context.fillText (Math.round(legend), this.x+4 , this.y+roundedYPos+gap);

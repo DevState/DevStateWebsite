@@ -57,6 +57,8 @@
 	}
 	BarChart.prototype.renderPoint=new SimpleGeometry.Point();//TODO make static
 
+	BarChart.prototype.extrudeWidth = 5;
+	
 	BarChart.prototype.render=function(context,animationPercent){
 		if(!this.values){
 			this.setRandomValues();
@@ -77,8 +79,33 @@
 		context.strokeStyle = "#FFFFFF";
 		for (var i = 0; i < this.values.length; i++) {
 			context.fillStyle = this.colors[i];
-			this.renderPoint.x = this.x + this.barSpacer + (this.barSpacer * i) + (this.barWidth * i);			
+			this.renderPoint.x = this.x + this.barSpacer + (this.barSpacer * i) + (this.barWidth * i);	
 			this.renderPoint.y = this.calculateYPosition(this.values[i], animationPercent);
+			
+			//draw top extrusion
+			context.beginPath();
+			context.moveTo(this.renderPoint.x, this.renderPoint.y);
+			context.lineTo(this.renderPoint.x+this.extrudeWidth, this.renderPoint.y-this.extrudeWidth);
+			context.lineTo(this.renderPoint.x+this.extrudeWidth+this.barWidth, this.renderPoint.y-this.extrudeWidth);
+			context.lineTo(this.renderPoint.x+this.barWidth, this.renderPoint.y);
+			context.lineTo(this.renderPoint.x, this.renderPoint.y);
+			context.closePath();
+
+			context.fill();
+			context.stroke();
+			
+			//draw side extrusion
+			context.beginPath();
+			context.moveTo(this.renderPoint.x+this.barWidth, this.renderPoint.y);
+			context.lineTo(this.renderPoint.x+this.extrudeWidth+this.barWidth, this.renderPoint.y-this.extrudeWidth);
+			context.lineTo(this.renderPoint.x+this.extrudeWidth+this.barWidth, this.height-this.extrudeWidth);
+			context.lineTo(this.renderPoint.x+this.barWidth, this.height);
+			context.lineTo(this.renderPoint.x+this.barWidth, this.renderPoint.y);
+			context.closePath();
+			
+			context.fill();
+			context.stroke();
+			//draw bar
 			context.fillRect(this.renderPoint.x, this.renderPoint.y, this.barWidth, this.y+this.height-this.renderPoint.y);
 			context.strokeRect(this.renderPoint.x, this.renderPoint.y, this.barWidth, this.y+this.height-this.renderPoint.y);
 		}
