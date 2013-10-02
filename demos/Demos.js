@@ -229,8 +229,21 @@
 	LineChartDemo.prototype = Object.create(AbstractDemo.prototype);
 	LineChartDemo.prototype.constructor = AbstractDemo;
 	
+	LineChartDemo.prototype.preSetUp = function(){
+		this.backGroundCanvas = this.document.createElement('canvas');
+		//console.log("LineChartDemo.preSetUp() ",this.backGroundCanvas);
+		this.backGroundCanvas.width = this.width; 
+		this.backGroundCanvas.height = this.height;
+		this.backGroundCanvasContext2d = this.backGroundCanvas.getContext("2d");
+		this.backGroundCanvas.style.position = "absolute";
+		this.document.body.appendChild(this.backGroundCanvas);//later on this should be a div, the created canvas should adopt the sizes of the div	
+	}
+	LineChartDemo.prototype.getCaptureCanvases = function(){
+		return [this.backGroundCanvas, this.canvas];
+	}
+	
 	LineChartDemo.prototype.run = function(){
-		this.lineChart = new LineChart(this.x, this.y, this.width, this.height);
+		this.lineChart = new LineChart(this.x + 10, this.y, this.width, this.height);
 		var _this = this;
 		this.canvas.addEventListener("click", function(event){_this.canvasClickHandler(event)}, false);//"mousedown"
 		this.lineChartOpen = true;
@@ -238,9 +251,18 @@
 		this.animator.start();
 	}	
 	
+	LineChartDemo.prototype.createBackground = function(){
+		this.background = new ChartBackground(this.x, this.y, this.width, this.height);
+		this.background.legendMargin = 10;
+		this.background.render(this.backGroundCanvasContext2d, 0, this.lineChart.max);
+	}
+	
 	LineChartDemo.prototype.updateLineChart = function(){
 		this.clear();
 		this.lineChart.render(this.context2d, this.animator.getAnimationPercent());
+		if(!this.background){
+			this.createBackground();
+		}
 	}
 	LineChartDemo.prototype.updateLineChartReverse = function(){
 		this.clear();
@@ -258,7 +280,10 @@
 	}
 	
 	LineChartDemo.prototype.customTearDown = function(){
-		delete this.lineChartOpen;
+		delete this.lineChart;
+		this.document.body.removeChild(this.backGroundCanvas);
+		delete this.backGroundCanvasContext2d;
+		delete this.backGroundCanvas;
 	}
 	
 	window.LineChartDemo = LineChartDemo;
@@ -307,7 +332,6 @@
 
 	BarChartDemo.prototype.createBackground = function(){
 		this.background = new ChartBackground(this.x, this.y, this.width, this.height);
-		this.background.renderFalse3d = true;
 		this.background.false3DExtrusion = this.barChart.extrudeWidth;
 		this.background.legendMargin = this.barChart.extrudeWidth + 3;
 		this.background.render(this.backGroundCanvasContext2d, 0, this.barChart.max);

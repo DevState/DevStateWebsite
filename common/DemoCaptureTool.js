@@ -2,7 +2,7 @@
 
 
 	DemoCaptureTool = function(captureFrameRate, playbackFrameRate, canvases, outputImage){
-		console.log("DemoCaptureTool constructor ",captureFrameRate, playbackFrameRate);
+		//console.log("DemoCaptureTool constructor ",captureFrameRate, playbackFrameRate);
 		this.captureFrameRate = captureFrameRate;
 		this.playbackFrameRate = playbackFrameRate;
 		this.canvases = canvases;

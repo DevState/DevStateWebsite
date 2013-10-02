@@ -6,7 +6,6 @@
 
 	LineChart=function(x,y,width,height){
 		SimpleGeometry.Rectangle.call(this,x,y,width,height); //call super constructor.
-		this.background=new ChartBackground(x,y,width,height);
 	}
 	
 	//subclass extends superclass
@@ -42,7 +41,7 @@
 	LineChart.prototype.setRandomValues=function(){
 		var values = new Array();
 		var lines = 1 + Math.floor(Math.random()*3);//between 1 and 4
-		var points = 10 + Math.floor(Math.random()*30);//between 10 and 40
+		var points = 10 + Math.floor(Math.random()*10);//between 10 and 40
 		var line,pointValue;
 		while(lines>0){
 			line = new Array();
@@ -71,14 +70,6 @@
 		//console.log("LineChart.setRandomColors",this.colors);
 	}
 	
-	//shared with other components, inherit?
-	LineChart.prototype.setBgColors=function(bgColor,bgStrokeColor){
-		this.background.setBgColors(bgColor,bgStrokeColor);
-	}
-	LineChart.prototype.setNumberOfBackgroundLines=function(lines){
-		this.background.numberOfBackgroundLines = lines;
-	}
-	
 	LineChart.prototype.render=function(context,animationPercent){
 		//console.log("LineChart.render()");
 		if(!this.values){
@@ -90,7 +81,6 @@
 		if(isNaN(animationPercent)){
 			animationPercent = 1;
 		}
-		this.background.render(context, this.min, this.max);
 		this.pointSpacer = (this.width-this.margin*2)/(this.values[0].length-1);
 		for (var i = 0; i < this.values.length; i++) {
 			this.renderLine(context,this.values[i],this.colors[i],animationPercent);
@@ -110,7 +100,7 @@
 		}
 		context.beginPath();
 		context.strokeStyle = color;
-		context.lineWidth = 1;
+		context.lineWidth = 3;
 		context.moveTo(this.x + this.margin, this.calculateYPosition(line[0],animationPercent));
 		//render lines
 		for (var i = 1; i < line.length; i++) {
@@ -127,13 +117,15 @@
 		}
 		
 		//render dots
-		context.fillStyle = color;
+		context.strokeStyle = color;
+		context.fillStyle = "#FFFFFF";
 		for (var i = 0; i < line.length; i++) {
 			context.beginPath();
 			this.renderPoint.x = this.x + this.margin + (this.pointSpacer * i);			
 			this.renderPoint.y = this.calculateYPosition(line[i],animationPercent);
-			context.arc(this.renderPoint.x, this.renderPoint.y, 2, 0, SimpleGeometry.PI2);
+			context.arc(this.renderPoint.x, this.renderPoint.y, 5, 0, SimpleGeometry.PI2);
 			context.fill();
+			context.stroke();
 			context.closePath();
 		}
 	}
