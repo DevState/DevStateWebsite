@@ -51,16 +51,16 @@
 		<font color="#FFFFFF"> .</font>
 		
 	</div>	
-
+    <div id="socialbar">
+		<iframe frameborder="0" src="socialLinks.html" width="400px" align="middle"></iframe>
+	</div>
 </div>
 
 <div id="subscriber"></div>
-
-<iframe frameborder="0" src="socialLinks.html" width = "100%"></iframe>
-
 <script type="text/javascript">
 
-var mailNode = id( 'subscriber' );
+var mailNode   = id( 'subscriber' );
+var socialNode = id( 'socialbar' );
 
 function checkEmail( emailAddress ) {
 
@@ -113,7 +113,7 @@ function transfer() {
 	
 	} else {
 		
-		alert( 'You must be kidding! \nThat´s not a valid mailaddress at all...\n;)' );
+		alert( 'You must be kidding! \nThats not a valid mailaddress at all...\n;)' );
 	
 	}
 	
@@ -125,15 +125,26 @@ function decorate() {
 	mailNode.style.textAlign       = 'center';	 
 	mailNode.style.verticalAlign   = 'middle';
 	mailNode.style.width    	   = '100%';
-	mailNode.style.height   	   = '20px';
-	mailNode.style.bottom   	   = '14px';
+	mailNode.style.height   	   = '24px';
+	mailNode.style.bottom   	   = '60px';
 	mailNode.style.backgroundColor = '#FFFFFF';
-	mailNode.style.zIndex          = 2;
+	mailNode.style.zIndex          = 3;
 	
 	mailNode.classList.add('handwriting');
 	mailNode.classList.add('size16');
 	
 	mailNode.innerHTML = 'SUBSCRIBE & STAY INFORMED:&nbsp;<input type="text" name="eMail" id="mailField" /><a href="javascript:transfer();">&nbsp;Submit.</a>';
+
+	socialNode.style.position 	     = 'fixed';
+	socialNode.style.display  	     = 'table-cell';
+	socialNode.style.textAlign       = 'center';	 
+	socialNode.style.verticalAlign   = 'middle';
+	socialNode.style.width    	     = '100%';
+	socialNode.style.height   	     = '60px';
+	socialNode.style.bottom   	     = '0px';
+	socialNode.style.backgroundColor = '#FFFFFF';
+	socialNode.style.zIndex          = 2;
+
 }
 
 var readyStateCheckInterval = setInterval( function() {
