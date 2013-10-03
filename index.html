@@ -15,39 +15,6 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 
 		<style>
-		
-/* =======:: FOOTER ::========== */
-
-footer{
-	z-index:40;
-	position:absolute;
-	left:50%;
-	top:570px;
-	margin-left:-215px;
-	text-align:center;
-}
-
-.socialMediaImageLink{
-	text-decoration:none;
-	padding-left:0px;
-	padding-right:0px;
-	margin-left:0px;
-	margin-left:0px;
-}
-
-
-nav h2{
-	display:none;
-}
-nav ul{
-	margin:0px;
-	padding:0px;
-}
-nav li{
-	list-style-type:none;
-	display:inline;
-	margin-top:10px;
-}
 			
 		</style>
 
@@ -87,52 +54,9 @@ nav li{
 
 </div>
 
-<footer>
-	<nav id="socialMediaBar">
-		<h2>Devstate Social Media Links</h2>
-		<ul>
+<div id="subscriber"></div>
 
-			<li><a href="https://twitter.com/DevSt8"  class="socialMediaImageLink"  >
-				<img 	src="assets/socialIcons/twitter.png" 
-						title="Keep up to date with our progress in 140 characters and less. Don't hesiteate to retweet, favorite and follow!" 
-						alt="Keep up to date with our progress in 140 characters and less. Don't hesiteate to retweet, favorite and follow!" 
-						/></a></li>
-			<li><a href="https://www.facebook.com/DevStateWorkshops"  class="socialMediaImageLink"  >
-				<img 	src="assets/socialIcons/facebook.png" 
-						title="Devstate facebook fanpage. Like, share and comment!" 
-						alt="Devstate facebook fanpage. Like, share and comment!" 
-						/></a></li>
-			<li><a href="https://plus.google.com/u/0/117236613911388170124/posts"  class="socialMediaImageLink"  >
-				<img 	src="assets/socialIcons/googlePlus.png" 
-						title="Devstate on Google+. Plus one us baby!" 
-						alt="Devstate on Google+. Plus one us baby!" 
-						/></a></li>
-			<li><a href="http://www.linkedin.com/company/devstate/"  class="socialMediaImageLink"  >
-				<img 	src="assets/socialIcons/LinkedIn.png" 
-						title="Devstate Linked In profile. Like us and do recommend us!" 
-						alt="Devstate Linked In profile. Like us and do recommend us!" 
-						/></a></li>
-						
-			<li><a href="https://github.com/DevState"  class="socialMediaImageLink"  >
-				<img 	src="assets/socialIcons/github.png" 
-						title="See the source code of all our demos and experiements. Follow and Star us if you like what you see." 
-						alt="See the source code of all our demos and experiements. Follow and Star us if you like what you see." 
-						/></a></li>
-			<li><a href="https://vimeo.com/devstate"  class="socialMediaImageLink"  >
-				<img 	src="assets/socialIcons/vimeo.png" 
-						title="We'll be documenting the process of flash developers re-inventing themselves as trainers of the Finest Canvas and WebGL workshops" 
-						alt="We'll be documenting the process of flash developers re-inventing themselves as trainers of the Finest Canvas and WebGL workshops" 
-						/></a></li>	
-			<li><a href="http://www.pinterest.com/devstate/"  class="socialMediaImageLink"  >
-				<img 	src="assets/socialIcons/pinterest.png" 
-						title="See our inspiration for the logo, identity, demo and website design." 
-						alt="See our inspiration for the logo, identity, demo and website design." 
-						/></a></li>									
-		</ul>
-	</nav>
-	<div id="subscriber"></div>
-</footer>
-
+<iframe frameborder="0" src="socialLinks.html" width = "100%"></iframe>
 
 <script type="text/javascript">
 
@@ -213,39 +137,11 @@ function decorate() {
 }
 
 var readyStateCheckInterval = setInterval( function() {
-    
 	if (document.readyState === "complete") {
-		captureOutboundLinkClicks();
         decorate();
         clearInterval(readyStateCheckInterval);
     }
 }, 10);
-
-//CAPTURE OUTBOUND CLICKS FOR GA
-function captureOutboundLinkClicks(){
-	//console.log("captureOutboundLinkClicks()");
-	var anchors = document.getElementsByTagName("a");
-	var anchor;
-	for (var i = 0; i < anchors.length; ++i) {
-		anchor=anchors[i];
-		if(anchor.href.indexOf("http")==0 && anchor.href.indexOf("devstate.net")==-1 ){
-			anchor.addEventListener("click",captureOutboundLinkClick);
-		}
-	}
-}
-function captureOutboundLinkClick(event){
-	var link=event.currentTarget;
-	event.preventDefault();
-	
-	var name=String(link).replace(/.*?:\/\//g, "");;//from http://stackoverflow.com/questions/8206269/javascript-how-to-remove-http-from-url
-	if(name.indexOf("www.")==0){
-		name=name.split("www.")[1];
-	}
-	name=name.split(".")[0];
-	_gaq.push(["_trackEvent", "outBoundClicks", name]);
-	//console.log("captureOutboundLinkClick() : ",name);
-	window.open(link,"_blank");
-}
 
 </script>
 
