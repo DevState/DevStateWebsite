@@ -25,6 +25,7 @@
 		this.gifEncoder.setRepeat(0); //auto-loop
 		this.gifEncoder.setDelay(this.playbackFrameRate);
 		this.gifEncoder.start();
+		this.capture();
 	}
 	
 	DemoCaptureTool.prototype.stop = function(){

@@ -447,7 +447,7 @@
 
 	ThumbnailCarouselDemo = function(x, y, width, height, document){
 		AbstractDemo.call(this, x, y, width, height, document); //call super constructor.
-		this.toolTip = "Click arrows to rotate carousel, click active thumb to load photo";
+		this.toolTip = "Click arrows to rotate carousel";
 		this.customCaptureControls = true;
 	}
 	
@@ -511,6 +511,81 @@
 	}
 	
 	window.ThumbnailCarouselDemo = ThumbnailCarouselDemo;
+	
+	
+	
+	
+	
+	
+	//================::SIMPLE COVER FLOW::===================
+
+	SimpleCoverFlowDemo = function(x, y, width, height, document){
+		AbstractDemo.call(this, x, y, width, height, document); //call super constructor.
+		this.toolTip = "Click arrows to slide cover flow";
+		this.customCaptureControls = true;
+	}
+	
+	//subclass extends superclass
+	SimpleCoverFlowDemo.prototype = Object.create(AbstractDemo.prototype);
+	SimpleCoverFlowDemo.prototype.constructor = AbstractDemo;
+		
+	SimpleCoverFlowDemo.prototype.run = function(){
+		var _this = this;
+		this.canvas.addEventListener("click", function(event){_this.canvasClickHandler(event)}, false);//"mousedown"
+		var urls=new Array(
+			"assets/instagramThumbs/paperWeight.jpg",
+			"assets/instagramThumbs/peacock.jpg",
+			"assets/instagramThumbs/rufus.jpg",
+			"assets/instagramThumbs/sakBeer.jpg",
+			"assets/instagramThumbs/SakEU.jpg",
+			"assets/instagramThumbs/sakirisChips.jpg",
+			"assets/instagramThumbs/silverTower.jpg",
+			"assets/instagramThumbs/oneWay.jpg",
+			"assets/instagramThumbs/botaniqueLady.jpg",
+			"assets/instagramThumbs/snowBallLantern.jpg",
+			"assets/instagramThumbs/springSnow.jpg",
+			"assets/instagramThumbs/Keon0FucksGiven.jpg",
+			"assets/instagramThumbs/sunny.jpg");
+
+		this.loadImagesWithImageStore(urls);
+	}
+	
+	SimpleCoverFlowDemo.prototype.useLoadedImageStoreImages = function(){
+		//console.log("SimpleCoverFlowDemo.useLoadedImageStoreImages()");
+		this.coverFlow = new SimpleCoverFlow(	this.x, this.y + this.height/2 - this.imageStore.images[0].height/2, 
+														this.width, this.imageStore.images[0].height+10, this.context2d);
+		this.coverFlow.setImages(this.imageStore.images);
+	}
+	
+	SimpleCoverFlowDemo.prototype.canvasClickHandler = function(event){
+		var x = event.pageX - this.canvas.offsetLeft;
+		var y = event.pageY - this.canvas.offsetTop;
+		var point = new SimpleGeometry.Point(x,y);
+		/*
+		if(this.coverFlow.hotSpot.containsPoint(point)){
+			var image = this.coverFlow.getCurrentImage();
+			var source = image.src.split("/");
+			console.log(source[source.length-1]);
+			return;
+		}*/
+		if(this.coverFlow.containsPoint(point)){
+			if(point.x > this.coverFlow.x + this.coverFlow.width/2){
+				this.coverFlow.next();
+			}else{
+				this.coverFlow.previous();
+			}
+		}
+	}
+	
+	SimpleCoverFlowDemo.prototype.startCustomCaptureAnimation = function(){
+		this.coverFlow.next();
+	}
+	
+	SimpleCoverFlowDemo.prototype.customTearDown = function(){
+		delete this.coverFlow;
+	}
+	
+	window.SimpleCoverFlowDemo = SimpleCoverFlowDemo;
 	
 	
 	
@@ -754,7 +829,7 @@
 	}
 	
 	BlockSetAnimatorDemo.prototype.customTearDown = function(){
-		delete this.thumbnailCarousel;
+		delete this.blockSetAnimator;
 	}
 	
 	window.BlockSetAnimatorDemo = BlockSetAnimatorDemo;
@@ -804,7 +879,7 @@
 	}
 	
 	TextEffectDemo.prototype.customTearDown = function(){
-		delete this.thumbnailCarousel;
+		delete this.blockSetAnimator;
 	}
 	
 	window.TextEffectDemo = TextEffectDemo;
