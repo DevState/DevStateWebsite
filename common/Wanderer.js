@@ -6,8 +6,24 @@
 (function (window){
 
 	//Wndering is animated within this circle
-	Wanderer=function(circle){
+	Wanderer = function(circle){
 		this.circle = circle;
+		this.minVelocity = .01;
+		this.maxVelocity = .06;
+		this.minDuration = 500;
+		this.maxDuration = 2000;
+		this.duration = 1000;
+		this.currentDuration = 0;
+		this.velocity = .04;
+		this.frameRate = 20;
+		this.radius = 0;
+		this.targetVelocity = 0;
+		this.targetRadius = 0;
+		this.radian = 0;
+		this.intervalId = -1;
+		this.radiusIncrement = 0;
+		this.velocityIncrement = 0;
+		this.opposingPoint = new SimpleGeometry.Point();
 		SimpleGeometry.Point.call(this,0,0); //call super constructor.
 	}
 	
@@ -15,23 +31,7 @@
 	Wanderer.prototype = Object.create(SimpleGeometry.Point.prototype);
 	Wanderer.prototype.constructor = SimpleGeometry.Point;
 	
-	Wanderer.prototype.minVelocity = .01;
-	Wanderer.prototype.maxVelocity = .06;
-	Wanderer.prototype.minDuration = 500;
-	Wanderer.prototype.maxDuration = 2000;
-	Wanderer.prototype.duration = 1000;
-	Wanderer.prototype.currentDuration = 0;
-	Wanderer.prototype.velocity = .04;//make private
-	Wanderer.prototype.frameRate = 20;
-	Wanderer.prototype.targetVelocity;//make private
-	Wanderer.prototype.radius = 0;//make private
-	Wanderer.prototype.targetRadius;//make private
-	Wanderer.prototype.radian;//make private
-	Wanderer.prototype.intervalId ;//make private
-	Wanderer.prototype.callBack;
-	Wanderer.prototype.circle;
-	
-	Wanderer.prototype.start=function(updateCallBack){
+	Wanderer.prototype.start = function(updateCallBack){
 		this.updateCallBack = updateCallBack;
 		this.radian = isNaN(this.startRadian) ? Math.random() * SimpleGeometry.PI2 : this.startRadian; 
 		this.radius = Math.random() * this.circle.radius;
@@ -42,12 +42,9 @@
 		//console.log("Wanderer.prototype.pause()");
 		clearInterval(this.intervalId);
 	}
-
-	Wanderer.prototype.radiusIncrement;
-	Wanderer.prototype.velocityIncrement;
 	
 	//refactor, make private
-	Wanderer.prototype.setNextTarget=function(){
+	Wanderer.prototype.setNextTarget = function(){
 		if(!isNaN(this.intervalId)){
 			clearInterval(this.intervalId);
 		}
@@ -64,7 +61,7 @@
 	}
 	
 	//refactor, make private
-	Wanderer.prototype.update=function(){
+	Wanderer.prototype.update = function(){
 		//this.velocity += (this.targetVelocity - this.velocity) / 30;
 		this.velocity += this.velocityIncrement;
 		this.radian =  SimpleGeometry.constrainRadianTo2PI( this.radian + this.velocity );
@@ -83,15 +80,13 @@
 		this.dispatchUpdate();
 	}
 	
-	Wanderer.prototype.dispatchUpdate=function(){
+	Wanderer.prototype.dispatchUpdate = function(){
 		if(this.updateCallBack){
 			this.updateCallBack();
 		}
 	}
 	
-	Wanderer.prototype.opposingPoint = new SimpleGeometry.Point();
-	
-	Wanderer.prototype.getOpposingPoint=function(){
+	Wanderer.prototype.getOpposingPoint = function(){
 		var opposingRadian = SimpleGeometry.constrainRadianTo2PI( this.radian + Math.PI );
 		this.opposingPoint.x = this.circle.x + Math.cos(opposingRadian) * this.radius;
 		this.opposingPoint.y = this.circle.y + Math.sin(opposingRadian) * this.radius;

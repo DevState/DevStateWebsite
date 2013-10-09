@@ -2,41 +2,33 @@
 
 (function (window){
 
-	//set up event dispatching?  EventDispatcher
-
-	ChartBackground=function(x,y,width,height){
+	ChartBackground = function(x,y,width,height){
 		SimpleGeometry.Rectangle.call(this,x,y,width,height); //call super constructor.
+		this.numberOfBackgroundLines = 9;
+		
+		this.bgColorTop = "#EFEFFF";
+		this.bgColorBottom = "#BBBBFF";
+		this.bgStrokeColor = "#9999FF";//TODO rename to bgStrokeStyle, include a stroke thickness?
+		this.false3DColor = "#AAAADD";
+		this.false3DExtrusion = 0;
+		this.legendMargin = 10;
 	}
 	
 	//subclass extends superclass
 	ChartBackground.prototype = Object.create(SimpleGeometry.Rectangle.prototype);
 	ChartBackground.prototype.constructor = SimpleGeometry.Rectangle;
-
-	ChartBackground.prototype.numberOfBackgroundLines = 9;
-	
-	ChartBackground.prototype.bgColorTop = "#EFEFFF";
-	ChartBackground.prototype.bgColorBottom = "#BBBBFF";
-	ChartBackground.prototype.bgStrokeColor = "#9999FF";//TODO rename to bgStrokeStyle, include a stroke thickness?
-	ChartBackground.prototype.false3DColor = "#AAAADD";
-	ChartBackground.prototype.false3DExtrusion = 0;
-	ChartBackground.prototype.legendMargin = 10;
 	
 	ChartBackground.prototype.setBgColors = function(bgColor,bgStrokeColor){
 		this.bgColor = bgColor;
 		this.bgStrokeColor = bgStrokeColor;
 	}
-	
 
-	//this lacks a "legend" the bgLines could have a number next to them?!
-	ChartBackground.prototype.render=function(context, min, max){
+	ChartBackground.prototype.render = function(context, min, max){
 		//color background
-		
 		var gradient = context.createLinearGradient(0, 0, 0, this.height);// linear gradient from start to end of line
 		gradient.addColorStop(0, this.bgColorTop);
 		gradient.addColorStop(1, this.bgColorBottom);
-		
 
-		
 		if(this.false3DExtrusion > 0){
 			//bg
 			context.beginPath();
@@ -96,20 +88,21 @@
 			context.stroke();
 			context.closePath();
 			yPos+=gap;
-			
-			context.shadowColor = SimpleGeometry.getRgbaStyleString(0x00,0x00,0x00,.4);
-			context.shadowOffsetX = 1;
-			context.shadowOffsetY = 1;
-			context.shadowBlur    = 2;
-			context.fillText (Math.round(legend), this.x+this.legendMargin , this.y+roundedYPos);
-			context.shadowOffsetX = 0;
-			context.shadowOffsetY = 0;
-			context.shadowBlur    = 0;
-			
+			this.renderLegendValue(context, Math.round(legend), this.y+roundedYPos);
 			legend-=legendIncrement;
 		}
-		context.fillText (Math.round(legend), this.x+this.legendMargin , this.y+roundedYPos+gap);
-		legend-=legendIncrement;
+		this.renderLegendValue(context, Math.round(legend), this.y+roundedYPos+gap);
+	}
+	
+	ChartBackground.prototype.renderLegendValue = function(context, value, yPosition){
+		context.shadowColor = SimpleGeometry.getRgbaStyleString(0x00,0x00,0x00,.4);
+		context.shadowOffsetX = 1;
+		context.shadowOffsetY = 1;
+		context.shadowBlur    = 2;
+		context.fillText (value, this.x+this.legendMargin , yPosition);
+		context.shadowOffsetX = 0;
+		context.shadowOffsetY = 0;
+		context.shadowBlur    = 0;	
 	}
 	
 	window.ChartBackground=ChartBackground;

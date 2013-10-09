@@ -9,14 +9,13 @@
 		this.customCaptureControls = false;
 		this.captureFrameRate = 300; //frames for generated gifs are captured at this rate
 		this.gifPlaybackFrameRate = 100;//generated gifs play at this speed
+		this.toolTip = "";
 		this.setUpDemo();
 	}
 	
 	//subclass extends superclass
 	AbstractDemo.prototype = Object.create(SimpleGeometry.Rectangle.prototype);
 	AbstractDemo.prototype.constructor = SimpleGeometry.Rectangle;
-
-	AbstractDemo.prototype.toolTip = "";	
 
 	//subclasses override this incase of custom set ups (additional canvas etc.)
 	AbstractDemo.prototype.preSetUp = function(){}

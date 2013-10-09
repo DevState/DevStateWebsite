@@ -9,18 +9,15 @@
 		this.context2d = context2d;
 		this.animator = new UnitAnimator();
 		this.animationTransformRectangle = new TransformRectangle();
+		this.arrows = new ArrowButtons(this);
+		this.margin = 40;
+		this.unfocusedItemWidthPercent = .5;
+		this.currentIndex = 0;
 	}
 	
 	//subclass extends superclass
 	SimpleCoverFlow.prototype = Object.create(SimpleGeometry.Rectangle.prototype);
 	SimpleCoverFlow.prototype.constructor = SimpleGeometry.Rectangle;
-	
-	//properties
-	SimpleCoverFlow.prototype.margin = 40;
-	SimpleCoverFlow.prototype.unfocusedItemWidthPercent = .5;
-	SimpleCoverFlow.prototype.currentIndex = 0;
-	
-	SimpleCoverFlow.prototype.cards;
 		
 	SimpleCoverFlow.prototype.next = function(){
 		if(!this.hasNext() || this.animator.isAnimating()){
@@ -107,7 +104,7 @@
 			this.cards[this.cards.length - i -1].render(this.context2d, this.images[this.currentIndex - this.numSideCards + this.cards.length - i- 1]);
 		}
 		this.cards[i].render(this.context2d, this.images[this.currentIndex - this.numSideCards + i]);
-		this.drawArrows();
+		this.arrows.render(this.context2d);
 	}
 	
 	SimpleCoverFlow.prototype.updateAnimationTransformRectangle = function(target, current, percent){
@@ -132,7 +129,6 @@
 			//card.render(this.context2d, this.images[this.currentIndex - this.numSideCards + i]);
 		}
 		this.renderCurrentIndex();
-		this.drawArrows();
 	}
 	
 	SimpleCoverFlow.prototype.slideRight = function(){
@@ -146,7 +142,6 @@
 			//card.render(this.context2d, this.images[this.currentIndex - this.numSideCards + i]);
 		}
 		this.renderCurrentIndex();
-		this.drawArrows();
 	}
 	
 	SimpleCoverFlow.prototype.slide=function(){
@@ -164,88 +159,7 @@
 		}
 		this.renderCurrentIndex();
 	}
-
-	
-	//duplicated in BasicSlideShow, move to a util
-	SimpleCoverFlow.prototype.drawArrows = function(){
-		this.context2d.beginPath();
-		this.context2d.lineWidth = 5;
-		this.context2d.strokeStyle = SimpleGeometry.getRgbaStyleString(0xFF,0xFF,0xFF,1);
-		this.context2d.fillStyle = SimpleGeometry.getRgbaStyleString(0,0,0,1);
-		this.context2d.lineCap = "butt"; //"square";//
-
-		var arrowHeight = 18;
-		var arrowWidth = 10;
-		var margin = 5;
-		
-		//left arrow graphic
-		this.context2d.moveTo(this.x + arrowWidth + margin, this.y + this.height/2 );
-		this.context2d.lineTo(this.x + arrowWidth + margin, this.y + this.height/2 - arrowHeight /2);
-		this.context2d.lineTo(this.x + arrowWidth + margin, this.y + this.height/2 + arrowHeight /2);
-		this.context2d.lineTo(this.x + margin, this.y + this.height/2 );
-		this.context2d.lineTo(this.x + arrowWidth + margin, this.y + this.height/2 - arrowHeight /2);
-		this.context2d.lineTo(this.x + arrowWidth + margin, this.y + this.height/2 );		
-		
-		//right arrow graphic
-		this.context2d.moveTo(this.getRight() - arrowWidth - margin, this.y + this.height/2 );
-		this.context2d.lineTo(this.getRight() - arrowWidth - margin, this.y + this.height/2 - arrowHeight /2);
-		this.context2d.lineTo(this.getRight() - arrowWidth - margin, this.y + this.height/2 + arrowHeight /2);
-		this.context2d.lineTo(this.getRight() - margin, this.y + this.height/2 );
-		this.context2d.lineTo(this.getRight() - arrowWidth - margin, this.y + this.height/2 - arrowHeight /2);	
-		this.context2d.lineTo(this.getRight() - arrowWidth - margin, this.y + this.height/2 );		
-		this.context2d.stroke();
-		this.context2d.fill();
-		this.context2d.closePath();
-		
-		this.context2d.lineWidth = 0;
-	}
 	
 	window.SimpleCoverFlow = SimpleCoverFlow;
 	
 }(window));
-
-
-
-	/*
-	SimpleCoverFlow.prototype.setCardTargets = function(image){
-	
-		var openCardRect = new SimpleGeometry.Rectangle();
-		openCardRect.height = image.height;
-		openCardRect.width = image.width;
-		openCardRect.x = this.width/2-openCardRect.width/2;
-		
-		var leftCard = new SimpleGeometry.Rectangle();
-		var rightCard = new SimpleGeometry.Rectangle();
-		leftCard.y = rightCard.y = openCardRect.y = this.y + this.height/2-openCardRect.height/2;
-		
-		rightCard.width = leftCard.width = openCardRect.width * this.unfocusedItemWidthPercent;
-		rightCard.height = leftCard.height = openCardRect.height;
-		leftCard.x = openCardRect.x - leftCard.width;
-		rightCard.x = openCardRect.getRight; 
-		 
-		this.numSideCards = Math.floor((openCardRect.x-this.x) / leftCard.width);
-		
-		this.targetTransformRectangles = new Array();
-		//LEFT SIDE
-		var fakePerspectiveOffset = openCardRect.height/5;
-		for(var i=0; i< this.numSideCards; i++){
-			this.targetTransformRectangles[i] = new TransformRectangle(	new SimpleGeometry.Point(this.x + leftCard.width*i, leftCard.y), 
-																		new SimpleGeometry.Point(this.x + leftCard.width*(i+1), leftCard.y+fakePerspectiveOffset), 
-																		new SimpleGeometry.Point(this.x + leftCard.width*(i+1), leftCard.getBottom()-fakePerspectiveOffset), 
-																		new SimpleGeometry.Point(this.x + leftCard.width*i, leftCard.getBottom()) );
-		}
-		//MIDDLE
-		this.targetTransformRectangles.push(new TransformRectangle(	new SimpleGeometry.Point(openCardRect.x, openCardRect.y), 
-																		new SimpleGeometry.Point(openCardRect.getRight(), openCardRect.y), 
-																		new SimpleGeometry.Point(openCardRect.getRight(), openCardRect.getBottom()), 
-																		new SimpleGeometry.Point(openCardRect.x, openCardRect.getBottom() ) )
-																	);
-		//RIGHT SIDE
-		for(i=0; i< this.numSideCards; i++){
-			this.targetTransformRectangles[this.targetTransformRectangles.length] = new TransformRectangle(	new SimpleGeometry.Point(openCardRect.getRight() + rightCard.width*i, rightCard.y+fakePerspectiveOffset), 
-																											new SimpleGeometry.Point(openCardRect.getRight() + rightCard.width*(i+1), rightCard.y), 
-																											new SimpleGeometry.Point(openCardRect.getRight() + rightCard.width*(i+1), rightCard.getBottom()), 
-																											new SimpleGeometry.Point(openCardRect.getRight() + rightCard.width*i, rightCard.getBottom()-fakePerspectiveOffset) );
-		}
-	}
-	*/

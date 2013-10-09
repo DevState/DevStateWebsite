@@ -1,12 +1,12 @@
 (function (window){
 
-	SimpleGeometry=function(){}
+	SimpleGeometry = function(){}
 
-	SimpleGeometry.degreesToRadians=function(degrees){
+	SimpleGeometry.degreesToRadians = function(degrees){
 		return degrees * (Math.PI/180);
 	}
 
-	SimpleGeometry.radiansToDegrees=function(radians){
+	SimpleGeometry.radiansToDegrees = function(radians){
 		return radians * (180/Math.PI)
 	}
 	
@@ -15,36 +15,36 @@
 	SimpleGeometry.PI_FOURTH = Math.PI/4;
 	
 	//return number between 1 and 0
-	SimpleGeometry.normalize=function(value, minimum, maximum){
+	SimpleGeometry.normalize = function(value, minimum, maximum){
 		return (value - minimum) / (maximum - minimum);
 	}
 
 	//map normalized number to values
-	SimpleGeometry.interpolate=function(normValue, minimum, maximum){
+	SimpleGeometry.interpolate = function(normValue, minimum, maximum){
 		return minimum + (maximum - minimum) * normValue;
 	}
 
 	//map a value from one set to another
-	SimpleGeometry.map=function(value, min1, max1, min2, max2){
+	SimpleGeometry.map = function(value, min1, max1, min2, max2){
 		return SimpleGeometry.interpolate( SimpleGeometry.normalize(value, min1, max1), min2, max2);
 	}
 
-	SimpleGeometry.getRandomPositiveOrNegativeOne=function(){
+	SimpleGeometry.getRandomPositiveOrNegativeOne = function(){
 		return Math.random() > .5 ? 1 : -1;
 	}
 
 	//constrain degrees between 0 and 360
-	SimpleGeometry.constrainDegreeTo360=function(degree){
+	SimpleGeometry.constrainDegreeTo360 = function(degree){
 		return (360+degree%360)%360;//hmmm... looks a bit weird?!
 	}
 	
 	//constrain radians between 0 and 2PI
-	SimpleGeometry.constrainRadianTo2PI=function(rad){
+	SimpleGeometry.constrainRadianTo2PI = function(rad){
 		return (SimpleGeometry.PI2+rad%SimpleGeometry.PI2)%SimpleGeometry.PI2;//equally so...
 	}
 	
 	//constrains a number within a range
-	SimpleGeometry.clamp=function(number, min, max){
+	SimpleGeometry.clamp = function(number, min, max){
 		if(number<min){
 			return min;
 		}
@@ -54,7 +54,7 @@
 		return number;
 	}
 	
-	SimpleGeometry.getRandomFillStyleColor=function(alpha, maxColorValue){
+	SimpleGeometry.getRandomFillStyleColor = function(alpha, maxColorValue){
 		if(isNaN(maxColorValue)){
 			maxColorValue = 255;
 		}
@@ -77,37 +77,37 @@
 	//=====================::POINT::====================
 	//==================================================
 
-	SimpleGeometry.Point=function (x,y){
+	SimpleGeometry.Point = function (x,y){
 		this.x=isNaN(x) ? 0 : x;
 		this.y=isNaN(y) ? 0 : y;
 	}
 		
-	SimpleGeometry.Point.prototype.clone=function(){
+	SimpleGeometry.Point.prototype.clone = function(){
 		return new SimpleGeometry.Point(this.x,this.y);
 	}
 	
-	SimpleGeometry.Point.prototype.equals=function(point){
+	SimpleGeometry.Point.prototype.equals = function(point){
 		return this.x==point.x && this.y==point.y;
 	}
 	
-	SimpleGeometry.Point.prototype.toString=function(){
+	SimpleGeometry.Point.prototype.toString = function(){
 		return "{x:"+this.x+" , y:"+this.y+"}";
 	}
 	
-	SimpleGeometry.distanceBetweenTwoPoints=function( point1, point2 ){
+	SimpleGeometry.distanceBetweenTwoPoints = function( point1, point2 ){
 		//console.log("Math.pow(point2.x - point1.x,2) : ",Math.pow(point2.x - point1.x,2));
 		return Math.sqrt( Math.pow(point2.x - point1.x,2) + Math.pow(point2.y - point1.y,2) );
 	}
 	
-	SimpleGeometry.angleBetweenTwoPoints=function(p1,p2){
+	SimpleGeometry.angleBetweenTwoPoints = function(p1,p2){
 		return Math.atan2(p1.y-p2.y, p1.x-p2.x);			
 	}
 	
-	SimpleGeometry.mirrorPointInRectangle=function(point,rect){
+	SimpleGeometry.mirrorPointInRectangle = function(point,rect){
 		return new SimpleGeometry.Point(rect.width-point.x,rect.height-point.y);
 	}
 	
-	SimpleGeometry.randomizePoint=function(point,randomValue){
+	SimpleGeometry.randomizePoint = function(point,randomValue){
 		return new SimpleGeometry.Point(-randomValue+Math.random()*randomValue+point.x,-randomValue+Math.random()*randomValue+point.y);
 	}
 
@@ -116,48 +116,48 @@
 	//=====================::TRIANGLE::====================
 	//==================================================
 
-	SimpleGeometry.Triangle=function (a,b,c){
+	SimpleGeometry.Triangle = function (a,b,c){
 		this.a = a ? a : new SimpleGeometry.Point(0,0);
 		this.b = b ? b : new SimpleGeometry.Point(0,0);
 		this.c = c ? c : new SimpleGeometry.Point(0,0);
 	}
 	
-	SimpleGeometry.Triangle.prototype.equals=function(triangle){
+	SimpleGeometry.Triangle.prototype.equals = function(triangle){
 		return this.a.equals(triangle.a) && this.b.equals(triangle.b) && this.c.equals(triangle.c);
 	}
 	
-	SimpleGeometry.Triangle.prototype.clone=function(){
+	SimpleGeometry.Triangle.prototype.clone = function(){
 		return new SimpleGeometry.Triangle(new Point(this.a.x,this.a.y),new Point(this.b.x,this.b.y),new Point(this.c.x,this.c.y));
 	}
 
-	SimpleGeometry.Triangle.prototype.getSmallestX=function(){
+	SimpleGeometry.Triangle.prototype.getSmallestX = function(){
 		return Math.min(this.a.x,this.b.x,this.c.x);
 	}
-	SimpleGeometry.Triangle.prototype.getSmallestY=function(){
+	SimpleGeometry.Triangle.prototype.getSmallestY = function(){
 		return Math.min(this.a.y,this.b.y,this.c.y);		
 	}
 	
-	SimpleGeometry.Triangle.prototype.getBiggestX=function(){
+	SimpleGeometry.Triangle.prototype.getBiggestX = function(){
 		return Math.max(this.a.x,this.b.x,this.c.x);
 	}
-	SimpleGeometry.Triangle.prototype.getBiggestY=function(){
+	SimpleGeometry.Triangle.prototype.getBiggestY = function(){
 		return Math.max(this.a.y,this.b.y,this.c.y);
 	}
 
-	SimpleGeometry.Triangle.prototype.containsVertex=function(point){
+	SimpleGeometry.Triangle.prototype.containsVertex = function(point){
 		//console.log("SimpleGeometry.Triangle.containsVertex",this.toString(),point.toString());
 		return (this.a.x==point.x && this.a.y==point.y) || (this.b.x==point.x && this.b.y==point.y) || (this.c.x==point.x && this.c.y==point.y);
 	}
 	
-	SimpleGeometry.Triangle.prototype.toString=function(){
+	SimpleGeometry.Triangle.prototype.toString = function(){
 		return "toString() Triangle{a:"+this.a+" , b:"+this.b+" , c:"+this.c+"}";
 	}
 	
-	SimpleGeometry.Triangle.prototype.containsVertex=function(point){
+	SimpleGeometry.Triangle.prototype.containsVertex = function(point){
 		return (this.a.x==point.x && this.a.y==point.y) || (this.b.x==point.x && this.b.y==point.y) || (this.c.x==point.x && this.c.y==point.y);
 	}
 	
-	SimpleGeometry.Triangle.prototype.sharesEdge=function(triangle){
+	SimpleGeometry.Triangle.prototype.sharesEdge = function(triangle){
 		//console.log("SimpleGeometry.Triangle.sharesEdge",this.toString(),triangle.toString());
 		var sharedPoints=0;
 		if(this.containsVertex(triangle.a)){
@@ -178,34 +178,34 @@
 	//==================================================
 
 	//TODO : Extend point?
-	SimpleGeometry.Rectangle=function (x,y,width,height){
+	SimpleGeometry.Rectangle = function (x,y,width,height){
 		this.x=x;
 		this.y=y;
 		this.width=width;
 		this.height=height;
 	}
 	
-	SimpleGeometry.Rectangle.prototype.getRight=function(){
+	SimpleGeometry.Rectangle.prototype.getRight = function(){
 		return this.x+this.width;
 	}
 	
-	SimpleGeometry.Rectangle.prototype.getBottom=function(){
+	SimpleGeometry.Rectangle.prototype.getBottom = function(){
 		return this.y+this.height;
 	}
 	
-	SimpleGeometry.Rectangle.prototype.containsPoint=function(point){
+	SimpleGeometry.Rectangle.prototype.containsPoint = function(point){
 		return point.x>this.x && point.y>this.y && point.x<this.getRight() && point.y<this.getBottom();
 	}
 	//questionable... center should not be relative to canvas itself...
-	SimpleGeometry.Rectangle.prototype.getCenter=function(){
+	SimpleGeometry.Rectangle.prototype.getCenter = function(){
 		return new SimpleGeometry.Point(this.x+this.width/2,this.y+this.height/2);
 	}
 	
-	SimpleGeometry.Rectangle.prototype.clone=function(){
+	SimpleGeometry.Rectangle.prototype.clone = function(){
 		return new SimpleGeometry.Rectangle(this.x,this.y,this.width,this.height);
 	}
 	
-	SimpleGeometry.Rectangle.prototype.toString=function(){
+	SimpleGeometry.Rectangle.prototype.toString = function(){
 		return "Rectangle{x:"+this.x+" , y:"+this.y+" , width:"+this.width+" , height:"+this.height+"}";
 	}		
 
@@ -232,7 +232,7 @@
 		return new SimpleGeometry.Point(x, y);
 	}
 	
-	SimpleGeometry.Circle.prototype.clone=function(){
+	SimpleGeometry.Circle.prototype.clone = function(){
 		return new SimpleGeometry.Circle(this.x,this.y,this.radius);
 	}
 	

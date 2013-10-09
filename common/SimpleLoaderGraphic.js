@@ -7,6 +7,14 @@
 		SimpleGeometry.Circle.call(this, x, y, radius); //call super constructor.
 		this.updateHandler = updateHandler;
 		this.arcLength = isNaN(arcLength) ? Math.PI*.8 : arcLength;
+		this.loadingTextFillStyle = "#CCCCCC";
+		this.loadingText = "";
+		this.lineWidth = 14;//stroke width of spinner in pixels
+		this.frameRate = 25;
+		this.velocity = .1;//expressed as a radian
+		this.intervalId;
+		this.linearGradientStart = new SimpleGeometry.Point();
+		this.linearGradientEnd = new SimpleGeometry.Point();
 	}
 	
 	//subclass extends superclass
@@ -25,16 +33,6 @@
 		this.endStrokeGradientColor = SimpleGeometry.getRgbaStyleString(red, green, blue, alpha);
 	}
 	
-	//stroke width of spinner in pixels
-	SimpleLoaderGraphic.prototype.lineWidth = 14;
-	
-	SimpleLoaderGraphic.prototype.frameRate = 25;
-	
-	//expressed as a radian
-	SimpleLoaderGraphic.prototype.velocity = .1;
-	
-	SimpleLoaderGraphic.prototype.intervalId;
-	
 	SimpleLoaderGraphic.prototype.play = function(){
 		this.radian = 0;
 		var _this = this;
@@ -50,24 +48,19 @@
 		delete this.intervalId;
 	}
 	
-	SimpleLoaderGraphic.prototype.rotate=function(){
+	SimpleLoaderGraphic.prototype.rotate = function(){
 		this.radian += this.velocity;
 		this.radian = SimpleGeometry.constrainRadianTo2PI(this.radian);
 		if(this.updateHandler){
 			this.updateHandler();
 		}
-	}	
-
-	SimpleLoaderGraphic.prototype.linearGradientStart = new SimpleGeometry.Point();
-	SimpleLoaderGraphic.prototype.linearGradientEnd = new SimpleGeometry.Point();
+	}
 	
 	SimpleLoaderGraphic.prototype.render = function(context){
-	
 		//render spinner
 		context.beginPath();
 		this.linearGradientStart.x = this.x + Math.cos(this.radian) * (this.radius + 10);
 		this.linearGradientStart.y = this.y + Math.sin(this.radian) * (this.radius + 10);
-				
 		this.linearGradientEnd.x = this.x + Math.cos(this.radian + this.arcLength) * (this.radius + 10);
 		this.linearGradientEnd.y = this.y + Math.sin(this.radian + this.arcLength) * (this.radius + 10);
 
@@ -96,9 +89,6 @@
 		context.fillText (this.loadingText, this.x - metrics.width/2, this.y+this.radius+this.lineWidth);
 		
 	}
-	
-	SimpleLoaderGraphic.prototype.loadingTextFillStyle = "#CCCCCC";
-	SimpleLoaderGraphic.prototype.loadingText = "";
 
 	window.SimpleLoaderGraphic=SimpleLoaderGraphic;
 	

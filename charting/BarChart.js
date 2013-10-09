@@ -1,13 +1,13 @@
 //has a dependency on SimpleGeometry
 (function (window){
 
-	//set up event dispatching?  EventDispatcher
-
 	BarChart = function(x, y, width, height, barWidth){
 		SimpleGeometry.Rectangle.call(this,x,y,width,height); //call super constructor.
 		if(!isNaN(barWidth)){
 			this.barWidth=barWidth;
 		}
+		this.renderPoint=new SimpleGeometry.Point();//Use one instance, instead of a local variable in method. TODO make static
+		this.extrudeWidth = 6;
 	}
 	
 	//subclass extends superclass
@@ -46,9 +46,6 @@
 	BarChart.prototype.calculateYPosition = function(value,animationPercent){
 		return SimpleGeometry.interpolate( SimpleGeometry.normalize(value, 0, this.max) * animationPercent, this.getBottom(), this.y)
 	}
-	BarChart.prototype.renderPoint=new SimpleGeometry.Point();//TODO make static
-
-	BarChart.prototype.extrudeWidth = 6;
 	
 	BarChart.prototype.render = function(context,animationPercent){
 		if(!this.values){

@@ -49,26 +49,6 @@
 		
 	}
 	
-	TransformRectangle.prototype.renderOutline  =  function(context2d){
-		context2d.strokeStyle  =  "#FF0000";
-		context2d.lineWidth  =  1;
-		context2d.beginPath();
-		context2d.moveTo(this.triangleA.a.x,this.triangleA.a.y);
-		context2d.lineTo(this.triangleA.b.x,this.triangleA.b.y);
-		context2d.lineTo(this.triangleA.c.x,this.triangleA.c.y);
-		context2d.lineTo(this.triangleA.a.x,this.triangleA.a.y);		
-		context2d.stroke();
-		context2d.closePath();
-		
-		context2d.beginPath();
-		context2d.moveTo(this.triangleB.a.x,this.triangleB.a.y);
-		context2d.lineTo(this.triangleB.b.x,this.triangleB.b.y);
-		context2d.lineTo(this.triangleB.c.x,this.triangleB.c.y);
-		context2d.lineTo(this.triangleB.a.x,this.triangleB.a.y);
-		context2d.stroke();
-		context2d.closePath();
-	}
-	
 	TransformRectangle.prototype.renderImage  =  function(context2d, image){
 		SimpleGeometry.setIdentityMatrixToContext(context2d);
 		context2d.fillStyle  =  context2d.createPattern(image,'no-repeat');
@@ -133,7 +113,26 @@
 		
 		this.transform.skewX = Math.sin(xAngle)*xScale;
 		this.transform.skewY = Math.cos(yAngle)*yScale;
+	}
+	
+	TransformRectangle.prototype.renderOutline  =  function(context2d){
+		context2d.strokeStyle  =  "#FF0000";
+		context2d.lineWidth  =  1;
+		context2d.beginPath();
+		context2d.moveTo(this.triangleA.a.x,this.triangleA.a.y);
+		context2d.lineTo(this.triangleA.b.x,this.triangleA.b.y);
+		context2d.lineTo(this.triangleA.c.x,this.triangleA.c.y);
+		context2d.lineTo(this.triangleA.a.x,this.triangleA.a.y);		
+		context2d.stroke();
+		context2d.closePath();
 		
+		context2d.beginPath();
+		context2d.moveTo(this.triangleB.a.x,this.triangleB.a.y);
+		context2d.lineTo(this.triangleB.b.x,this.triangleB.b.y);
+		context2d.lineTo(this.triangleB.c.x,this.triangleB.c.y);
+		context2d.lineTo(this.triangleB.a.x,this.triangleB.a.y);
+		context2d.stroke();
+		context2d.closePath();
 	}
 	
 	window.TransformRectangle  =  TransformRectangle;

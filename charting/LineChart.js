@@ -2,20 +2,19 @@
 
 (function (window){
 
-	//set up event dispatching?  EventDispatcher
-
-	LineChart=function(x,y,width,height){
+	LineChart = function(x,y,width,height){
 		SimpleGeometry.Rectangle.call(this,x,y,width,height); //call super constructor.
+		this.showDots=true;
+		this.renderPoint=new SimpleGeometry.Point();//Use one instance, instead of a local variable in method. TODO make static
+		this.margin = 30;
 	}
 	
 	//subclass extends superclass
 	LineChart.prototype = Object.create(SimpleGeometry.Rectangle.prototype);
 	LineChart.prototype.constructor = SimpleGeometry.Rectangle;
 	
-	LineChart.prototype.showDots=true;
-	
 	//values is a multi dimentional Array with values ranging from 0-100
-	LineChart.prototype.setValues=function(values){
+	LineChart.prototype.setValues = function(values){
 		this.min=0;
 		this.max=100;
 		this.values=values;
@@ -38,7 +37,7 @@
 		//console.log("LineChart.setValues() lines : ",this.values.length," min:",this.min," max:",this.max);
 	}
 	
-	LineChart.prototype.setRandomValues=function(){
+	LineChart.prototype.setRandomValues = function(){
 		var values = new Array();
 		var lines = 1 + Math.floor(Math.random()*3);//between 1 and 4
 		var points = 10 + Math.floor(Math.random()*10);//between 10 and 40
@@ -59,10 +58,10 @@
 	}
 	
 	//colors must be an array in the format ["#FF00FF","#FF00CC"...]
-	LineChart.prototype.setLineColors=function(colors){
+	LineChart.prototype.setLineColors = function(colors){
 		this.colors=colors;	
 	}
-	LineChart.prototype.setRandomColors=function(){
+	LineChart.prototype.setRandomColors = function(){
 		this.colors = new Array();
 		while(this.colors.length != this.values.length){
 			this.colors.push(SimpleGeometry.getRandomFillStyleColor(1,123));
@@ -70,7 +69,7 @@
 		//console.log("LineChart.setRandomColors",this.colors);
 	}
 	
-	LineChart.prototype.render=function(context,animationPercent){
+	LineChart.prototype.render = function(context,animationPercent){
 		//console.log("LineChart.render()");
 		if(!this.values){
 			this.setRandomValues();
@@ -87,14 +86,11 @@
 		}
 	}
 	
-	LineChart.prototype.calculateYPosition=function(value,animationPercent){
+	LineChart.prototype.calculateYPosition = function(value,animationPercent){
 		return SimpleGeometry.interpolate( SimpleGeometry.normalize(value, this.min, this.max) * animationPercent, this.getBottom(), this.y)
 	}
-	LineChart.prototype.renderPoint=new SimpleGeometry.Point();//TODO make static
 	
-	LineChart.prototype.margin = 30;
-	
-	LineChart.prototype.renderLine=function(context, line, color, animationPercent){
+	LineChart.prototype.renderLine = function(context, line, color, animationPercent){
 		if(animationPercent==0){
 			return;
 		}
@@ -129,21 +125,6 @@
 			context.closePath();
 		}
 	}
-	
-	/*
-	LineChart.prototype.mouseMoveHandler=function(event){
-		if(_animating || !_isOver){
-			return;
-		}
-		_toolTip.visible=true;
-		_positionOffset=Math.round((mouseX/_previousWidth)*this.valuesLengthMinus1);
-		if(_previousPositionOffset!=_positionOffset){
-			_toolTip.x= _positionOffset*(width/this.valuesLengthMinus1);
-			_toolTip.y= calculateYPosition(this.values[_positionOffset])-_menuTipHalfHeight;
-			_toolTip.updateToolTip(_happyNumberFormatter.format(this.values[_positionOffset]),mouseX<_halfWidth);
-			_previousPositionOffset= _positionOffset;
-		}
-	}*/
 
 	window.LineChart=LineChart;
 	

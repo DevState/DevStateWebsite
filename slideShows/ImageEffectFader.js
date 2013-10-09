@@ -15,6 +15,12 @@
 	ImageEffectFader.prototype = Object.create(SimpleGeometry.Rectangle.prototype);
 	ImageEffectFader.prototype.constructor = SimpleGeometry.Rectangle;
 
+	ImageEffectFader.easingFunctions = new Array(UnitAnimator.easeInSine, UnitAnimator.easeInOutSine, UnitAnimator.easeOutBounce, UnitAnimator.easeInBounce);
+	
+	ImageEffectFader.getRandomEasingFunction = function(){
+		return ImageEffectFader.easingFunctions[Math.floor(Math.random()*ImageEffectFader.easingFunctions.length)];
+	}
+	
 	//values is a multi dimentional Array with values
 	ImageEffectFader.prototype.setImage = function(url, effect){
 		//console.log("ImageEffectFader.setImage()", url);
@@ -42,12 +48,6 @@
 			this.context2d.drawImage( this.previousImage, 0, 0, this.width, this.height);
 		}
 		this.spinner.render(this.context2d);
-	}
-	
-	ImageEffectFader.easingFunctions = new Array(UnitAnimator.easeInSine, UnitAnimator.easeInOutSine, UnitAnimator.easeOutBounce, UnitAnimator.easeInBounce);
-	
-	ImageEffectFader.getRandomEasingFunction = function(){
-		return ImageEffectFader.easingFunctions[Math.floor(Math.random()*ImageEffectFader.easingFunctions.length)];
 	}
 	
 	ImageEffectFader.prototype.showImage = function(direction){
@@ -81,8 +81,6 @@
 		this.animator.start();
 	}
 	
-	
-	
 	ImageEffectFader.prototype.startFadeOut = function(){
 		var _this=this;
 		this.animator.easingFunction = UnitAnimator.easeInSine;
@@ -112,9 +110,6 @@
 		//console.log("ImageEffectFader.slideComplete()");
 	}
 	
-	
-	
-
 	window.ImageEffectFader=ImageEffectFader;
 	
 }(window));

@@ -175,9 +175,7 @@
 		image.src = resizeCanvas.toDataURL();
 	}
 	
-	
 	window.ImageEffects=ImageEffects;
-	
 
 }(window));
 

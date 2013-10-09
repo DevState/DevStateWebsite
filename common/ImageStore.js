@@ -2,13 +2,6 @@
 
 
 	ImageStore = function(){}
-	
-	ImageStore.COMPLETE="complete";
-	
-	ImageStore.prototype.images=new Array();
-	ImageStore.prototype.currentLoadIndex = 0;
-	ImageStore.prototype.completeCallback;//this is a temporary hack, figure out how to work with events in JS and remove
-	ImageStore.prototype.updateCallback;//this is a temporary hack, figure out how to work with events in JS and remove
 		
 	ImageStore.prototype.loadImages = function(urls, completeCallback, updateCallback){
 		this.urls = urls;
@@ -33,7 +26,7 @@
 		return this.currentLoadIndex+" / "+this.urls.length;
 	}
 
-	ImageStore.prototype.loadNextImage=function(){
+	ImageStore.prototype.loadNextImage = function(){
 		if(this.currentLoadIndex >= this.urls.length){
 			//console.log("all images loaded");
 			this.completeCallback();
@@ -65,7 +58,6 @@
 		}
 		this.loadNextImage();
 	}
-	
 
 	window.ImageStore=ImageStore;
 	

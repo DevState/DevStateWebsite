@@ -5,9 +5,7 @@
 	//set up event dispatching?  EventDispatcher
 
 	PieChart = function(x, y, width, height, margin){
-		if(!isNaN(margin)){
-			this.margin = margin;
-		}
+		this.margin = isNaN(margin) ? 20 : margin;
 		SimpleGeometry.Rectangle.call(this, x, y, width, height); //call super constructor.
 		this.center = this.getCenter();
 		this.radius = this.width < this.height ? (this.width/2 - this.margin*2) : (this.height/2 - this.margin*2);
@@ -16,8 +14,6 @@
 	//subclass extends superclass
 	PieChart.prototype = Object.create(SimpleGeometry.Rectangle.prototype);
 	PieChart.prototype.constructor = SimpleGeometry.Rectangle;
-
-	PieChart.prototype.margin = 20;//used to calculate the radius
 	
 	PieChart.prototype.setValues = function(values){
 		this.values=values;

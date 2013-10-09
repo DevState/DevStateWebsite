@@ -1,12 +1,7 @@
 (function (window){
 
 
-	TextChopper=function(){
-
-	}
-
-	TextChopper.prototype.text;
-	TextChopper.prototype.totalCharacters;
+	TextChopper=function(){}
 		
 	TextChopper.prototype.createImagesFromString = function(document, string, size, color, color2){
 		var characters = string.split("");		

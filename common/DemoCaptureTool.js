@@ -1,5 +1,5 @@
+//has dependencies on gifEncoder/b64.js, gifEncoder/LZWEncoder.js, gifEncoder/NeuQuant.js, gifEncoder/GIFEncoder.js
 (function (window){
-
 
 	DemoCaptureTool = function(captureFrameRate, playbackFrameRate, canvases, outputImage){
 		//console.log("DemoCaptureTool constructor ",captureFrameRate, playbackFrameRate);
@@ -87,5 +87,3 @@
 	window.DemoCaptureTool=DemoCaptureTool;
 	
 }(window));
-
-
