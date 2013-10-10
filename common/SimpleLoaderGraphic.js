@@ -84,7 +84,7 @@
 		
 		context.textBaseline = "top";
 		context.fillStyle = this.loadingTextFillStyle;
-		context.font = "20px 'ArchivoBlack'";
+		context.font = "30px 'sf_collegiate_solidregular'";
 		var metrics = context.measureText(this.loadingText);
 		context.fillText (this.loadingText, this.x - metrics.width/2, this.y+this.radius+this.lineWidth);
 		

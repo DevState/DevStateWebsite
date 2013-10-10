@@ -50,7 +50,7 @@
   })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
   ga('create', 'UA-44531934-1', 'devstate.net');
-  //ga('send', 'pageview');
+  ga('send', 'pageview');
   
 </script>
 
@@ -228,6 +228,7 @@ function lightBoxNextDemoClickHandler(){
 	index = index < demos.length-1 ? index+1 : 0;
 	tearDownDemo();
 	setUpDemo(demos[index]);
+	location.hash=demos[index];
 }
 
 function lightBoxPreviousDemoClickHandler(){
@@ -235,6 +236,7 @@ function lightBoxPreviousDemoClickHandler(){
 	index = index > 0 ? index-1 : demos.length-1;
 	tearDownDemo();
 	setUpDemo(demos[index]);
+	location.hash=demos[index];
 }
 
 function showDemo(demoName){
@@ -281,7 +283,8 @@ function setUpDemo(demoName){
 	detailsHtml +="<p style='padding-top:20px'><a href = 'javascript:void(0)' onclick = 'lightBoxPreviousDemoClickHandler()'>Previous</a>";
 	detailsHtml +="<a href = 'javascript:void(0)' onclick = 'hideDemo()' style='padding-left:20px'>Close</a>";
 	detailsHtml +="<a href = 'javascript:void(0)' onclick = 'lightBoxNextDemoClickHandler()' style='padding-left:20px'>Next</a></p>";
-	detailsDiv.innerHTML = detailsHtml;
+	detailsDiv.innerHTML = detailsHtml
+	ga("send", "event", "DemoView", demoName);
 }
 
 function tearDownDemo(){
