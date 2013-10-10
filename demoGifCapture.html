@@ -112,7 +112,7 @@
 					currentDemo.tearDown();
 				}
 				//console.log("showDemo() ",demoName+"Demo");
-				currentDemo = new this[demoName+"Demo"](0,0,demoWidth,demoHeight,document);
+				currentDemo = new this[demoName+"Demo"](0,0,demoWidth,demoHeight,document, document.body);
 				currentDemo.run();
 				var toolTip = document.getElementById("toolTip");
 				toolTip.innerHTML = currentDemo.toolTip;
@@ -174,7 +174,7 @@
 
 		<nav id="demosNavigation" style="font-family: sans-serif;">
 				<ul id="demosList" />
-		</nav>	
+		</nav>
 		<span>
 			<input type="checkbox"  id="captureCheckbox" >capture</input>
 			<button type="button" id="startDemoCaptureButton" disabled="true" onclick="startCaptureDemoHandler()">start</button>

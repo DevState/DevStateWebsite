@@ -14,14 +14,16 @@
 			character = characters[i];
 			
 			context = canvas.getContext("2d");
-			context.font = size+"px 'ArchivoBlack'";
+			//context.font = size+"px 'ArchivoBlack'";
+			context.font = size+"px 'sf_collegiate_solidregular'";
 			
 			metrics = context.measureText(character);
 			canvas.width = metrics.width;
 			canvas.height = size;//hardcoded, TODO : use getFirstNonTransparentPixel for dynamic sizing
 
 			context = canvas.getContext("2d");
-			context.font = size+"px 'ArchivoBlack'";
+			//context.font = size+"px 'ArchivoBlack'";
+			context.font = size+"px 'sf_collegiate_solidregular'";
 			
 			image = new Image();
 			image.width = canvas.width;
