@@ -103,6 +103,10 @@
 				}
 			}
 			
+			function resizeHandler(){
+				
+			}
+			
 			function demoLinkClickHandler(event){
 				showDemo(event.target.hash.split("#")[1]);
 			}
@@ -165,7 +169,7 @@
 		</script>
 		
 	</head>
-	<body >
+	<body onresize="resizeHandler()">
 		<span>
 			<img id="captureOutput" >
 			<img id="capturePngOutput" >

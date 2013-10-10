@@ -89,7 +89,7 @@
 
 
 </head>
-<body bgcolor="#FFFFFF" >
+<body bgcolor="#FFFFFF" onresize="resizeHandler()">
 	
 <div id="container">
 
@@ -218,6 +218,10 @@ var lightBoxMaxWidth = 700;
 var lightBoxMaxHeight = 400;
 var lightBoxMinWidth = 400;
 var lightBoxMinHeight = 400;
+
+function resizeHandler(){
+	hideDemo();
+}
 
 function lightBoxOverlayDivClick(){
 	hideDemo();
