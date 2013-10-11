@@ -6,11 +6,6 @@
 		<title>DevState : Finest Canvas and WebGL Workshops</title>
 
 		<style>
-		
-			@font-face {
-				font-family: 'ArchivoBlack';
-				src: url('assets/fonts/ArchivoBlack-Regular.otf?') format("opentype");
-			}
 
 			ul{
 				padding: 0px;
@@ -28,6 +23,8 @@
 			}
 			
 		</style>
+		<link rel="stylesheet" href="./css/fonts.css">
+		<link rel="stylesheet" href="./css/styles.css">
 
 		<!-- Gif Encoder -->
 		<script src="gifEncoder/b64.js"></script>
@@ -116,7 +113,7 @@
 					currentDemo.tearDown();
 				}
 				//console.log("showDemo() ",demoName+"Demo");
-				currentDemo = new this[demoName+"Demo"](0,0,demoWidth,demoHeight,document, document.body);
+				currentDemo = new this[demoName+"Demo"](0,0,demoWidth,demoHeight, document.body);
 				currentDemo.run();
 				var toolTip = document.getElementById("toolTip");
 				toolTip.innerHTML = currentDemo.toolTip;
@@ -174,7 +171,7 @@
 			<img id="captureOutput" >
 			<img id="capturePngOutput" >
 		</span>
-		<h1 style="font-family: ArchivoBlack;" >DevState : Finest Canvas and WebGL Workshops</h1>
+		<h1 class="handwriting" style="font-size:60px" >DevState : Finest Canvas and WebGL Workshops</h1>
 
 		<nav id="demosNavigation" style="font-family: sans-serif;">
 				<ul id="demosList" />

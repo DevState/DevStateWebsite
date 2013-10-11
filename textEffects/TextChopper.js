@@ -3,7 +3,7 @@
 
 	TextChopper=function(){}
 		
-	TextChopper.prototype.createImagesFromString = function(document, string, size, color, color2){
+	TextChopper.prototype.createImagesFromString = function(string, size, color, color2){
 		var characters = string.split("");		
 		var images = new Array();
 		canvas = document.createElement("canvas");

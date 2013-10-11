@@ -3,9 +3,8 @@
 	//================::ABSTRACT DEMO::===================
 
 	//constructor
-	AbstractDemo = function(x, y, width, height, document, demoContainer){
+	AbstractDemo = function(x, y, width, height, demoContainer){
 		SimpleGeometry.Rectangle.call(this,x,y,width,height); //call super constructor.
-		this.document = document;
 		this.demoContainer = demoContainer;
 		this.customCaptureControls = false;
 		this.captureFrameRate = 300; //frames for generated gifs are captured at this rate
@@ -114,8 +113,7 @@
 		this.demoContainer.removeChild(this.canvas);
 		delete this.context2d;
 		delete this.canvas;
-		this.customTearDown();		
-		this.document = undefined;
+		this.customTearDown();
 	}
 	
 	AbstractDemo.prototype.customTearDown = function(){
@@ -145,8 +143,8 @@
 
 	//================::PIE CHART::===================
 	
-	PieChartDemo = function(x, y, width, height, document, demoContainer){
-		AbstractDemo.call(this, x, y, width, height, document, demoContainer); //call super constructor.
+	PieChartDemo = function(x, y, width, height, demoContainer){
+		AbstractDemo.call(this, x, y, width, height, demoContainer); //call super constructor.
 		this.toolTip = "Click link to create random data, click pie chart to open/close";
 		this.gifPlaybackFrameRate = 200;
 	}
@@ -212,8 +210,8 @@
 	
 	//================::DONUT CHART::===================
 	
-	DonutChartDemo = function(x, y, width, height, document, demoContainer){
-		PieChartDemo.call(this, x, y, width, height, document, demoContainer); //call super constructor.
+	DonutChartDemo = function(x, y, width, height, demoContainer){
+		PieChartDemo.call(this, x, y, width, height, demoContainer); //call super constructor.
 		this.toolTip = "Click link to create random data, click donut chart to open/close";
 	}
 	
@@ -238,8 +236,8 @@
 	
 	//================::LINE CHART::===================
 	
-	LineChartDemo = function(x, y, width, height, document, demoContainer){
-		AbstractDemo.call(this, x, y, width, height, document, demoContainer); //call super constructor.
+	LineChartDemo = function(x, y, width, height, demoContainer){
+		AbstractDemo.call(this, x, y, width, height, demoContainer); //call super constructor.
 		this.toolTip = "Click link to create random data, click line chart to open/close";
 		this.gifPlaybackFrameRate = 200;
 	}
@@ -249,7 +247,7 @@
 	LineChartDemo.prototype.constructor = AbstractDemo;
 	
 	LineChartDemo.prototype.preSetUp = function(){
-		this.backGroundCanvas = this.document.createElement('canvas');
+		this.backGroundCanvas = document.createElement('canvas');
 		//console.log("LineChartDemo.preSetUp() ",this.backGroundCanvas);
 		this.backGroundCanvas.width = this.width; 
 		this.backGroundCanvas.height = this.height;
@@ -313,8 +311,8 @@
 	
 	//================::BAR CHART::===================
 	
-	BarChartDemo = function(x, y, width, height, document, demoContainer){
-		AbstractDemo.call(this, x, y, width, height, document, demoContainer); //call super constructor.
+	BarChartDemo = function(x, y, width, height, demoContainer){
+		AbstractDemo.call(this, x, y, width, height, demoContainer); //call super constructor.
 		this.toolTip = "Click link to create random data, click bar chart to open/close";
 		this.gifPlaybackFrameRate = 200;
 	}
@@ -324,7 +322,7 @@
 	BarChartDemo.prototype.constructor = AbstractDemo;
 	
 	BarChartDemo.prototype.preSetUp = function(){
-		this.backGroundCanvas = this.document.createElement('canvas');
+		this.backGroundCanvas = document.createElement('canvas');
 		//console.log("BarChartDemo.preSetUp() ",this.backGroundCanvas);
 		this.backGroundCanvas.width = this.width; 
 		this.backGroundCanvas.height = this.height;
@@ -393,8 +391,8 @@
 	
 	//================::BASIC SLIDESHOW::===================
 
-	BasicSlideShowDemo = function(x, y, width, height, document, demoContainer){
-		AbstractDemo.call(this, x, y, width, height, document, demoContainer); //call super constructor.
+	BasicSlideShowDemo = function(x, y, width, height, demoContainer){
+		AbstractDemo.call(this, x, y, width, height, demoContainer); //call super constructor.
 		this.toolTip = "Click left or right arrows to slide to next/previous image";
 		this.customCaptureControls = true;
 	}
@@ -463,8 +461,8 @@
 	
 	//================::THUMBNAIL CAROUSEL::===================
 
-	ThumbnailCarouselDemo = function(x, y, width, height, document, demoContainer){
-		AbstractDemo.call(this, x, y, width, height, document, demoContainer); //call super constructor.
+	ThumbnailCarouselDemo = function(x, y, width, height, demoContainer){
+		AbstractDemo.call(this, x, y, width, height, demoContainer); //call super constructor.
 		this.toolTip = "Click arrows to rotate carousel";
 		this.customCaptureControls = true;
 	}
@@ -538,8 +536,8 @@
 	
 	//================::SIMPLE COVER FLOW::===================
 
-	SimpleCoverFlowDemo = function(x, y, width, height, document, demoContainer){
-		AbstractDemo.call(this, x, y, width, height, document, demoContainer); //call super constructor.
+	SimpleCoverFlowDemo = function(x, y, width, height, demoContainer){
+		AbstractDemo.call(this, x, y, width, height, demoContainer); //call super constructor.
 		this.toolTip = "Click arrows to slide cover flow";
 		this.customCaptureControls = true;
 	}
@@ -614,8 +612,8 @@
 	
 	//================::IMAGE FADER::===================	
 	
-	ImageFaderDemo = function(x, y, width, height, document, demoContainer){
-		AbstractDemo.call(this, x, y, width, height, document, demoContainer); //call super constructor.
+	ImageFaderDemo = function(x, y, width, height, demoContainer){
+		AbstractDemo.call(this, x, y, width, height, demoContainer); //call super constructor.
 		this.toolTip = "Click image to fade effect random image";
 		this.customCaptureControls = true;
 	}
@@ -667,8 +665,8 @@
 	
 	//================::WANDERER::===================
 	
-	WandererDemo = function(x, y, width, height, document, demoContainer){
-		AbstractDemo.call(this, x, y, width, height, document, demoContainer); //call super constructor.
+	WandererDemo = function(x, y, width, height, demoContainer){
+		AbstractDemo.call(this, x, y, width, height, demoContainer); //call super constructor.
 		this.toolTip = "The two colors are complementary";
 		this.customCaptureControls = true;
 	}
@@ -684,7 +682,7 @@
 	WandererDemo.prototype.useLoadedImageStoreImages = function(){
 		//console.log("WandererDemo.useLoadedImageStoreImages()");
 		
-		this.colorWheelCanvas = this.document.createElement('canvas');
+		this.colorWheelCanvas = document.createElement('canvas');
 		this.colorWheelCanvas.width  = this.imageStore.images[0].width;
 		this.colorWheelCanvas.height = this.imageStore.images[0].height;
 		this.colorWheelContext = this.colorWheelCanvas.getContext("2d");
@@ -753,8 +751,8 @@
 	
 	//================::BLOCK SET ANIMATOR::===================
 
-	BlockSetAnimatorDemo = function(x, y, width, height, document, demoContainer){
-		AbstractDemo.call(this, x, y, width, height, document, demoContainer); //call super constructor.
+	BlockSetAnimatorDemo = function(x, y, width, height, demoContainer){
+		AbstractDemo.call(this, x, y, width, height, demoContainer); //call super constructor.
 		this.toolTip = "Click on canvas for a new random animation";
 	}
 	
@@ -861,8 +859,8 @@
 	
 	//================::TEXT EFFECT::===================
 
-	TextEffectDemo = function(x, y, width, height, document, demoContainer){
-		AbstractDemo.call(this, x, y, width, height, document, demoContainer); //call super constructor.
+	TextEffectDemo = function(x, y, width, height, demoContainer){
+		AbstractDemo.call(this, x, y, width, height, demoContainer); //call super constructor.
 		this.toolTip = "Click on canvas for a new random animation";
 	}
 	
@@ -875,7 +873,7 @@
 		var _this = this;
 		this.canvas.addEventListener("click", function(event){_this.canvasClickHandler(event)}, false);//"mousedown"
 		var textChopper = new TextChopper();
-		var images = textChopper.createImagesFromString(this.document,"DEVSTATE",100, "#AAAAFF", "#000044");
+		var images = textChopper.createImagesFromString("DEVSTATE",100, "#AAAAFF", "#000044");
 		this.blockSetAnimator = new BlockSetAnimator( this.x , this.y + this.height/2 - images[0].height/2, this.width, this.height);
 		this.blockSetAnimator.setImages(images);
 		BlockSetAnimatorDemo.runRandomAnimation(this);
