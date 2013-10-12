@@ -35,7 +35,7 @@
 		this.borderThickness = 10;
 	}
 	
-	DSLightBox.prototype.lightBoxOverlayDivClickHandler = function (){
+	DSLightBox.prototype.lightBoxOverlayDivClickHandler = function (event){
 		this.close();
 	}
 	
@@ -51,6 +51,7 @@
 	}
 	
 	DSLightBox.prototype.open = function(screenRect, contentRect){
+		this.contentRect = contentRect;
 		this.overlayDiv.style.left = "0px";
 		this.overlayDiv.style.top = "0px";
 		this.overlayDiv.style.width = screenRect.width+"px";
@@ -85,10 +86,22 @@
 	
 	DSLightBox.prototype.fadeOut = function(){
 		this.overlayDiv.style.opacity = (1-this.animator.getAnimationPercent())*this.backgroundOpacity;
-		this.borderDiv.style.opacity = 1-this.animator.getAnimationPercent();
+		this.contentDiv.style.opacity = 1-this.animator.getAnimationPercent();
+		
+		var shrink = this.contentRect.width * .025;
+		this.contentRect.x += shrink/2;
+		this.contentRect.y += shrink/2;
+		this.contentRect.width -= shrink;
+		this.contentRect.height-= shrink;
+				
+		this.contentDiv.style.left = this.contentRect.x+"px";
+		this.contentDiv.style.top = this.contentRect.y+"px";
+		this.contentDiv.style.width = this.contentRect.width+"px";
+		this.contentDiv.style.height = this.contentRect.height+"px";
 	}
 	
 	DSLightBox.prototype.close = function(){
+		this.borderDiv.style.display = "none";
 		var _this = this;
 		this.animator.reset(1000,20,function(){_this.fadeOut()} , function(){_this.closeComplete()});
 		this.animator.start();
