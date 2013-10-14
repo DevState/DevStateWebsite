@@ -34,7 +34,8 @@ if(location.hostname && location.hostname.toLowerCase().indexOf("devstate")>-1){
 	<link rel="stylesheet" type="text/css" href="css/devstate.css">
 	<link rel="shortcut icon" href="http://www.devstate.net/assets/favicon.ico">
 	
-	<script src="./js/h5utils.js"></script>
+	<script src="js/h5utils.js"></script>
+	<script src="js/main.js"></script>
 	
 	<!-- Common javascript files -->
 	<script type="text/javascript" src="common/SimpleGeometry.js" ></script>
@@ -67,186 +68,9 @@ if(location.hostname && location.hostname.toLowerCase().indexOf("devstate")>-1){
 	
 	<!-- Demos -->
 	<script type="text/javascript" src="demos/Demos.js" ></script>
+	
+	<script type="text/javascript"src="demos/main.js" ></script>
 </head>
-
-<script type="text/javascript">
-
-var demos;/* = ["PieChart", "DonutChart", "LineChart", "BarChart", 
-			"BasicSlideShow", "ImageFader", "ThumbnailCarousel" , "SimpleCoverFlow", 
-			"Wanderer","BlockSetAnimator", "TextEffect"];*/
-
-var currentDemo;
-var currentDemoName;
-var detailsDiv;
-var demoRect;
-var contentRect;
-
-var lightBoxMaxWidth = 700;
-var lightBoxMaxHeight = 400;
-var lightBoxMinWidth = 400;
-var lightBoxMinHeight = 400;
-
-function resizeHandler(){
-	forceHideDemo();
-}
-
-function forceHideDemo(){
-	if(lightBox.isOpen()){
-		hideDemo(true);
-	}
-}
-
-function lightBoxOverlayDivClick(){
-	hideDemo();
-}
-
-function lightBoxNextDemoClickHandler(){
-	var index = demos.indexOf(currentDemoName);
-	index = index < demos.length-1 ? index+1 : 0;
-	tearDownDemo();
-	setUpDemo(demos[index]);
-	location.hash=demos[index];
-}
-
-function lightBoxPreviousDemoClickHandler(){
-	var index = demos.indexOf(currentDemoName);
-	index = index > 0 ? index-1 : demos.length-1;
-	tearDownDemo();
-	setUpDemo(demos[index]);
-	location.hash=demos[index];
-}
-
-function showDemo(demoName){
-	var size = viewportSize();
-	contentRect = new SimpleGeometry.Rectangle();
-	demoRect = new SimpleGeometry.Rectangle(0,0,400,400);
-	if(size.width < lightBoxMaxWidth || size.height < lightBoxMinHeight){
-		//TODO : find a slightly better solution for this ;)
-		alert("Sorry, your screen is too small :(");
-		return;
-	}
-	if(size.width > lightBoxMaxWidth && size.height > lightBoxMaxHeight){
-		contentRect.x = size.width/2 - lightBoxMaxWidth/2;
-		contentRect.y = size.height/2 - lightBoxMaxHeight/2;
-		contentRect.width = lightBoxMaxWidth;
-		contentRect.height = lightBoxMaxHeight;
-	}else{
-		//scale down
-		//decide whether to show title, description etc.
-	}
-	currentDemoName = demoName;
-	lightBox.open(size, contentRect);
-}
-
-function setUpDemo(demoName){
-	currentDemoName = demoName;
-	currentDemo = new this[demoName+"Demo"](demoRect.x, demoRect.y, demoRect.width, demoRect.height, lightBox.contentDiv);
-	currentDemo.run();
-	var padding = 10;
-	detailsDiv = document.createElement("div");
-	detailsDiv.style.position = "absolute";
-	detailsDiv.style.left = (padding+demoRect.width)+"px";
-	detailsDiv.style.top = padding+"px";
-	detailsDiv.style.width = (contentRect.width-demoRect.width-padding*2) + "px";
-	detailsDiv.style.height = (contentRect.height-padding*2) + "px";
-	detailsDiv.style.fontFamily = "Sans-serif";
-	var detailsHtml = "<h2 class='handwriting' style='font-size:36px'>"+demoName+"</h2><p style='padding-top:20px'>"+currentDemo.toolTip+"</p>";
-	detailsHtml +="<p style='padding-top:20px'><a href = 'javascript:void(0)' onclick = 'lightBoxPreviousDemoClickHandler()'>Previous</a>";
-	detailsHtml +="<a href = 'javascript:void(0)' onclick = 'hideDemo()' style='padding-left:20px'>Close</a>";
-	detailsHtml +="<a href = 'javascript:void(0)' onclick = 'lightBoxNextDemoClickHandler()' style='padding-left:20px'>Next</a></p>";
-	detailsDiv.innerHTML = detailsHtml;
-	lightBox.setContent(detailsDiv);
-	if(location.hostname && location.hostname.toLowerCase().indexOf("devstate")>-1){
-		ga("send", "event", "DemoView", demoName);
-	}
-}
-
-function tearDownDemo(){
-	if(currentDemo){
-		currentDemo.tearDown();
-	}
-	if(detailsDiv){
-		lightBox.removeContent(detailsDiv);
-	}
-}
-
-function hideDemo(forceClose){
-	if(forceClose){
-		lightBox.forceClose();
-	}else{
-		lightBox.close();
-	}
-}
-
-function lightBoxOpenComplete(){
-	setUpDemo(currentDemoName);
-}
-
-function lightBoxBeginClose(){
-	tearDownDemo();
-	location.hash="";
-}
-
-function init(){
-	//console.log("init()");
-	setUpDemosMenu();
-	lightBox = new DSLightBox(undefined, lightBoxOpenComplete, lightBoxBeginClose);
-	if(!window.location.hash) {
-		return;
-	}
-	var demoName = getDemoFromHash(window.location.hash);
-	if(demos.indexOf(demoName)>-1){
-		showDemo(demoName);
-	}
-	window.onscroll = function (oEvent) {
-		forceHideDemo();
-	}
-}
-
-function setUpDemosMenu(){
-	demos = new Array();
-	var list = document.getElementById("demos");
-	var anchors = list.getElementsByTagName("a");
-	var images = list.getElementsByTagName("img");
-	for(var i = 0 ; i < anchors.length; i++){
-		anchors[i].onclick = demoLinkClickHandler;
-		demos[i] = getDemoFromHash(anchors[i].hash);
-		images[i].onmouseover = showGif;
-		images[i].onmouseout = showPng;
-	}
-}
-
-function getDemoFromHash(hash){
-	return hash.split("#")[1];
-}
-
-function demoLinkClickHandler(event){
-	showDemo(getDemoFromHash(event.currentTarget.hash));
-}
-
-var readyStateCheckInterval = setInterval( function() {
-	if (document.readyState === "complete") {
-        //decorate();
-		init();
-        clearInterval(readyStateCheckInterval);
-    }
-}, 10);
-
-
-function showGif(event){
-	var path = event.target.src.split("/");
-	var file = path[path.length-1].split(".png")[0];
-	path[path.length-1] = file+".gif";
-	event.target.src = path.join("/");
-}
-
-function showPng(event){
-	var path = event.target.src.split("/");
-	var file = path[path.length-1].split(".gif")[0];
-	path[path.length-1] = file+".png";
-	event.target.src = path.join("/");
-}
-</script>
 
 <body onresize="resizeHandler()">
 <div class="wrapper">
@@ -263,12 +87,13 @@ function showPng(event){
                 <li><a href="#footer">Contact</a></li>
             </ul>      
         </nav>
+	    <hr/>
     </div>
     
-    <hr/><!-- Horizontal Line -->
+
 
     <header>
-    	<h1 style="display:none">Finest Html5 Canvas and WebGL Workshops</h1>
+    	<h1>Finest Html5 Canvas and WebGL Workshops</h1>
     </header>
     
     <aside id="about" class=" left">
@@ -331,7 +156,17 @@ Prior to workshops, we ask attendees to pick topics they wish to master using ou
         <div class="clearfix"></div>
     </section>
 
+	<div id="subscriber">
+		<p>Subscribe & stay informed:&nbsp;<input type="text" name="eMail" id="mailField" /><a href="javascript:transfer();">&nbsp;Submit.</a></p>
+	</div>
+	
+	<div id="socialbar" >
+		<iframe frameborder="0" src="socialLinks.html" width="100%px" align="middle"></iframe>
+	</div>
+	
 </div>
+
+
 
 <!--<footer id="footer">
 	<div class="wrapper">

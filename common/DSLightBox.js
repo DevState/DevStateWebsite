@@ -50,12 +50,12 @@
 		return this.contentDiv.style.display=="block"
 	}
 	
-	DSLightBox.prototype.open = function(screenRect, contentRect){
+	DSLightBox.prototype.open = function(contentRect){
 		this.contentRect = contentRect;
 		this.overlayDiv.style.left = "0px";
 		this.overlayDiv.style.top = "0px";
-		this.overlayDiv.style.width = screenRect.width+"px";
-		this.overlayDiv.style.height = screenRect.height+"px";
+		this.overlayDiv.style.width = "100%";
+		this.overlayDiv.style.height = "100%";
 		
 		this.borderDiv.style.left = (contentRect.x-this.borderThickness) + "px";
 		this.borderDiv.style.top = (contentRect.y-this.borderThickness) + "px";
@@ -66,10 +66,10 @@
 		this.contentDiv.style.top = contentRect.y+"px";
 		this.contentDiv.style.width = contentRect.width+"px";
 		this.contentDiv.style.height = contentRect.height+"px";
-		
+
+		this.borderDiv.style.opacity = this.contentDiv.style.opacity = this.overlayDiv.style.opacity = 0;		
 		this.borderDiv.style.display = this.overlayDiv.style.display = this.contentDiv.style.display = "block";
-		this.overlayDiv.style.opacity = 0;
-		this.contentDiv.style.opacity = 0;
+		
 		var _this = this;
 		this.animator.reset(1000,20,function(){_this.fadeIn()} , function(){_this.openComplete()});
 		this.animator.start();
