@@ -68,12 +68,12 @@ nav ul li a:hover{
 }
 
 /*margin is top right bottom left*/
-hr{
+.topDivider{
 	height:1px;
 	background-color:#000000;
 	float:right;
 	width: 87%;
-}/*margin:5% 0; */
+}
 
 header{
 	display:none;
@@ -101,23 +101,30 @@ header{
 	font-family:'sf_collegiate_solidregular', Arial, Helvetica, sans-serif;
 	font-size:180%;
 	font-weight:normal;
-	text-align:center;
 	color:#000000;
-	margin-bottom:1%;
-}
-/* text-shadow: 0 1px 1px #dadada; */
-
-.left p{
-	font-family:Arial, Helvetica, sans-serif;
-	font-size:100%;
-	line-height:140%;
+	margin-bottom:4%;
 }
 
 .left p a{
 	color:#FF0000;
 	text-decoration:none;
 }
-	
+
+.left ol{
+	padding-left : 25px;
+}
+
+.left li{
+	font-family:'sf_collegiate_solidregular', Arial, Helvetica, sans-serif;
+	font-size:150%;
+	padding-bottom : 2%;
+}
+
+.left li p{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:80%;
+}
+
 .right{
 	margin-top:2%;
 	width:48%;
@@ -129,9 +136,8 @@ header{
 	font-family:'sf_collegiate_solidregular', Arial, Helvetica, sans-serif;
 	font-size:180%;
 	font-weight:normal;
-	text-align:center;
 	color:#000000;
-	margin-bottom:1%;
+	margin-bottom:4%;
 }
 /* text-shadow: 0 1px 1px #dadada; */
 
@@ -150,7 +156,7 @@ header{
 /* ----------------------- DEMOS START ------------------------- */
 #demos{
 	width:1000px;
-	margin:1% auto 1% auto;
+	margin:1% auto 3% auto;
 }
 
 .item{
@@ -201,12 +207,26 @@ header{
 
 /* ----------------------- DEMO LIGHBOX CONTENT START ------------------------- */
 
+.bottomDivider{
+	width: 100%;
+		background-color: #CCCCCC;
+		margin-bottom:2px;
+		height:4px;
+}
+
+footer{
+	width:100%;
+	padding-top:25px;
+	background-color:#CCCCCC;
+	height:300px;
+}
+
 #subscriber{
 	width:100%;
 	text-align:center;
-	background-color:#FFFFFF;
 	font-family:'sf_collegiate_solidregular', Arial, Helvetica, sans-serif;
 	font-size:18px;
+	padding-bottom:10px;
 }
 #subscriber a{
 	text-decoration:none;
@@ -222,12 +242,6 @@ header{
 
 #subscriber  a:hover{
 	color:#FF0000;
-}
-
-footer{
-	width:100%;
-	padding:10px 0;
-	background-color:#000000;
 }
 
 
@@ -293,11 +307,15 @@ footer{
 
 @media only screen and (max-width: 720px) {
 	
+	/*#top{
+		height:140px;
+	}*/
+	
 	#logo{
-		width:150px;
+		width:60px;
 		display:block;
 		margin:auto;
-		margin-bottom:5%;
+		margin-bottom:1%;
 	}
 	
 	#logoimage{
@@ -306,6 +324,7 @@ footer{
 	
 	nav{
 		width:100%;
+		margin-top:10px;
 	}
 	
 	.left{
@@ -327,7 +346,7 @@ footer{
 		margin:10px;
 	}
 	
-	hr{
+	.topDivider{
 		width: 100%;
 	}
 }

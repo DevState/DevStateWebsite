@@ -19,6 +19,10 @@ function viewportSize() {
 	
 }
 
+function isHorizontalLayout(){
+	var size = viewportSize();
+	return size.width > size.height;
+}
 
 
 ////////////////////////////////////////////////////////////////////////////////

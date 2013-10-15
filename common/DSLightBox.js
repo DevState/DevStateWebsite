@@ -28,6 +28,15 @@
 		this.contentDiv.style.backgroundColor = "white";
 		this.contentDiv.style.zIndex = 1002;
 		
+		//close button
+		this.closeButton = document.createElement("img");
+		document.body.appendChild(this.closeButton);
+		this.closeButton.src = "assets/closeButton.png";
+		this.closeButton.style.position = "absolute";
+		this.closeButton.style.display = "none";
+		this.closeButton.addEventListener('click', function(){_this.lightBoxOverlayDivClickHandler()});
+		this.closeButton.style.zIndex = 1003;
+		
 		this.animator = new UnitAnimator();
 		this.animator.setEasingFunction(UnitAnimator.easeOutSine);
 
@@ -52,23 +61,30 @@
 	
 	DSLightBox.prototype.open = function(contentRect){
 		this.contentRect = contentRect;
+		
+		var doc = document.documentElement, body = document.body;
+		var top = (doc && doc.scrollTop  || body && body.scrollTop  || 0);
+		
 		this.overlayDiv.style.left = "0px";
-		this.overlayDiv.style.top = "0px";
+		this.overlayDiv.style.top = top + "px";
 		this.overlayDiv.style.width = "100%";
 		this.overlayDiv.style.height = "100%";
 		
 		this.borderDiv.style.left = (contentRect.x-this.borderThickness) + "px";
-		this.borderDiv.style.top = (contentRect.y-this.borderThickness) + "px";
+		this.borderDiv.style.top = top + (contentRect.y-this.borderThickness) + "px";
 		this.borderDiv.style.width = (contentRect.width+this.borderThickness*2) + "px";
 		this.borderDiv.style.height = (contentRect.height+this.borderThickness*2) + "px";
 		
-		this.contentDiv.style.left = contentRect.x+"px";
-		this.contentDiv.style.top = contentRect.y+"px";
-		this.contentDiv.style.width = contentRect.width+"px";
-		this.contentDiv.style.height = contentRect.height+"px";
+		this.contentDiv.style.left = contentRect.x + "px";
+		this.contentDiv.style.top = top + contentRect.y + "px";
+		this.contentDiv.style.width = contentRect.width + "px";
+		this.contentDiv.style.height = contentRect.height + "px";
 
 		this.borderDiv.style.opacity = this.contentDiv.style.opacity = this.overlayDiv.style.opacity = 0;		
 		this.borderDiv.style.display = this.overlayDiv.style.display = this.contentDiv.style.display = "block";
+		
+		this.closeButton.style.left = (this.contentRect.getRight() - this.closeButton.width/2) + "px";
+		this.closeButton.style.top = (top + this.contentRect.getBottom() - this.closeButton.height/2) + "px";;
 		
 		var _this = this;
 		this.animator.reset(1000,20,function(){_this.fadeIn()} , function(){_this.openComplete()});
@@ -101,7 +117,7 @@
 	}
 	
 	DSLightBox.prototype.close = function(){
-		this.borderDiv.style.display = "none";
+		this.closeButton.style.display = this.borderDiv.style.display = "none";
 		var _this = this;
 		this.animator.reset(1000,20,function(){_this.fadeOut()} , function(){_this.closeComplete()});
 		this.animator.start();
@@ -116,11 +132,12 @@
 		if(this.openCompleteCallback != undefined){
 			this.openCompleteCallback();
 		}
+		this.closeButton.style.display = "block";
 	}
 	
 	DSLightBox.prototype.closeComplete = function(){
 		//console.log("DSLightBox.closeComplete()");
-		this.borderDiv.style.display = this.overlayDiv.style.display = this.contentDiv.style.display = "none";
+		this.closeButton.style.display = this.borderDiv.style.display = this.overlayDiv.style.display = this.contentDiv.style.display = "none";
 		if(this.closeCompleteCallback != undefined){
 			this.closeCompleteCallback();
 		}

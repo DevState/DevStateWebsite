@@ -57,11 +57,6 @@ var detailsDiv;
 var demoRect;
 var contentRect;
 
-var lightBoxMaxWidth = 700;
-var lightBoxMaxHeight = 400;
-var lightBoxMinWidth = 400;
-var lightBoxMinHeight = 400;
-
 function resizeHandler(){
 	forceHideDemo();
 }
@@ -82,6 +77,9 @@ function lightBoxNextDemoClickHandler(){
 	tearDownDemo();
 	setUpDemo(demos[index]);
 	location.hash=demos[index];
+	if(location.hostname && location.hostname.toLowerCase().indexOf("devstate")>-1){
+		ga("send", "event", "nextDemo");
+	}
 }
 
 function lightBoxPreviousDemoClickHandler(){
@@ -90,26 +88,45 @@ function lightBoxPreviousDemoClickHandler(){
 	tearDownDemo();
 	setUpDemo(demos[index]);
 	location.hash=demos[index];
+	if(location.hostname && location.hostname.toLowerCase().indexOf("devstate")>-1){
+		ga("send", "event", "previousDemo");
+	}
 }
+
+function lightBoxResetDemoClickHandler(){
+	tearDownDemo();
+	setUpDemo(currentDemoName);
+	if(location.hostname && location.hostname.toLowerCase().indexOf("devstate")>-1){
+		ga("send", "event", "resetDemo", demoName);
+	}
+}
+
+var lightBoxWidth = 700;
+var lightBoxHeight = 400;
+var demoSize = 400;
 
 function showDemo(demoName){
 	var size = viewportSize();
-	console.log(size.width);
 	contentRect = new SimpleGeometry.Rectangle();
-	demoRect = new SimpleGeometry.Rectangle(0,0,400,400);
-	if(size.width < lightBoxMaxWidth || size.height < lightBoxMinHeight){
-		//TODO : find a slightly better solution for this ;)
-		alert("Sorry, your screen is too small :(");
+	demoRect = new SimpleGeometry.Rectangle(0,0,demoSize,demoSize);
+	if(size.width < lightBoxWidth && size.height < lightBoxWidth){
+		//TODO : find a slightly better solution for this, maybe use
+		alert("Sorry, your screen is too small to show this demo :(");
 		return;
 	}
-	if(size.width > lightBoxMaxWidth && size.height > lightBoxMaxHeight){
-		contentRect.x = size.width/2 - lightBoxMaxWidth/2;
-		contentRect.y = size.height/2 - lightBoxMaxHeight/2;
-		contentRect.width = lightBoxMaxWidth;
-		contentRect.height = lightBoxMaxHeight;
+	
+	if(isHorizontalLayout()){
+		//horizontal layout
+		contentRect.x = size.width/2 - lightBoxWidth/2;
+		contentRect.y = size.height/2 - lightBoxHeight/2;
+		contentRect.width = lightBoxWidth;
+		contentRect.height = lightBoxHeight;
 	}else{
-		//scale down
-		//decide whether to show title, description etc.
+		//vertical layout
+		contentRect.x = size.width/2 - lightBoxHeight/2;
+		contentRect.y = size.height/2 - lightBoxWidth/2;
+		contentRect.width = lightBoxHeight;
+		contentRect.height = lightBoxWidth;
 	}
 	currentDemoName = demoName;
 	lightBox.open(contentRect);
@@ -122,14 +139,21 @@ function setUpDemo(demoName){
 	var padding = 10;
 	detailsDiv = document.createElement("div");
 	detailsDiv.style.position = "absolute";
-	detailsDiv.style.left = (padding+demoRect.width)+"px";
-	detailsDiv.style.top = padding+"px";
-	detailsDiv.style.width = (contentRect.width-demoRect.width-padding*2) + "px";
-	detailsDiv.style.height = (contentRect.height-padding*2) + "px";
+	if(isHorizontalLayout()){
+		detailsDiv.style.left = (padding+demoRect.width)+"px";
+		detailsDiv.style.top = padding+"px";
+		detailsDiv.style.width = (contentRect.width-demoRect.width-padding*2) + "px";
+		detailsDiv.style.height = (contentRect.height-padding*2) + "px";
+	}else{
+		detailsDiv.style.left = padding+"px";
+		detailsDiv.style.top = (padding+demoRect.height)+"px";
+		detailsDiv.style.width = (contentRect.height-demoRect.width-padding*2) + "px";
+		detailsDiv.style.height = (contentRect.width-padding*2) + "px";	
+	}
 	detailsDiv.style.fontFamily = "Sans-serif";
 	var detailsHtml = "<h2 class='demoTitle' >"+demoName+"</h2><p style='padding-top:20px'>"+currentDemo.toolTip+"</p>";
 	detailsHtml +="<p style='padding-top:20px'><a href = 'javascript:void(0)' onclick = 'lightBoxPreviousDemoClickHandler()'>Previous</a>";
-	detailsHtml +="<a href = 'javascript:void(0)' onclick = 'hideDemo()' style='padding-left:20px'>Close</a>";
+	detailsHtml +="<a href = 'javascript:void(0)' onclick = 'lightBoxResetDemoClickHandler()' style='padding-left:20px'>Reset</a>";
 	detailsHtml +="<a href = 'javascript:void(0)' onclick = 'lightBoxNextDemoClickHandler()' style='padding-left:20px'>Next</a></p>";
 	detailsDiv.innerHTML = detailsHtml;
 	lightBox.setContent(detailsDiv);
