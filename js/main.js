@@ -1,52 +1,4 @@
 
-//===============================::SUBSCRIBE::===========================
-
-var mailNode;
-
-function checkEmail( emailAddress ) {
-
-  var sQtext = '[^\\x0d\\x22\\x5c\\x80-\\xff]';
-  var sDtext = '[^\\x0d\\x5b-\\x5d\\x80-\\xff]';
-  var sAtom = '[^\\x00-\\x20\\x22\\x28\\x29\\x2c\\x2e\\x3a-\\x3c\\x3e\\x40\\x5b-\\x5d\\x7f-\\xff]+';
-  var sQuotedPair = '\\x5c[\\x00-\\x7f]';
-  var sDomainLiteral = '\\x5b(' + sDtext + '|' + sQuotedPair + ')*\\x5d';
-  var sQuotedString = '\\x22(' + sQtext + '|' + sQuotedPair + ')*\\x22';
-  var sDomain_ref = sAtom;
-  var sSubDomain = '(' + sDomain_ref + '|' + sDomainLiteral + ')';
-  var sWord = '(' + sAtom + '|' + sQuotedString + ')';
-  var sDomain = sSubDomain + '(\\x2e' + sSubDomain + ')*';
-  var sLocalPart = sWord + '(\\x2e' + sWord + ')*';
-  var sAddrSpec = sLocalPart + '\\x40' + sDomain; // complete RFC822 email address spec
-  var sValidEmail = '^' + sAddrSpec + '$'; // as whole string
-
-  var reValidEmail = new RegExp(sValidEmail);
-  
-  if (reValidEmail.test(emailAddress)) {
-    return true;
-  }
-  return false;
-}
-
-
-function transfer() {
-	var userMail = document.getElementById("mailField").value;
-	if ( checkEmail( userMail ) ) {
-		 var formData = new FormData();
-		 formData.append( 'ml', document.getElementById("mailField").value );
-		 var xhr = new XMLHttpRequest();
-		 xhr.open('POST','./subscribe.php');
-		 xhr.onload = function() {
-			if( this.status == 200 ) {
-			    mailNode.innerHTML = 'SUBSCRIBE & STAY INFORMED:&nbsp;<input type="text" name="eMail" id="mailField" /><a href="javascript:transfer();">&nbsp;Submit.</a>&nbsp;<font color="#FF0000">THANK YOU!</font> ';	
-			}
-		 }
-		 xhr.send( formData );
-	} else {
-		alert( 'You must be kidding! \nThats not a valid mailaddress at all...\n;)' );
-	}
-}
-
-
 //===============================::DEMOS / LIGHTBOX::===========================
 
 
@@ -103,6 +55,7 @@ function lightBoxResetDemoClickHandler(){
 
 var lightBoxWidth = 700;
 var lightBoxHeight = 400;
+var lightBoxVerticalLayoutHeight = 600;
 var demoSize = 400;
 
 function showDemo(demoName){
@@ -126,7 +79,7 @@ function showDemo(demoName){
 		contentRect.x = size.width/2 - lightBoxHeight/2;
 		contentRect.y = size.height/2 - lightBoxWidth/2;
 		contentRect.width = lightBoxHeight;
-		contentRect.height = lightBoxWidth;
+		contentRect.height = lightBoxVerticalLayoutHeight;
 	}
 	currentDemoName = demoName;
 	lightBox.open(contentRect);
@@ -147,12 +100,12 @@ function setUpDemo(demoName){
 	}else{
 		detailsDiv.style.left = padding+"px";
 		detailsDiv.style.top = (padding+demoRect.height)+"px";
-		detailsDiv.style.width = (contentRect.height-demoRect.width-padding*2) + "px";
-		detailsDiv.style.height = (contentRect.width-padding*2) + "px";	
+		detailsDiv.style.width = (contentRect.width-padding*2) + "px";
+		detailsDiv.style.height = (contentRect.height-demoRect.height-padding*2) + "px";	
 	}
 	detailsDiv.style.fontFamily = "Sans-serif";
 	var detailsHtml = "<h2 class='demoTitle' >"+demoName+"</h2><p style='padding-top:20px'>"+currentDemo.toolTip+"</p>";
-	detailsHtml +="<p style='padding-top:20px'><a href = 'javascript:void(0)' onclick = 'lightBoxPreviousDemoClickHandler()'>Previous</a>";
+	detailsHtml +="<p class='lightboxControls' ><a href = 'javascript:void(0)' onclick = 'lightBoxPreviousDemoClickHandler()'>Previous</a>";
 	detailsHtml +="<a href = 'javascript:void(0)' onclick = 'lightBoxResetDemoClickHandler()' style='padding-left:20px'>Reset</a>";
 	detailsHtml +="<a href = 'javascript:void(0)' onclick = 'lightBoxNextDemoClickHandler()' style='padding-left:20px'>Next</a></p>";
 	detailsDiv.innerHTML = detailsHtml;

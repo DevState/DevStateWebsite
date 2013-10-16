@@ -22,7 +22,7 @@
 		var _this = this;
 		this.overlayDiv.addEventListener("click",function(){ _this.lightBoxOverlayDivClickHandler()}, false);
 		
-		this.borderDiv.style.backgroundColor = "#CCCCCC";
+		this.borderDiv.style.backgroundColor = "#DDDDDD";
 		this.borderDiv.style.zIndex = 1001;
 		
 		this.contentDiv.style.backgroundColor = "white";
@@ -36,6 +36,7 @@
 		this.closeButton.style.display = "none";
 		this.closeButton.addEventListener('click', function(){_this.lightBoxOverlayDivClickHandler()});
 		this.closeButton.style.zIndex = 1003;
+		this.overlayDiv.style.cursor = this.closeButton.style.cursor = "pointer";
 		
 		this.animator = new UnitAnimator();
 		this.animator.setEasingFunction(UnitAnimator.easeOutSine);

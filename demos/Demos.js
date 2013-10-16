@@ -63,6 +63,8 @@
 	
 	AbstractDemo.prototype.clear = function(){
 		this.context2d.clearRect(0, 0, this.canvas.width, this.canvas.height);
+		//this.fillStyle="#000000"
+		//this.context2d.fillRect(0, 0, this.canvas.width, this.canvas.height);
 	}
 	
 	AbstractDemo.prototype.loadImagesWithImageStore = function(urls){
@@ -145,7 +147,7 @@
 	
 	PieChartDemo = function(x, y, width, height, demoContainer){
 		AbstractDemo.call(this, x, y, width, height, demoContainer); //call super constructor.
-		this.toolTip = "Click link to create random data, click pie chart to open/close";
+		this.toolTip = "Standard pie chart with a reflection. Click the pie chart to run open and close animations. Press reset for new data.";
 		this.gifPlaybackFrameRate = 200;
 	}
 	
@@ -212,7 +214,7 @@
 	
 	DonutChartDemo = function(x, y, width, height, demoContainer){
 		PieChartDemo.call(this, x, y, width, height, demoContainer); //call super constructor.
-		this.toolTip = "Click link to create random data, click donut chart to open/close";
+		this.toolTip = "Click the donut chart to run open and close animations. Press reset for new data.";
 	}
 	
 	//subclass extends superclass
@@ -238,7 +240,7 @@
 	
 	LineChartDemo = function(x, y, width, height, demoContainer){
 		AbstractDemo.call(this, x, y, width, height, demoContainer); //call super constructor.
-		this.toolTip = "Click link to create random data, click line chart to open/close";
+		this.toolTip = "Click the line chart to run open and close animations. Press reset for new data.";
 		this.gifPlaybackFrameRate = 200;
 	}
 	
@@ -313,7 +315,7 @@
 	
 	BarChartDemo = function(x, y, width, height, demoContainer){
 		AbstractDemo.call(this, x, y, width, height, demoContainer); //call super constructor.
-		this.toolTip = "Click link to create random data, click bar chart to open/close";
+		this.toolTip = "Bar chart with fake 3d. Click the bar chart to run open and close animations. Press reset for new data.";
 		this.gifPlaybackFrameRate = 200;
 	}
 	
@@ -393,7 +395,7 @@
 
 	BasicSlideShowDemo = function(x, y, width, height, demoContainer){
 		AbstractDemo.call(this, x, y, width, height, demoContainer); //call super constructor.
-		this.toolTip = "Click left or right arrows to slide to next/previous image";
+		this.toolTip = "Click the left or right arrows to slide to next or previous image.";
 		this.customCaptureControls = true;
 	}
 	
@@ -463,7 +465,7 @@
 
 	ThumbnailCarouselDemo = function(x, y, width, height, demoContainer){
 		AbstractDemo.call(this, x, y, width, height, demoContainer); //call super constructor.
-		this.toolTip = "Click arrows to rotate carousel";
+		this.toolTip = "Click the arrows to rotate the carousel.";
 		this.customCaptureControls = true;
 	}
 	
@@ -538,7 +540,7 @@
 
 	SimpleCoverFlowDemo = function(x, y, width, height, demoContainer){
 		AbstractDemo.call(this, x, y, width, height, demoContainer); //call super constructor.
-		this.toolTip = "Click arrows to slide cover flow";
+		this.toolTip = "Click the arrows to slide the cover flow.  Unfortunately this demo renders poorly on some devices.";
 		this.customCaptureControls = true;
 	}
 	
@@ -614,7 +616,7 @@
 	
 	ImageFaderDemo = function(x, y, width, height, demoContainer){
 		AbstractDemo.call(this, x, y, width, height, demoContainer); //call super constructor.
-		this.toolTip = "Click image to fade effect random image";
+		this.toolTip = "Click an image to see a fade effect from one random image to another.";
 		this.customCaptureControls = true;
 	}
 	//subclass extends superclass
@@ -667,7 +669,7 @@
 	
 	WandererDemo = function(x, y, width, height, demoContainer){
 		AbstractDemo.call(this, x, y, width, height, demoContainer); //call super constructor.
-		this.toolTip = "The two colors are complementary";
+		this.toolTip = "Animation with random wandering movement and smoothly transitioning random colors. The two colors are complementary.";
 		this.customCaptureControls = true;
 	}
 	
@@ -728,11 +730,11 @@
 		this.context2d.closePath();
 	}
 	
-	WandererDemo.prototype.canvasClickHandler = function(event){
+	/*WandererDemo.prototype.canvasClickHandler = function(event){
 		//console.log("canvasClickHandlerWanderer()");
 		this.wanderer.pause();
 		this.colorWanderer.pause();
-	}
+	}*/
 	
 	WandererDemo.prototype.customTearDown = function(){
 		//console.log("WandererDemo.teardown()");
@@ -753,7 +755,7 @@
 
 	BlockSetAnimatorDemo = function(x, y, width, height, demoContainer){
 		AbstractDemo.call(this, x, y, width, height, demoContainer); //call super constructor.
-		this.toolTip = "Click on canvas for a new random animation";
+		this.toolTip = "Click the images or reset for a new random animation.";
 	}
 	
 	//subclass extends superclass
@@ -861,7 +863,7 @@
 
 	TextEffectDemo = function(x, y, width, height, demoContainer){
 		AbstractDemo.call(this, x, y, width, height, demoContainer); //call super constructor.
-		this.toolTip = "Click on canvas for a new random animation";
+		this.toolTip = "Click the text or reset for a new random animation.";
 	}
 	
 	//subclass extends superclass

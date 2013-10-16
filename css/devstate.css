@@ -39,7 +39,7 @@ body{
 
 nav{
 	float:right;
-	width:400px;
+	width:450px;
 	display:block;
 	height:50px;
 	margin-top:40px;
@@ -47,9 +47,9 @@ nav{
 
 nav ul li{
 	display:block;
-	width:25%;
-	float:left;
-	text-align:center;	
+	margin-left:30px;
+	float:right;
+	text-align:right;	
 }
 
 nav ul li a{
@@ -58,7 +58,7 @@ nav ul li a{
 	text-decoration:none;
 	text-transform:uppercase;
 	font-size:140%;
-	line-height:250%;
+	line-height:280%;
 	display:block;
 	color:#000000;
 }
@@ -73,10 +73,11 @@ nav ul li a:hover{
 	background-color:#000000;
 	float:right;
 	width: 87%;
+	margin-bottom : 2px;
 }
 
 header{
-	display:none;
+	font-family:'sf_collegiate_solidregular', Arial, Helvetica, sans-serif;
 }
 
 /* -- Make the highlight colours pretty -- */
@@ -160,37 +161,41 @@ header{
 }
 
 .item{
-	border-radius:15px;
+	/*border-radius:15px;*/
 	width:160px;
 	height:160px;
-	background-color:#FFF;
+	background-color:#FFFFFF;
 	margin:10px;
 	float:left;
-	-webkit-box-shadow: 0 1px 3px #c3c3c3;
+    padding: 4px 8px 8px 4px;
+    /*-webkit-box-shadow: 0 1px 3px #c3c3c3;
     -moz-box-shadow: 0 1px 3px #c3c3c3;
-    box-shadow: 0 1px 3px #c3c3c3;  
+    box-shadow: 0 1px 3px #c3c3c3;  */
 	overflow:hidden;
-	-webkit-transition: box-shadow 0.2s ease-in-out;
+	/*-webkit-transition: box-shadow 0.2s ease-in-out;
 	-moz-transition: box-shadow 0.2s ease-in-out;
 	-o-transition: box-shadow 0.2s ease-in-out;
 	-ms-transition: box-shadow 0.2s ease-in-out;
-	transition: box-shadow 0.2s ease-in-out;
+	transition: box-shadow 0.2s ease-in-out;*/
+    border: 4px solid #CCCCCC;
 }
 
 .item:hover{
-	-webkit-box-shadow: 0 0 8px #999999, 0 0 8px #999999;
+	/*-webkit-box-shadow: 0 0 8px #999999, 0 0 8px #999999;
     -moz-box-shadow: 0 0 8px #999999,  0 0 8px #999999;
-    box-shadow: 0 0 8px #999999,  0 0 8px #999999; 
+    box-shadow: 0 0 8px #999999,  0 0 8px #999999; */
+	border-color:#000000;
 }
 	
 
 .item img{
 	display:block;
 	width:100%;
-	-webkit-box-shadow: 0 2px 1px #c3c3c3;
+    border: 2px solid #CCCCCC;
+    /*-webkit-box-shadow: 0 2px 1px #c3c3c3;
     -moz-box-shadow: 0 2px 1px #c3c3c3;
     box-shadow: 0 2px 1px #c3c3c3;
-	border-radius:15px 15px 0 0;	
+    border-radius:15px 15px 0 0;	*/
 }
 
 /* ----------------------- DEMOS END ------------------------- */
@@ -202,7 +207,26 @@ header{
 
 .demoTitle{
 	font-family:'sf_collegiate_solidregular', Arial, Helvetica, sans-serif;
-	font-size:36px;
+	font-size:35px;
+}
+
+.lightboxControls{
+	font-family:'sf_collegiate_solidregular', Arial, Helvetica, sans-serif;
+	font-size:24px;
+	padding-top:20px;
+	text-align:center;
+	position:absolute;
+	bottom:10px;
+	width:100%;
+}
+
+.lightboxControls a{
+	text-decoration:none;
+	color:#000000;
+}
+
+.lightboxControls a:hover{
+	color: #FF0000; 
 }
 
 /* ----------------------- DEMO LIGHBOX CONTENT START ------------------------- */
@@ -221,28 +245,7 @@ footer{
 	height:300px;
 }
 
-#subscriber{
-	width:100%;
-	text-align:center;
-	font-family:'sf_collegiate_solidregular', Arial, Helvetica, sans-serif;
-	font-size:18px;
-	padding-bottom:10px;
-}
-#subscriber a{
-	text-decoration:none;
-	text-transform:uppercase;
-	color:#000000;
-}
 
-#mailField{
-	border-style:solid;
-	border-width:1px;
-	border-color:#000000;
-}
-
-#subscriber  a:hover{
-	color:#FF0000;
-}
 
 
 /* ---------------------- RESPONSIVE ---------------------- */
@@ -285,10 +288,6 @@ footer{
 		height:130px;
 		margin:7px;
 	}
-	
-	nav ul li a{
-		font-size:100%;
-	}
 }
 
 @media only screen and (max-width: 835px) {
@@ -314,9 +313,8 @@ footer{
 	#logo{
 		width:60px;
 		display:block;
-		margin:auto;
-		margin-bottom:1%;
-	}
+        margin: auto auto 1%;
+    }
 	
 	#logoimage{
 		width:60px;
@@ -325,6 +323,16 @@ footer{
 	nav{
 		width:100%;
 		margin-top:10px;
+	}
+	
+	nav ul li{
+		text-align:center;
+		margin-left:0;
+		width:25%;
+	}
+	
+	nav ul li a{
+		font-size:100%;
 	}
 	
 	.left{

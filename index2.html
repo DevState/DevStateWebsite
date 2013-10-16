@@ -10,7 +10,7 @@
 	<meta name="author" content="Sakri Rosenstrom, Frank Reitberger" />
 	
 	<!--[if lt IE 9]>
-	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
 
 	<title>DevState : Finest Html5 and WebGL Workshops</title>
@@ -68,8 +68,7 @@ if(location.hostname && location.hostname.toLowerCase().indexOf("devstate")>-1){
 	
 	<!-- Demos -->
 	<script type="text/javascript" src="demos/Demos.js" ></script>
-	
-	<script type="text/javascript"src="demos/main.js" ></script>
+
 </head>
 
 <body onresize="resizeHandler()">
@@ -81,18 +80,20 @@ if(location.hostname && location.hostname.toLowerCase().indexOf("devstate")>-1){
     
         <nav>
             <ul>
-            	<li><a href="#top">HOME</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#work">Work</a></li>
-                <li><a href="#footer">Contact</a></li>
+            	<!--<li><a href="#top">HOME</a></li>-->
+				<li><a href="availability.html">Booking</a></li>
+                <li><a href="pricing.html">Pricing</a></li>
+                <li><a href="faq.html">FAQ</a></li>
+                <li><a href="about.html">About</a></li>
             </ul>      
         </nav>
+	    <hr class="topDivider"/>
 	    <hr class="topDivider"/>
     </div>
     
 
 
-    <header>
+    <header style="display:none;">
     	<h1>Finest Html5 Canvas and WebGL Workshops</h1>
     </header>
     
@@ -110,7 +111,7 @@ if(location.hostname && location.hostname.toLowerCase().indexOf("devstate")>-1){
 		and <a href="http://www.sakri.net" target="_blank">Sakri Rosenstrom</a> 
 		share a combined 30 years of coding experience with a focus on graphics. 
 		Over the years we've enjoyed presenting at many conferences and decided to join forces as DevState to share our
-		skills and expertese in the form of workshops.  <a href="http://www.devstate.net/about#whoWeAre">Read More...</a>
+		skills and expertese in the form of workshops.  <a href="about.html#whoWeAre">Read More...</a>
     </aside>
     <div class="clearfix"></div>
     
@@ -164,23 +165,14 @@ if(location.hostname && location.hostname.toLowerCase().indexOf("devstate")>-1){
     </section>
 	
 </div>
+
 <hr class="bottomDivider"/>
+
 <footer>
-	<div id="subscriber">
-		<p>Subscribe & stay informed:&nbsp;<input type="text" name="eMail" id="mailField" /><a href="javascript:transfer();">&nbsp;Submit.</a></p>
-	</div>
-	
 	<div id="socialbar" >
 		<iframe frameborder="0" src="socialLinks.html" width="100%px" align="middle"></iframe>
 	</div>
 </footer>
-
-<!--<footer id="footer">
-	<div class="wrapper">
-
-    </div>
-    <div class="clearfix"></div>
-</footer>-->
 
 </body>
 </html>

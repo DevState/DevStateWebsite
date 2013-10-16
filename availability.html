@@ -13,28 +13,57 @@
 		<meta http-equiv="Expires" content="-1">	
 		<meta name="viewport" content="width=device-width,initial-scale=1">
 		<link rel="shortcut icon" href="http://www.devstate.net/assets/favicon.ico">
+		
+		<link rel="stylesheet" type="text/css" href="css/fonts.min.css">
+		<link rel="stylesheet" type="text/css" href="css/devstate.css">
+		
 
 		<!-- GOOGLE ANALYTICS -->
 		<script>
-		  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-		  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-		  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-		  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+			(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+			})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-		  ga('create', 'UA-44531934-1', 'devstate.net');
-		  ga('send', 'pageview');
-
+			ga('create', 'UA-44531934-1', 'devstate.net');
+		  
+			if(location.hostname && location.hostname.toLowerCase().indexOf("devstate")>-1){
+			  ga('send', 'pageview');
+			}
 		</script>
 
 	</head>
 	<body bgcolor="#FFFFFF">
 	
-	<iframe src="https://www.google.com/calendar/embed?height=600&amp;wkst=1&amp;bgcolor=%23FFFFFF&amp;src=lqnjtmv2m7ivqqr7mv3a4upook%40group.calendar.google.com&amp;color=%232952A3&amp;ctz=Europe%2FBrussels" 
-	style=" border-width:0 " width="800" height="600" frameborder="0" scrolling="no"></iframe>
+	<div class="wrapper">
+		<div id="top">
+			<div id="logo">
+				<img id="logoimage" src="assets/devstate.png" alt="logo">
+			</div>
+		
+			<nav>
+				<ul>
+					<li><a href="pricing.html">Pricing</a></li>
+					<li><a href="faq.html">FAQ</a></li>
+					<li><a href="about.html">About</a></li>
+					<li><a href="index2.html">HOME</a></li>
+				</ul>      
+			</nav>
+			<hr class="topDivider"/>
+			<hr class="topDivider"/>
+		</div>
+		
+	</div>
+	
+	<div style="text-align:center;margin-bottom:30px;over-flow:auto">
+		<iframe src="https://www.google.com/calendar/embed?height=600&amp;wkst=1&amp;bgcolor=%23FFFFFF&amp;src=lqnjtmv2m7ivqqr7mv3a4upook%40group.calendar.google.com&amp;color=%232952A3&amp;ctz=Europe%2FBrussels" 
+		style=" border-width:0 " width="800" height="600" frameborder="0" scrolling="no"></iframe>
+	</div>
 
-		<footer>
-			<iframe frameborder="0" src="socialLinks.html" width = "100%"></iframe>
-		</footer>
+    <hr class="bottomDivider"/>
 
+	<footer>
+		<iframe frameborder="0" src="socialLinks.html" width = "100%"></iframe>
+	</footer>
 	</body>
 </html>
