@@ -14,12 +14,8 @@
 <meta http-equiv="Expires" content="-1">	
 <meta name="viewport" content="width=device-width,initial-scale=1">
 
-		<style>
-			
-		</style>
 
 <link rel="stylesheet" href="./css/fonts.css">
-<link rel="stylesheet" href="./css/styles.css">
 <link rel="shortcut icon" href="http://www.devstate.net/assets/favicon.ico">
 
 <!-- GOOGLE ANALYTICS -->
@@ -30,131 +26,65 @@
   })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
   ga('create', 'UA-44531934-1', 'devstate.net');
-  ga('send', 'pageview');
-
-</script>
-
-<script src="./js/h5utils.js"></script>
-
-
-</head>
-<body bgcolor="#FFFFFF">
-	
-<div id="container">
-	
-	<div id="holder">
-
-	</div>
-	
-	<div id="fontLoader" class="handwriting size2">
-		
-		<font color="#FFFFFF"> .</font>
-		
-	</div>	
-    <div id="socialbar">
-		<iframe frameborder="0" src="socialLinks.html" width="400px" align="middle"></iframe>
-	</div>
-</div>
-
-<div id="subscriber"></div>
-<script type="text/javascript">
-
-var mailNode   = id( 'subscriber' );
-var socialNode = id( 'socialbar' );
-
-function checkEmail( emailAddress ) {
-
-  var sQtext = '[^\\x0d\\x22\\x5c\\x80-\\xff]';
-  var sDtext = '[^\\x0d\\x5b-\\x5d\\x80-\\xff]';
-  var sAtom = '[^\\x00-\\x20\\x22\\x28\\x29\\x2c\\x2e\\x3a-\\x3c\\x3e\\x40\\x5b-\\x5d\\x7f-\\xff]+';
-  var sQuotedPair = '\\x5c[\\x00-\\x7f]';
-  var sDomainLiteral = '\\x5b(' + sDtext + '|' + sQuotedPair + ')*\\x5d';
-  var sQuotedString = '\\x22(' + sQtext + '|' + sQuotedPair + ')*\\x22';
-  var sDomain_ref = sAtom;
-  var sSubDomain = '(' + sDomain_ref + '|' + sDomainLiteral + ')';
-  var sWord = '(' + sAtom + '|' + sQuotedString + ')';
-  var sDomain = sSubDomain + '(\\x2e' + sSubDomain + ')*';
-  var sLocalPart = sWord + '(\\x2e' + sWord + ')*';
-  var sAddrSpec = sLocalPart + '\\x40' + sDomain; // complete RFC822 email address spec
-  var sValidEmail = '^' + sAddrSpec + '$'; // as whole string
-
-  var reValidEmail = new RegExp(sValidEmail);
-
-  if (reValidEmail.test(emailAddress)) {
-    return true;
+  if(location.hostname && location.hostname.toLowerCase().indexOf("devstate")>-1){
+      ga('send', 'pageview');
   }
 
-  return false;
-  
-}
-
-
-function transfer() {
-
-	var userMail = document.getElementById("mailField").value;
-	
-	if ( checkEmail( userMail ) ) {
-	
-		 var formData = new FormData();
-		 formData.append( 'ml', document.getElementById("mailField").value );
-		
-		 var xhr = new XMLHttpRequest();
-		 xhr.open('POST','./subscribe.php');
-		 xhr.onload = function() {
-		 
-			if( this.status == 200 ) {
-				
-			    mailNode.innerHTML = 'SUBSCRIBE & STAY INFORMED:&nbsp;<input type="text" name="eMail" id="mailField" /><a href="javascript:transfer();">&nbsp;Submit.</a>&nbsp;<font color="#FF0000">THANK YOU!</font> ';
-				
-			}
-			
-		 }
-		 xhr.send( formData );	
-	
-	} else {
-		
-		alert( 'You must be kidding! \nThats not a valid mailaddress at all...\n;)' );
-	
-	}
-	
-}
-function decorate() {
-
-	mailNode.style.position 	   = 'fixed';
-	mailNode.style.display  	   = 'table-cell';
-	mailNode.style.textAlign       = 'center';	 
-	mailNode.style.verticalAlign   = 'middle';
-	mailNode.style.width    	   = '100%';
-	mailNode.style.height   	   = '24px';
-	mailNode.style.bottom   	   = '60px';
-	mailNode.style.backgroundColor = '#FFFFFF';
-	mailNode.style.zIndex          = 3;
-	
-	mailNode.classList.add('handwriting');
-	mailNode.classList.add('size16');
-	
-	mailNode.innerHTML = 'SUBSCRIBE & STAY INFORMED:&nbsp;<input type="text" name="eMail" id="mailField" /><a href="javascript:transfer();">&nbsp;Submit.</a>';
-
-	socialNode.style.position 	     = 'fixed';
-	socialNode.style.display  	     = 'table-cell';
-	socialNode.style.textAlign       = 'center';	 
-	socialNode.style.verticalAlign   = 'middle';
-	socialNode.style.width    	     = '100%';
-	socialNode.style.height   	     = '60px';
-	socialNode.style.bottom   	     = '0px';
-	socialNode.style.backgroundColor = '#FFFFFF';
-	socialNode.style.zIndex          = 2;
-
-}
-
-var readyStateCheckInterval = setInterval( function() {
-	if (document.readyState === "complete") {
-        decorate();
-        clearInterval(readyStateCheckInterval);
-    }
-}, 10);
-
 </script>
 
-</body>
+<style>
+
+        /* ----------------- Reset all styles ----------------- */
+    *{
+        margin:0;
+        padding:0;
+        border:0;
+    }
+
+    #holder {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        z-index: 2;
+        background: url(assets/logo.jpg) no-repeat center center;
+        background-size: 330 379;
+
+    }
+
+
+    #socialbar{
+        width: 100%;
+        position: absolute;
+        bottom: 20px;
+        z-index: 10;
+
+    }
+
+     /* font related */
+
+    .handwriting {
+
+        font-family: 'sf_collegiate_solidregular';
+
+    }
+
+    .size12{ font-size: 12px; }
+
+
+</style>
+
+</head>
+    <body bgcolor="#FFFFFF">
+
+        <div id="holder">
+
+        </div>
+
+        <div id="fontLoader" class="handwriting size2">
+
+        <div id="socialbar" >
+            <iframe frameborder="0" src="socialLinks.html" width="100%px" align="middle"></iframe>
+        </div>
+
+    </body>
 </html>

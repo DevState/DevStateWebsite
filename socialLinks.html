@@ -23,7 +23,6 @@
 		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
 		ga('create', 'UA-44531934-1', 'devstate.net');
-		//ga('send', 'pageview');
 
 		var readyStateCheckInterval = setInterval( function() {
 			if (document.readyState === "complete") {
@@ -93,12 +92,14 @@
 				 xhr.open('POST','./subscribe.php');
 				 xhr.onload = function() {
 					if( this.status == 200 ) {
-						mailNode.innerHTML = 'SUBSCRIBE & STAY INFORMED:&nbsp;<input type="text" name="eMail" id="mailField" /><a href="javascript:transfer();">&nbsp;Submit.</a>&nbsp;<font color="#FF0000">THANK YOU!</font> ';	
+                        var mailNode = document.getElementById("subscriber");
+                        console.log("mail sent succesful!");
+						mailNode.innerHTML = '<p>SUBSCRIBE & STAY INFORMED:&nbsp;<input type="text" name="eMail" id="mailField" /><a href="javascript:transfer();">&nbsp;Submit.</a>&nbsp;<font color="#FF0000">THANK YOU!</font></p> ';
 					}
 				 }
 				 xhr.send( formData );
 			} else {
-				alert( 'You must be kidding! \nThats not a valid mailaddress at all...\n;)' );
+				alert( "You must be kidding! \nThat's not a valid mail address at all...\n;)" );
 			}
 		}
 		  
@@ -170,7 +171,7 @@
 	<body>
 	
 		<div id="subscriber">
-			<p>Subscribe & stay informed:&nbsp;<input type="text" name="eMail" id="mailField" /><a href="javascript:transfer();">&nbsp;Submit.</a></p>
+			<p>SUBSCRIBE & STAY INFORMED:&nbsp;<input type="text" name="eMail" id="mailField" /><a href="javascript:transfer();">&nbsp;Submit.</a></p>
 		</div>
 	
 		<nav id="socialMediaBar" style="text-align: center;">
