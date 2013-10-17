@@ -94,7 +94,7 @@
 					if( this.status == 200 ) {
                         var mailNode = document.getElementById("subscriber");
                         console.log("mail sent succesful!");
-						mailNode.innerHTML = '<p>SUBSCRIBE & STAY INFORMED:&nbsp;<input type="text" name="eMail" id="mailField" /><a href="javascript:transfer();">&nbsp;Submit.</a>&nbsp;<font color="#FF0000">THANK YOU!</font></p> ';
+						mailNode.innerHTML = '<p>Subscribe & Stay informed:&nbsp;<input type="text" name="eMail" id="mailField" /><a href="javascript:transfer();">&nbsp;Submit.</a>&nbsp;<font color="'+DSColors.ORANGE+'">Thank you!</font></p> ';
 					}
 				 }
 				 xhr.send( formData );
@@ -107,61 +107,43 @@
 		
 		<style>
 		
-			.socialMediaImageLink{
-				text-decoration:none;
-				padding-left:0px;
-				padding-right:0px;
-				margin-left:0px;
-				margin-left:0px;
-			}
-			
-			nav h2{
-				display:none;
-			}
-			
-			nav ul{
-				margin:0px;
-				padding:0px;
-			}
-			
-			nav li{
-				list-style-type:none;
-				display:inline;
-				margin-top:10px;
-			}
-			
-		/*img{
-			opacity:0.7;
-			-webkit-transition: opacity 0.2s ease-in-out;
-			-moz-transition: opacity 0.2s ease-in-out;
-			-o-transition: opacity 0.2s ease-in-out;
-			-ms-transition: opacity 0.2s ease-in-out;
-			transition: opacity 0.2s ease-in-out;
-			
-		}
+        .socialMediaImageLink{
+            text-decoration:none;
+            padding-left:2px;
+            padding-right:2px;
+            margin-left:0px;
+            margin-left:0px;
+        }
 
-		img:hover{
-			opacity:1;
-		}*/
+        nav h2{
+            display:none;
+        }
+
+        nav ul{
+            margin:0px;
+            padding:0px;
+        }
+
+        nav li{
+            list-style-type:none;
+            display:inline;
+            margin-top:10px;
+        }
 		
 		#subscriber{
 			width:100%;
 			text-align:center;
+            vertical-align: top;
 			font-family:'sf_collegiate_solidregular', Arial, Helvetica, sans-serif;
-			font-size:18px;
+			font-size:22px;
 			padding-bottom:10px;
-            color: #FFFFFF;
-		}
-		#subscriber a{
-			text-decoration:none;
-			text-transform:uppercase;
+            text-transform:uppercase;
             color: #FFFFFF;
 		}
 
-		#mailField{
-			border-style:solid;
-			border-width:1px;
-			border-color:#000000;
+		#subscriber a{
+			text-decoration:none;
+            color: #FFFFFF;
 		}
 
 		#subscriber  a:hover{
@@ -173,7 +155,7 @@
 	<body>
 	
 		<div id="subscriber">
-			<p>SUBSCRIBE & STAY INFORMED:&nbsp;<input type="text" name="eMail" id="mailField" /><a href="javascript:transfer();">&nbsp;SUBMIT.</a></p>
+			<p>Subscribe & Stay informed:&nbsp;<input type="text" name="eMail" id="mailField" /><a href="javascript:transfer();">&nbsp;Submit.</a></p>
 		</div>
 	
 		<nav id="socialMediaBar" style="text-align: center;">
