@@ -16,6 +16,32 @@ body{
 
 
 /* ----------------- Wrapper - keeps all content in the center of page -----------------  */
+
+.greenText {
+    color: #157b0f;
+}
+
+.greenLink{
+    text-decoration:none;
+    color: #000000;
+    color: #157b0f;
+}
+.greenLink:hover{
+    color: #000000;
+}
+
+.orangeText {
+    color: #ff342e;
+}
+.orangeLink{
+    text-decoration:none;
+    color: #ff342e;
+}
+.orangeLink:hover{
+    color: #000000;
+}
+
+
 .wrapper{
 	margin:auto;
 	width:80%;
@@ -64,7 +90,7 @@ nav ul li a{
 }
 
 nav ul li a:hover{
-	color:#FF0000;
+	color:#ff342e;
 }
 
 /*margin is top right bottom left*/
@@ -81,8 +107,8 @@ header{
 }
 
 /* -- Make the highlight colours pretty -- */
-::selection      { background:#FF0000; color:#FFFFFF;}
-::-moz-selection  { background:#FF0000; color:#FFFFFF;}
+::selection      { background:#ff342e; color:#FFFFFF;}
+::-moz-selection  { background:#ff342e; color:#FFFFFF;}
 
 .clearfix {
 	float: none;
@@ -96,6 +122,7 @@ header{
 	width:48%;
 	float:left;
 	margin-bottom:1%;
+    line-height: 180%;
 }
 
 .left h3{
@@ -107,7 +134,7 @@ header{
 }
 
 .left p a{
-	color:#FF0000;
+	color:#ff342e;
 	text-decoration:none;
 }
 
@@ -118,7 +145,6 @@ header{
 .left li{
 	font-family:'sf_collegiate_solidregular', Arial, Helvetica, sans-serif;
 	font-size:150%;
-	padding-bottom : 2%;
 }
 
 .left li p{
@@ -131,6 +157,7 @@ header{
 	width:48%;
 	float:right;
 	margin-bottom:1%;
+    line-height: 150%;
 }
 
 .right h3{
@@ -145,11 +172,10 @@ header{
 .right p{
 	font-family:Arial, Helvetica, sans-serif;
 	font-size:100%;
-	line-height:140%;
 }
 
 .right p a{
-	color:#FF0000;
+	color:#ff342e;
 	text-decoration:none;
 }
 
@@ -161,7 +187,7 @@ header{
 }
 
 .item{
-	/*border-radius:15px;*/
+	border-radius:15px;
 	width:160px;
 	height:160px;
 	background-color:#FFFFFF;
@@ -177,7 +203,8 @@ header{
 	-o-transition: box-shadow 0.2s ease-in-out;
 	-ms-transition: box-shadow 0.2s ease-in-out;
 	transition: box-shadow 0.2s ease-in-out;*/
-    border: 4px solid #CCCCCC;
+    /*border: 4px solid #CCCCCC;*/
+    /*border: 4px solid #ff3230;*/
 }
 
 .item:hover{
@@ -191,11 +218,13 @@ header{
 .item img{
 	display:block;
 	width:100%;
-    border: 2px solid #CCCCCC;
+    /*border: 2px solid #CCCCCC;*/
+    border: 1px solid #ff342e;
     /*-webkit-box-shadow: 0 2px 1px #c3c3c3;
     -moz-box-shadow: 0 2px 1px #c3c3c3;
     box-shadow: 0 2px 1px #c3c3c3;
     border-radius:15px 15px 0 0;	*/
+    border-radius:12px;
 }
 
 /* ----------------------- DEMOS END ------------------------- */
@@ -226,14 +255,15 @@ header{
 }
 
 .lightboxControls a:hover{
-	color: #FF0000; 
+	color: #ff342e; 
 }
 
 /* ----------------------- DEMO LIGHBOX CONTENT START ------------------------- */
 
 .bottomDivider{
 	width: 100%;
-		background-color: #CCCCCC;
+		/*background-color: #CCCCCC;*/
+		background-color: #157b0f;
 		margin-bottom:2px;
 		height:4px;
 }
@@ -241,7 +271,8 @@ header{
 footer{
 	width:100%;
 	padding-top:25px;
-	background-color:#CCCCCC;
+	/*background-color:#CCCCCC;*/
+	background-color:#157b0f;
 	height:300px;
 }
 

@@ -22,7 +22,7 @@
 		var _this = this;
 		this.overlayDiv.addEventListener("click",function(){ _this.lightBoxOverlayDivClickHandler()}, false);
 		
-		this.borderDiv.style.backgroundColor = "#DDDDDD";
+		this.borderDiv.style.backgroundColor = DSColors.GREEN;
 		this.borderDiv.style.zIndex = 1001;
 		
 		this.contentDiv.style.backgroundColor = "white";
@@ -31,10 +31,12 @@
 		//close button
 		this.closeButton = document.createElement("img");
 		document.body.appendChild(this.closeButton);
-		this.closeButton.src = "assets/closeButton.png";
+        this.closeButtonOutHandler();
 		this.closeButton.style.position = "absolute";
 		this.closeButton.style.display = "none";
 		this.closeButton.addEventListener('click', function(){_this.lightBoxOverlayDivClickHandler()});
+        this.closeButton.addEventListener("mouseover", function(){ _this.closeButtonOverHandler()});
+        this.closeButton.addEventListener("mouseout", function(){ _this.closeButtonOutHandler()});
 		this.closeButton.style.zIndex = 1003;
 		this.overlayDiv.style.cursor = this.closeButton.style.cursor = "pointer";
 		
@@ -42,11 +44,17 @@
 		this.animator.setEasingFunction(UnitAnimator.easeOutSine);
 
 		this.backgroundOpacity = .8;
-		this.borderThickness = 10;
+		this.borderThickness = 4;
 	}
 	
 	DSLightBox.prototype.lightBoxOverlayDivClickHandler = function (event){
 		this.close();
+	}
+    DSLightBox.prototype.closeButtonOverHandler = function (event){
+        this.closeButton.src = "assets/closeButtonOver.png";
+	}
+    DSLightBox.prototype.closeButtonOutHandler = function (event){
+        this.closeButton.src = "assets/closeButton.png";
 	}
 	
 	DSLightBox.prototype.setContent = function(content){
