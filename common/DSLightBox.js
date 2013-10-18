@@ -20,7 +20,7 @@
 		this.overlayDiv.style.backgroundColor = "black";
 		this.overlayDiv.style.zIndex = 1000;
 		var _this = this;
-		this.overlayDiv.addEventListener("click",function(){ _this.lightBoxOverlayDivClickHandler()}, false);
+		this.overlayDiv.addEventListener("click",function(event){ _this.lightBoxOverlayDivClickHandler(event)}, false);
 		
 		this.borderDiv.style.backgroundColor = DSColors.GREEN;
 		this.borderDiv.style.zIndex = 1001;
@@ -34,7 +34,7 @@
         this.closeButtonOutHandler();
 		this.closeButton.style.position = "absolute";
 		this.closeButton.style.display = "none";
-		this.closeButton.addEventListener('click', function(){_this.lightBoxOverlayDivClickHandler()});
+		this.closeButton.addEventListener('click', function(event){_this.lightBoxOverlayDivClickHandler(event)});
         this.closeButton.addEventListener("mouseover", function(){ _this.closeButtonOverHandler()});
         this.closeButton.addEventListener("mouseout", function(){ _this.closeButtonOutHandler()});
 		this.closeButton.style.zIndex = 1003;
@@ -48,7 +48,7 @@
 	}
 	
 	DSLightBox.prototype.lightBoxOverlayDivClickHandler = function (event){
-		this.close();
+		this.close(event);
 	}
     DSLightBox.prototype.closeButtonOverHandler = function (event){
         this.closeButton.src = "assets/closeButtonOver.png";
@@ -112,20 +112,20 @@
 	DSLightBox.prototype.fadeOut = function(){
 		this.overlayDiv.style.opacity = (1-this.animator.getAnimationPercent())*this.backgroundOpacity;
 		this.contentDiv.style.opacity = 1-this.animator.getAnimationPercent();
-		
-		var shrink = this.contentRect.width * .025;
-		this.contentRect.x += shrink/2;
-		this.contentRect.y += shrink/2;
-		this.contentRect.width -= shrink;
-		this.contentRect.height-= shrink;
-				
-		this.contentDiv.style.left = this.contentRect.x+"px";
-		this.contentDiv.style.top = this.contentRect.y+"px";
-		this.contentDiv.style.width = this.contentRect.width+"px";
-		this.contentDiv.style.height = this.contentRect.height+"px";
+
+        this.contentRect.width = SimpleGeometry.interpolate(this.animator.getAnimationPercent(), this.fadeOutBeginRect.width, this.fadeOutTargetRect.width );
+        this.contentRect.height = SimpleGeometry.interpolate(this.animator.getAnimationPercent(), this.fadeOutBeginRect.height, this.fadeOutTargetRect.height );
+        this.contentRect.x = SimpleGeometry.interpolate(this.animator.getAnimationPercent(), this.fadeOutBeginRect.x, this.fadeOutTargetRect.x );
+        this.contentRect.y = SimpleGeometry.interpolate(this.animator.getAnimationPercent(), this.fadeOutBeginRect.y, this.fadeOutTargetRect.y );
+        this.contentDiv.style.left = Math.round(this.contentRect.x)+"px";
+		this.contentDiv.style.top = Math.round(this.contentRect.y)+"px";
+		this.contentDiv.style.width = Math.round(this.contentRect.width)+"px";
+		this.contentDiv.style.height = Math.round(this.contentRect.height)+"px";
 	}
 	
-	DSLightBox.prototype.close = function(){
+	DSLightBox.prototype.close = function(event){
+        this.fadeOutBeginRect = this.contentRect.clone();
+        this.fadeOutTargetRect = new SimpleGeometry.Rectangle(event.pageX-25, event.pageY-25, 50, 50);
 		this.closeButton.style.display = this.borderDiv.style.display = "none";
 		var _this = this;
 		this.animator.reset(1000,20,function(){_this.fadeOut()} , function(){_this.closeComplete()});
@@ -137,6 +137,9 @@
 	
 	DSLightBox.prototype.openComplete = function(){
 		//console.log("DSLightBox.openComplete()");
+        if(this.animator && this.animator.isAnimating()){
+            this.animator.pause();
+        }
 		this.overlayDiv.style.opacity = this.backgroundOpacity;
 		if(this.openCompleteCallback != undefined){
 			this.openCompleteCallback();

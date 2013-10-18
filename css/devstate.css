@@ -134,12 +134,6 @@ header{
 	margin-bottom:4%;
 }
 
-.left p a{
-	color:#ff342e;
-    font-weight: bold;
-	text-decoration:none;
-}
-
 .left ol{
 	padding-left : 25px;
 }
@@ -183,7 +177,9 @@ header{
     font-weight: bold;
 }
 
-
+.right p a:hover{
+    color:#157b0f;
+}
 /* ----------------------- DEMOS START ------------------------- */
 #demos{
 	width:1000px;

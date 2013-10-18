@@ -6,10 +6,9 @@
 		SimpleGeometry.Rectangle.call(this,x,y,width,height); //call super constructor.
 		this.numberOfBackgroundLines = 9;
 		
-		this.bgColorTop = "#EFEFFF";
-		this.bgColorBottom = "#BBBBFF";
-		this.bgStrokeColor = "#9999FF";//TODO rename to bgStrokeStyle, include a stroke thickness?
-		this.false3DColor = "#AAAADD";
+		this.darkColor = DSColors.GREEN;
+		this.lightColor = DSColors.LIGHT_GREEN;
+
 		this.false3DExtrusion = 0;
 		this.legendMargin = 10;
 	}
@@ -25,12 +24,14 @@
 
 	ChartBackground.prototype.render = function(context, min, max){
 		//color background
+        /*
 		var gradient = context.createLinearGradient(0, 0, 0, this.height);// linear gradient from start to end of line
-		gradient.addColorStop(0, this.bgColorTop);
-		gradient.addColorStop(1, this.bgColorBottom);
+		gradient.addColorStop(0, this.darkColor);
+		gradient.addColorStop(1, this.lightColor);*/
 
 		if(this.false3DExtrusion > 0){
 			//bg
+            /*
 			context.beginPath();
 			context.fillStyle = gradient;
 			context.moveTo(this.false3DExtrusion, 0);
@@ -41,9 +42,9 @@
 			context.lineTo(0, this.false3DExtrusion);
 			context.lineTo(this.false3DExtrusion, 0);
 			context.fill();
-			context.closePath();
+			context.closePath();*/
 		
-			context.fillStyle = this.false3DColor;
+			context.fillStyle = this.lightColor;
 		
 			//left side extrusion
 			context.beginPath();
@@ -64,13 +65,13 @@
 			context.lineTo(0, this.height-this.false3DExtrusion);
 			context.fill();
 			context.closePath();
-		}else{
+		}/*else{
 			context.fillStyle = gradient;
 			context.fillRect(this.x, this.y, this.width, this.height);		
-		}
+		}*/
 		
 		//draw background lines
-		context.strokeStyle = this.bgStrokeColor;
+		context.strokeStyle = this.lightColor;
 		context.lineWidth=1;
 		context.textBaseline = "bottom";
 		var gap = (this.height-this.false3DExtrusion)/(this.numberOfBackgroundLines+1);
@@ -78,7 +79,7 @@
 		var roundedYPos;
 		var legendIncrement = (max-min)/(this.numberOfBackgroundLines+1);
 		var legend = max-legendIncrement;
-		context.fillStyle = "#FFFFFF";
+		context.fillStyle = this.darkColor;
 		context.font = "bold 16px sans-serif";
 		for(var i=0;i<this.numberOfBackgroundLines;i++){
 			context.beginPath();
@@ -95,14 +96,14 @@
 	}
 	
 	ChartBackground.prototype.renderLegendValue = function(context, value, yPosition){
-		context.shadowColor = SimpleGeometry.getRgbaStyleString(0x00,0x00,0x00,.4);
+		/*context.shadowColor = this.lightColor;//SimpleGeometry.getRgbaStyleString(0x00,0x00,0x00,.4);
 		context.shadowOffsetX = 1;
 		context.shadowOffsetY = 1;
-		context.shadowBlur    = 2;
+		context.shadowBlur    = 2;*/
 		context.fillText (value, this.x+this.legendMargin , yPosition);
-		context.shadowOffsetX = 0;
+		/*context.shadowOffsetX = 0;
 		context.shadowOffsetY = 0;
-		context.shadowBlur    = 0;	
+		context.shadowBlur    = 0;	*/
 	}
 	
 	window.ChartBackground=ChartBackground;

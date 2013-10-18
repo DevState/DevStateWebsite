@@ -3,14 +3,22 @@
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" />
-		<title>DevState : Finest Canvas and WebGL Workshops</title>
+		<title>DevState : Demo Gif Capture Tool</title>
 
 		<style>
 
+            /* font related */
+
+            h1 {
+                font-size:60px;
+                font-family: 'sf_collegiate_solidregular';
+                margin:0;
+                color: #157b0f;
+            }
+
 			ul{
-				padding: 0px;
-				margin: 0px;
-				max-width: 800px;
+				padding: 0;
+				margin: 0;
 			}
 		
 			li{
@@ -21,10 +29,10 @@
 				max-height:80px;
 				max-width:800px;
 			}
-			
+
+
 		</style>
 		<link rel="stylesheet" href="./css/fonts.css">
-		<link rel="stylesheet" href="./css/styles.css">
 		<link rel="shortcut icon" href="http://www.devstate.net/assets/favicon.ico">
 
 		<!-- Gif Encoder -->
@@ -35,6 +43,7 @@
 		
 		<!-- Common javascript files -->
 		<script type="text/javascript" src="common/SimpleGeometry.js" ></script>
+		<script type="text/javascript" src="common/DSColors.js" ></script>
 		<script type="text/javascript" src="common/UnitAnimator.js" ></script>
 		<script type="text/javascript" src="common/SimpleLoaderGraphic.js" ></script><!-- TODO : MOVE -->
 		<script type="text/javascript" src="common/ArrowButtons.js" ></script><!-- TODO : MOVE -->
@@ -66,8 +75,6 @@
 		<script type="text/javascript" src="demos/Demos.js" ></script>
 		
 
-
-		
 		<script type="text/javascript">
 
 			var demos = ["PieChart", "DonutChart", "LineChart", "BarChart", 
@@ -77,6 +84,7 @@
 			var captureCheckBox;
 			var demoWidth = 400;
 			var demoHeight = 400;
+            var captureTool;
 			
 			function init(){
 				//console.log("init()");
@@ -134,19 +142,19 @@
 				document.getElementById("startDemoCaptureButton").disabled = document.getElementById("endDemoCaptureButton").disabled = !show;
 			}
 			
-			function startCaptureDemoHandler(event){
+			function startCaptureDemoHandler(){
 				var captureOutputImage = document.getElementById("captureOutput");
 				captureTool = new DemoCaptureTool(currentDemo.captureFrameRate, currentDemo.gifPlaybackFrameRate, currentDemo.getCaptureCanvases(), captureOutputImage);
 				currentDemo.startCustomCaptureAnimation();
 				captureTool.start();
 			}
 			
-			function endCaptureDemoHandler(event){
+			function endCaptureDemoHandler(){
 				//console.log("endCaptureDemoHandler()");
 				captureTool.stopOnNextCapture();
 			}
 			
-			function captureDemoPngHandler(event){
+			function captureDemoPngHandler(){
 				var captureOutputImage = document.getElementById("capturePngOutput");
 				DemoCaptureTool.capturePng(currentDemo.getCaptureCanvases(), captureOutputImage);
 			}
@@ -168,21 +176,23 @@
 		
 	</head>
 	<body onresize="resizeHandler()">
-		<span>
-			<img id="captureOutput" >
-			<img id="capturePngOutput" >
-		</span>
-		<h1 class="handwriting" style="font-size:60px" >DevState : Finest Canvas and WebGL Workshops</h1>
+        <div style="position: absolute; top: 420px; width: 100%">
+            <h1>DevState : Demo Gif Capture Tool</h1>
 
-		<nav id="demosNavigation" style="font-family: sans-serif;">
-				<ul id="demosList" />
-		</nav>
-		<span>
-			<input type="checkbox"  id="captureCheckbox" >capture</input>
-			<button type="button" id="startDemoCaptureButton" disabled="true" onclick="startCaptureDemoHandler()">start</button>
-			<button type="button" id="endDemoCaptureButton"  disabled="true" onclick="endCaptureDemoHandler()">stop</button>
-			<button type="button" id="capturePngButton"  onclick="captureDemoPngHandler()">screen shot</button>
-			<p id="toolTip" style="font-family: sans-serif; color:#FF5555; " />
-		</span>
+            <nav id="demosNavigation" style="font-family: sans-serif;">
+                    <ul id="demosList" />
+            </nav>
+            <span>
+                <input type="checkbox"  id="captureCheckbox" >capture</input>
+                <button type="button" id="startDemoCaptureButton" disabled="true" onclick="startCaptureDemoHandler()">start</button>
+                <button type="button" id="endDemoCaptureButton"  disabled="true" onclick="endCaptureDemoHandler()">stop</button>
+                <button type="button" id="capturePngButton"  onclick="captureDemoPngHandler()">screen shot</button>
+                <p id="toolTip" style="font-family: sans-serif; color:#FF5555; " ></p>
+            </span>
+
+            <img id="captureOutput"  />
+            <img id="capturePngOutput"  />
+        </div>
+
 	</body>
 </html>

@@ -39,12 +39,12 @@
 	
 	LineChart.prototype.setRandomValues = function(){
 		var values = new Array();
-		var lines = 1 + Math.floor(Math.random()*3);//between 1 and 4
+		var lines = 2 + Math.floor(Math.random()*2);//between 2 and 3
 		var points = 10 + Math.floor(Math.random()*10);//between 10 and 40
 		var line,pointValue;
 		while(lines>0){
 			line = new Array();
-			pointValue = Math.floor(Math.random()*100);
+			pointValue = values.length*30+Math.floor(Math.random()*30);
 			for(var i=0;i<points;i++){
 				line[i] = pointValue;
 				pointValue += Math.floor(-3+Math.random()*6);

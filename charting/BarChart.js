@@ -8,6 +8,11 @@
 		}
 		this.renderPoint=new SimpleGeometry.Point();//Use one instance, instead of a local variable in method. TODO make static
 		this.extrudeWidth = 6;
+        //this.lightColor = DSColors.LIGHT_GREEN;
+        //this.darkColor = DSColors.GREEN;
+
+        this.lightColor = DSColors.PINK_ORANGE;
+        this.darkColor = DSColors.ORANGE;
 	}
 	
 	//subclass extends superclass
@@ -62,11 +67,12 @@
 		}
 		this.barSpacer = (this.width - this.barWidth * this.values.length) / (this.values.length+1);//TODO : add comment, move to a method?
 		//render bars
-		
+		var gradient;
 		context.strokeStyle = "#FFFFFF";
 		for (var i = 0; i < this.values.length; i++) {
-			context.fillStyle = this.colors[i];
-			this.renderPoint.x = this.x + this.barSpacer + (this.barSpacer * i) + (this.barWidth * i);	
+			//context.fillStyle = this.colors[i];
+			context.fillStyle = this.lightColor;
+			this.renderPoint.x = this.x + this.barSpacer + (this.barSpacer * i) + (this.barWidth * i);
 			this.renderPoint.y = this.calculateYPosition(this.values[i], animationPercent);
 			
 			//draw top extrusion
@@ -89,9 +95,15 @@
 			context.lineTo(this.renderPoint.x+this.barWidth, this.y+this.height);
 			context.lineTo(this.renderPoint.x+this.barWidth, this.renderPoint.y);
 			context.closePath();
-			
-			context.fill();
-			context.stroke();
+            context.fill();
+            context.stroke();
+
+            gradient = context.createLinearGradient(0, this.renderPoint.y, 0, this.y+this.height);// linear gradient from start to end of line
+            gradient.addColorStop(0, this.lightColor);
+            gradient.addColorStop(1, this.darkColor);
+
+            context.fillStyle = gradient;
+
 			//draw bar
 			context.fillRect(this.renderPoint.x, this.renderPoint.y, this.barWidth, this.y+this.height-this.renderPoint.y);
 			context.strokeRect(this.renderPoint.x, this.renderPoint.y, this.barWidth, this.y+this.height-this.renderPoint.y);

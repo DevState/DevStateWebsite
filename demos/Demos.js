@@ -39,18 +39,18 @@
 		this.demoContainer.appendChild(canvas);
 	}	
 	
-	AbstractDemo.prototype.getGlobalDemoPosition = function() {
-		var point = new SimpleGeometry.Point(0, 0);
-		var element = this.canvas;
-		while(element) {
-			if(element.style && element.style.left && element.style.top){
-				point.x += parseInt(element.style.left.split("px")[0]);
-				point.y += parseInt(element.style.top.split("px")[0]);
-			}
-			element = element.parentNode;
-		}
-		return point;
-	}
+	AbstractDemo.prototype.getGlobalDemoPosition = function () {
+        var point = new SimpleGeometry.Point(0, 0);
+        var element = this.canvas;
+        while (element) {
+            if (element.style && element.style.left && element.style.top) {
+                point.x += parseInt(element.style.left.split("px")[0]);
+                point.y += parseInt(element.style.top.split("px")[0]);
+            }
+            element = element.parentNode;
+        }
+        return point;
+    };
 	
 	//override in demos where multiple canvases are used, return canvases in correct stack z-sort order
 	AbstractDemo.prototype.getCaptureCanvases = function(){
@@ -624,8 +624,7 @@
 	ImageFaderDemo.prototype.constructor = AbstractDemo;	
 	
 	ImageFaderDemo.prototype.run = function(){
-		this.urls=new Array(
-			"assets/instagramPhotos/paperWeight.jpg",
+		this.urls=["assets/instagramPhotos/paperWeight.jpg",
 			"assets/instagramPhotos/peacock.jpg",
 			"assets/instagramPhotos/rufus.jpg",
 			"assets/instagramPhotos/sakBeer.jpg",
@@ -637,7 +636,7 @@
 			"assets/instagramPhotos/snowBallLantern.jpg",
 			"assets/instagramPhotos/springSnow.jpg",
 			"assets/instagramPhotos/Keon0FucksGiven.jpg",
-			"assets/instagramPhotos/sunny.jpg");
+			"assets/instagramPhotos/sunny.jpg"];
 		var _this = this;
 		this.canvas.addEventListener("click", function(event){_this.canvasClickHandler(event)}, false);//"mousedown"
 		this.ImageEffectFader = new ImageEffectFader(this.x, this.y, this.width, this.height, this.context2d);
@@ -648,7 +647,7 @@
 		this.ImageEffectFader.setImage( this.urls[Math.floor(Math.random()*this.urls.length)] );	
 	}
 	
-	ImageFaderDemo.prototype.canvasClickHandler = function(event){
+	ImageFaderDemo.prototype.canvasClickHandler = function(){
 		this.showRandomImage();
 	}
 	
@@ -765,11 +764,10 @@
 	BlockSetAnimatorDemo.prototype.run = function(){
 		var _this = this;
 		this.canvas.addEventListener("click", function(event){_this.canvasClickHandler(event)}, false);//"mousedown"
-		var urls=new Array(
-			"assets/instagramThumbs/paperWeight.jpg",
+		var urls=["assets/instagramThumbs/paperWeight.jpg",
 			"assets/instagramThumbs/sakBeer.jpg",
 			"assets/instagramThumbs/SakEU.jpg",
-			"assets/instagramThumbs/sakirisChips.jpg");
+			"assets/instagramThumbs/sakirisChips.jpg"];
 
 		this.loadImagesWithImageStore(urls);
 	}
@@ -790,20 +788,18 @@
 	}
 	
 	BlockSetAnimatorDemo.getIntroEasingFunction = function(){
-		var easing = new Array(		UnitAnimator.easeLinear, 
+		var easing = [UnitAnimator.easeLinear,
 									UnitAnimator.easeOutSine,
 									UnitAnimator.easeOutBounce,
-									UnitAnimator.easeOutElastic
-								);
+									UnitAnimator.easeOutElastic];
 		return easing[Math.floor( Math.random()*easing.length )];
 	}
 	
 	BlockSetAnimatorDemo.getEndtroEasingFunction = function(){
-		var easing = new Array(		UnitAnimator.easeLinear, 
+		var easing = [UnitAnimator.easeLinear,
 									UnitAnimator.easeInSine,
 									UnitAnimator.easeInBounce,
-									UnitAnimator.easeInElastic
-								);
+									UnitAnimator.easeInElastic];
 		return easing[Math.floor( Math.random()*easing.length )];	
 	}
 	
@@ -864,6 +860,8 @@
 	TextEffectDemo = function(x, y, width, height, demoContainer){
 		AbstractDemo.call(this, x, y, width, height, demoContainer); //call super constructor.
 		this.toolTip = "Click the text or reset for a new random animation.";
+        this.gifPlaybackFrameRate = 100;
+        this.captureFrameRate = 400;
 	}
 	
 	//subclass extends superclass
@@ -874,9 +872,10 @@
 		this.intro = true;
 		var _this = this;
 		this.canvas.addEventListener("click", function(event){_this.canvasClickHandler(event)}, false);//"mousedown"
-		var textChopper = new TextChopper();
-		var images = textChopper.createImagesFromString("DEVSTATE",100, "#AAAAFF", "#000044");
-		this.blockSetAnimator = new BlockSetAnimator( this.x , this.y + this.height/2 - images[0].height/2, this.width, this.height);
+        var chopper = new TextChopper();
+		//var images = chopper.createImagesFromString("DEVSTATE",100, "#77fd6f", "#157b0f");
+		var images = chopper.createImagesFromString("DEVSTATE",100, DSColors.LIGHT_GREEN, DSColors.GREEN);
+		this.blockSetAnimator = new BlockSetAnimator( this.x+8 , this.y + this.height/2 - images[0].height/2, this.width, this.height);
 		this.blockSetAnimator.setImages(images);
 		BlockSetAnimatorDemo.runRandomAnimation(this);
 	}

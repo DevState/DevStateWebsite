@@ -5,18 +5,18 @@
 		
 	TextChopper.prototype.createImagesFromString = function(string, size, color, color2){
 		var characters = string.split("");		
-		var images = new Array();
+		var images = [];
+        var canvas, context, image, metrics, i,character;
 		canvas = document.createElement("canvas");
 
-		//this.context.textAlign = 'center';
-		var image, metrix, i,character;
 		for(i=0; i<characters.length; i++){
 			character = characters[i];
 			
 			context = canvas.getContext("2d");
 			//context.font = size+"px 'ArchivoBlack'";
 			context.font = size+"px 'sf_collegiate_solidregular'";
-			
+			//context.font = size+"px 'Arial'";
+
 			metrics = context.measureText(character);
 			canvas.width = metrics.width;
 			canvas.height = size;//hardcoded, TODO : use getFirstNonTransparentPixel for dynamic sizing
@@ -24,7 +24,8 @@
 			context = canvas.getContext("2d");
 			//context.font = size+"px 'ArchivoBlack'";
 			context.font = size+"px 'sf_collegiate_solidregular'";
-			
+            //context.font = size+"px 'Arial'";
+
 			image = new Image();
 			image.width = canvas.width;
 			image.height = canvas.height;
@@ -51,13 +52,14 @@
 			image.src = canvas.toDataURL();
 			images[i] = image;
 		}
+        delete canvas;
 		return images;
 	}
 	
-	TextChopper.prototype.getFirstNonTransparentPixelYTopDown=function(context){
+	TextChopper.getFirstNonTransparentPixelYTopDown=function(context){
 		return point;
 	}
-	TextChopper.prototype.getFirstNonTransparentPixelYBottomUp=function(context){	
+	TextChopper.getFirstNonTransparentPixelYBottomUp=function(context){
 		return point;
 	}	
 	
