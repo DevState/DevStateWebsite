@@ -259,8 +259,67 @@
 	SimpleGeometry.Transform.prototype.toString = function() {
 		return "SimpleGeometry.Transform{scaleX:"+this.scaleX+" ,skewX:"+this.skewX+" ,skewY:"+this.skewY+" ,scaleY:"+this.scaleY+" ,tx:"+this.tx+" ,ty:"+this.ty+"}";
 	}
-	
-	window.SimpleGeometry=SimpleGeometry;
 
-	
+
+    //==================================================
+    //=====================::Point3d::====================
+    //==================================================
+
+
+    SimpleGeometry.Point2d = function (x, y, t){
+        this.x = isNaN(x) ? 0 : x;
+        this.y = isNaN(y) ? 0 : y;
+        this.t = isNaN(t) ? 0 : t;
+    }
+
+    SimpleGeometry.Point2d.prototype.toString = function(){
+        return "x: " + this.x + ", y: " + this.y + ", t: " + this.t;
+    }
+
+
+    SimpleGeometry.Point3d = function (x,y, z){
+        this.x = isNaN(x) ? 0 : x;
+        this.y = isNaN(y) ? 0 : y;
+        this.z = isNaN(z) ? 0 : z;
+    }
+
+    SimpleGeometry.Point3d.prototype.clone = function(){
+        return new SimpleGeometry.Point3d(this.x, this.y, this.z);
+    }
+
+    SimpleGeometry.Point3d.prototype.equals = function(point){
+        return this.x==point.x && this.y==point.y && this.z==point.z;
+    }
+
+    SimpleGeometry.Point3d.prototype.project = function(focalLength, projectionCenter){
+        var t = focalLength / (focalLength+z);
+
+        if (!projectionCenter)
+        {
+            projectionCenter = new SimpleGeometry.Point(0, 0);
+        }
+
+        var xOffset = projectionCenter.x;
+        var yOffset = projectionCenter.y;
+
+        var x = this.x;
+        var y = this.y;
+        var z = this.z;
+
+        x -= xOffset;
+        y -= yOffset;
+
+        x = (x*t)+xOffset;
+        y = (y*t)+yOffset;
+
+        return new SimpleGeometry.Point2d(x, y, t);
+    }
+
+
+    SimpleGeometry.Point3d.prototype.toString = function(){
+        return "{x:"+this.x+" , y:"+this.y+" , z:"+this.z+"}";
+    }
+
+    window.SimpleGeometry=SimpleGeometry;
+
 }(window));
