@@ -292,8 +292,7 @@
     }
 
     SimpleGeometry.Point3d.prototype.project = function(focalLength, projectionCenter){
-        var t = focalLength / (focalLength+z);
-
+        var t = focalLength / (focalLength+this.z);
         if (!projectionCenter)
         {
             projectionCenter = new SimpleGeometry.Point(0, 0);
@@ -304,13 +303,15 @@
 
         var x = this.x;
         var y = this.y;
-        var z = this.z;
+        //var z = this.z;
 
         x -= xOffset;
         y -= yOffset;
 
         x = (x*t)+xOffset;
         y = (y*t)+yOffset;
+
+        console.log("Point3d.project()", t, projectionCenter.toString(), xOffset, yOffset, x, y);
 
         return new SimpleGeometry.Point2d(x, y, t);
     }

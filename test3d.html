@@ -1,0 +1,157 @@
+<!Doctype html>
+<html lang="en" >
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" />
+		<title>DevState : 3d test</title>
+
+		<link rel="shortcut icon" href="http://www.devstate.net/assets/favicon.ico">
+
+		<!-- Common javascript files -->
+		<script type="text/javascript" src="common/SimpleGeometry.js" ></script>
+		<script type="text/javascript" src="common/DSColors.js" ></script>
+		<script type="text/javascript" src="common/UnitAnimator.js" ></script>
+		<script type="text/javascript" src="common/TransformRectangle.js" ></script>
+
+
+		<script type="text/javascript">
+
+            var COLOR = 0x000000;
+            
+            var _cubeWidth;
+            var _cubeHeight;
+            var _cubeDepth;
+            var _cubeX;
+            var _cubeY;
+            var _projectionCenter;
+            var _fieldOfView;
+            var _focalLength;
+            var _pivotPoint;
+            var _3dPoints;
+            var _2dPoints;
+            
+            var _rotationX = 0;
+            var _rotationY = 0;
+            var _rotationZ = 0;
+
+            var canvas;
+            var context2d;
+
+            function init (){
+                console.log("init");
+                canvas = document.createElement('canvas');
+                canvas.width = 600;
+                canvas.height = 600;
+                context2d = this.canvas.getContext("2d");
+                canvas.style.position = "absolute";
+                canvas.style.left = "0px";
+                canvas.style.top = "0px";
+                document.body.appendChild(canvas);
+                setProperties();
+                create3dPoints();
+                projectPoints();
+                drawPoints();
+            }
+
+            function setProperties (){
+                // set the size properties of the cube
+                _cubeWidth = 200;
+                _cubeHeight = 200;
+                _cubeDepth = 200;
+
+                // Set the position of the cube to the center of the stage
+                _cubeX = (canvas.width - _cubeWidth)/2;
+                _cubeY = (canvas.height - _cubeHeight)/2;
+
+                // Set the projection center (vanishing point) to the center of the stage
+                _projectionCenter = new SimpleGeometry.Point(canvas.width/2, canvas.height/2);
+
+                // Set the pivot point to be at the 3d center of the cube
+                _pivotPoint = new SimpleGeometry.Point3d(_cubeX + (_cubeWidth/2), _cubeY + (_cubeHeight/2), _cubeDepth/2);
+
+                // Set the the field of view to a numver between 1 and 179.
+                _fieldOfView = 55;
+
+                // Calculate the focal length based on the width of the stage and the field of view.
+                var a = _fieldOfView/2;
+                var b = 90 - a;
+                var bRad = b/180*Math.PI;
+                var opposite = canvas.width/2;
+
+                _focalLength = opposite * Math.tan(bRad);
+
+                console.log("setProperties()", _projectionCenter.toString(), _focalLength, _pivotPoint.toString());
+            }
+
+            function create3dPoints (){
+
+                _3dPoints = [];
+
+                // add points to create a rectangle of the supplied width and height
+                // at the supplied x and y coordinates and a z value of 0
+
+                _3dPoints.push(new SimpleGeometry.Point3d(_cubeX, _cubeY, 0));
+                _3dPoints.push(new SimpleGeometry.Point3d(_cubeX + _cubeWidth, _cubeY, 0));
+                _3dPoints.push(new SimpleGeometry.Point3d(_cubeX + _cubeWidth, _cubeY + _cubeHeight, 0));
+                _3dPoints.push(new SimpleGeometry.Point3d(_cubeX, _cubeY + _cubeHeight, 0));
+
+                // then add the same points again with a z value of the supplied depth
+                _3dPoints.push(new SimpleGeometry.Point3d(_cubeX, _cubeY, _cubeDepth));
+                _3dPoints.push(new SimpleGeometry.Point3d(_cubeX + _cubeWidth, _cubeY, _cubeDepth));
+                _3dPoints.push(new SimpleGeometry.Point3d(_cubeX + _cubeWidth, _cubeY + _cubeHeight, _cubeDepth));
+                _3dPoints.push(new SimpleGeometry.Point3d(_cubeX, _cubeY + _cubeHeight, _cubeDepth));
+            }
+
+
+            /**
+             * Loops through and projects the 3d points to create a vector of 2d points.
+             */
+            function projectPoints (){
+                _2dPoints = [];
+                var point3d,point2d;
+                for (var i = 0; i < _3dPoints.length; i++){
+                    point3d = _3dPoints[i];
+                    console.log(point3d.toString());
+                    // calls the project function on each point3d which returns a point2d
+                    point2d = point3d.project(_focalLength, _projectionCenter);
+                    console.log(point2d.toString());
+                    _2dPoints.push(point2d)
+                }
+            }
+
+            /**
+             * Draws a circle on stage as a visual representation of each point. Notice that we multiply the radius of each circle by the Point2d instance's t-value to make the scaling of each point smaller or bigger depending on its distance from the camera and thus enhancing the illusion of 3d space.
+             */
+            function drawPoints (){
+                context2d.clearRect(0,0,canvas.width, canvas.height);
+                context2d.fillStyle = "#FF0000";
+                var point2d;
+                for (var i = 0; i < _2dPoints.length; i++){
+                    point2d = _2dPoints[i];
+                    console.log(point2d.toString());
+                    context2d.beginPath();
+                    context2d.arc(point2d.x,point2d.y,5,0,Math.PI*2);
+                    context2d.fill();
+                    context2d.closePath();
+                }
+            }
+
+            function createProjection (){
+                create3dPoints();
+                projectPoints();
+                drawPoints();
+            }
+
+            var readyStateCheckInterval = setInterval( function() {
+                if (document.readyState === "complete") {
+                    mailNode = document.getElementById( "subscriber" );
+                    init();
+                    clearInterval(readyStateCheckInterval);
+                }
+            }, 10);
+
+		</script>
+		
+	</head>
+	<body></body>
+</html>
