@@ -9,7 +9,7 @@
 	//constructor, duration and framerate must be in milliseconds
 	UnitAnimator=function(duration,framerate,updateCallBack,completeCallBack){
 		this.reset(duration,framerate,updateCallBack,completeCallBack);
-	}
+	};
 
 	//t is "time" this.millisecondsAnimated
 	//b is the "beginning" value
@@ -22,24 +22,24 @@
 	
 	UnitAnimator.easeLinear = function(t, b, c, d){
 		return c * (t / d) + b;
-	}
+	};
 	
 	//SINE
 	UnitAnimator.easeInSine = function (t, b, c, d){
 		return -c * Math.cos(t/d * SimpleGeometry.PI_HALF) + c + b;
-	}
+	};
 	UnitAnimator.easeOutSine = function (t, b, c, d){
 		return c * Math.sin(t/d * SimpleGeometry.PI_HALF) + b;
-	}
+	};
 	UnitAnimator.easeInOutSine = function (t, b, c, d){
 		return -c/2 * (Math.cos(Math.PI*t/d) - 1) + b;
-	}
+	};
 	
 	
 	//BOUNCE
 	UnitAnimator.easeInBounce = function(t, b, c, d){
 		return c - UnitAnimator.easeOutBounce (d-t, 0, c, d) + b;
-	}
+	};
 	UnitAnimator.easeOutBounce = function(t, b, c, d){
 		if ((t/=d) < (1/2.75)) {
 			return c*(7.5625*t*t) + b;
@@ -50,13 +50,13 @@
 		} else {
 			return c*(7.5625*(t-=(2.625/2.75))*t + .984375) + b;
 		}
-	}
+	};
 	UnitAnimator.easeInOutBounce = function (t, b, c, d){
 		if (t < d/2){
 			return UnitAnimator.easeInBounce (t*2, 0, c, d) * .5 + b;
 		}
 		return UnitAnimator.easeOutBounce (t*2-d, 0, c, d) * .5 + c*.5 + b;
-	}
+	};
 	
 	//ELASTIC
 	UnitAnimator.easeInElastic = function(t, b, c, d, a, p){
@@ -76,7 +76,7 @@
 			s = p/SimpleGeometry.PI2 * Math.asin (c/a);
 		}
 		return -(a*Math.pow(2,10*(t-=1)) * Math.sin( (t*d-s)*SimpleGeometry.PI2/p )) + b;
-	}
+	};
 	UnitAnimator.easeOutElastic = function(t, b, c, d, a, p){
 		var s;
 		if (t==0){
@@ -94,7 +94,7 @@
 			s = p/SimpleGeometry.PI2 * Math.asin (c/a);
 		}
 		return (a*Math.pow(2,-10*t) * Math.sin( (t*d-s)*SimpleGeometry.PI2/p ) + c + b);
-	}
+	};
 	UnitAnimator.easeInOutElastic = function(t, b, c, d, a, p){
 		var s;
 		if (t==0){
@@ -115,42 +115,42 @@
 			return -.5*(a*Math.pow(2,10*(t-=1)) * Math.sin( (t*d-s)*SimpleGeometry.PI2/p )) + b;
 		}
 		return a*Math.pow(2,-10*(t-=1)) * Math.sin( (t*d-s)*SimpleGeometry.PI2/p )*.5 + c + b;
-	}
+	};
 	
-	UnitAnimator.easingFunctions = new Array(	UnitAnimator.easeLinear, 
-												UnitAnimator.easeInSine, UnitAnimator.easeOutSine, UnitAnimator.easeInOutSine,
-												UnitAnimator.easeInBounce, UnitAnimator.easeOutBounce, UnitAnimator.easeInOutBounce,
-												UnitAnimator.easeInElastic, UnitAnimator.easeOutElastic, UnitAnimator.easeInOutElastic
-											);
+	UnitAnimator.easingFunctions = [UnitAnimator.easeLinear,
+                                    UnitAnimator.easeInSine, UnitAnimator.easeOutSine, UnitAnimator.easeInOutSine,
+                                    UnitAnimator.easeInBounce, UnitAnimator.easeOutBounce, UnitAnimator.easeInOutBounce,
+                                    UnitAnimator.easeInElastic, UnitAnimator.easeOutElastic, UnitAnimator.easeInOutElastic
+                                    ];
 	
 	UnitAnimator.prototype.easingFunction = UnitAnimator.easeLinear;//default
 	
 	UnitAnimator.getRandomEasingFunction = function(){
 		return UnitAnimator.easingFunctions[Math.floor( Math.random()*UnitAnimator.easingFunctions.length )];
-	}
+	};
 	
 	UnitAnimator.prototype.setRandomEasingFunction = function(){
 		this.easingFunction = UnitAnimator.getRandomEasingFunction();
-	}
+	};
 	
 	UnitAnimator.prototype.setEasingFunction = function(easingFunction){
 		if(UnitAnimator.easingFunctions.indexOf(easingFunction) > -1){
 			this.easingFunction = easingFunction;
 		}
-	}
+	};
 	
 	//easing (t, b, c, d)
-	//@t is the current time (or position) of the tween. This can be seconds or frames, steps, seconds, ms, whatever – as long as the unit is the same as is used for the total time [3].
+	//@t is the current time (or position) of the tween. This can be seconds or frames, steps, seconds, ms, whatever ï¿½ as long as the unit is the same as is used for the total time [3].
 	//@b is the beginning value of the property.
 	//@c is the change between the beginning and destination value of the property.
 	//@d is the total time of the tween.
 	UnitAnimator.prototype.getAnimationPercent = function(){
 		return this.easingFunction(SimpleGeometry.normalize(this.millisecondsAnimated,0,this.duration),0,1,1);
-	}
+	};
 	
 	UnitAnimator.prototype.isAnimating = function(){
 		return !isNaN(this.intervalId);
-	}
+	};
 	
 	UnitAnimator.prototype.reset = function(duration,framerate,updateCallBack,completeCallBack){
 		this.duration = duration;
@@ -161,7 +161,7 @@
 		this.updateCallBack = updateCallBack;
 		this.completeCallBack = completeCallBack;
 		this.millisecondsAnimated = 0;//keeps track of how long the animation has been running
-	}
+	};
 	
 	UnitAnimator.prototype.start = function(easingFunction){
 		//console.log("UnitAnimator.start()");
@@ -170,14 +170,14 @@
 		}
 		var _this = this;
 		this.intervalId = setInterval(function(){_this.update();}, this.framerate);//TODO : find easier to explain solution
-	}
+	};
 	
 	UnitAnimator.prototype.pause = function(){
 		if(!isNaN(this.intervalId)){
 			clearInterval(this.intervalId);
 		}
 		delete this.intervalId;
-	}
+	};
 
 	//refactor, make private
 	UnitAnimator.prototype.update = function(){
@@ -192,19 +192,19 @@
 			return;
 		}
 		this.dispatchUpdate();
-	}
+	};
 	
 	UnitAnimator.prototype.dispatchUpdate = function(){
 		if(this.updateCallBack){
 			//console.log("UnitAnimator.dispatchUpdate()",this.getAnimationPercent());
 			this.updateCallBack();
 		}
-	}
+	};
 	UnitAnimator.prototype.dispatchComplete = function(){
 		if(this.completeCallBack){
 			this.completeCallBack();
 		}
-	}
+	};
 	
 	window.UnitAnimator = UnitAnimator;
 	

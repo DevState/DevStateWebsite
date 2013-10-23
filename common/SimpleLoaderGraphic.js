@@ -12,10 +12,10 @@
 		this.lineWidth = 14;//stroke width of spinner in pixels
 		this.frameRate = 25;
 		this.velocity = .1;//expressed as a radian
-		this.intervalId;
+		this.intervalId = -1;
 		this.linearGradientStart = new SimpleGeometry.Point();
 		this.linearGradientEnd = new SimpleGeometry.Point();
-	}
+	};
 	
 	//subclass extends superclass
 	SimpleLoaderGraphic.prototype = Object.create(SimpleGeometry.Circle.prototype);
@@ -25,19 +25,19 @@
 	//front gradient color of spinner, red, green and blue values from 0-255, alpha from 0-1
 	SimpleLoaderGraphic.prototype.setStrokeStartColor = function(red, green, blue, alpha){
 		this.startStrokeGradientColor = SimpleGeometry.getRgbaStyleString(red, green, blue, alpha);
-	}
+	};
 	
 	SimpleLoaderGraphic.prototype.endStrokeGradientColor = SimpleGeometry.getRgbaStyleString(0xCC, 0xCC, 0xCC, 1);
 	//front gradient color of spinner, red, green and blue values from 0-255, alpha from 0-1
 	SimpleLoaderGraphic.prototype.setEndStartColor = function(red, green, blue, alpha){
 		this.endStrokeGradientColor = SimpleGeometry.getRgbaStyleString(red, green, blue, alpha);
-	}
+	};
 	
 	SimpleLoaderGraphic.prototype.play = function(){
 		this.radian = 0;
 		var _this = this;
 		this.intervalId = setInterval(function(){_this.rotate();},this.frameRate);
-	}
+	};
 	
 	//TODO : rename to stop
 	SimpleLoaderGraphic.prototype.pause = function(){
@@ -46,7 +46,7 @@
 		}
 		this.updateHandler = undefined;
 		delete this.intervalId;
-	}
+	};
 	
 	SimpleLoaderGraphic.prototype.rotate = function(){
 		this.radian += this.velocity;
@@ -54,7 +54,7 @@
 		if(this.updateHandler){
 			this.updateHandler();
 		}
-	}
+	};
 	
 	SimpleLoaderGraphic.prototype.render = function(context){
 		//render spinner
@@ -88,7 +88,7 @@
 		var metrics = context.measureText(this.loadingText);
 		context.fillText (this.loadingText, this.x - metrics.width/2, this.y+this.radius+this.lineWidth);
 		
-	}
+	};
 
 	window.SimpleLoaderGraphic=SimpleLoaderGraphic;
 	

@@ -1,30 +1,30 @@
 (function (window){
 
 
-	ImageStore = function(){}
+	ImageStore = function(){};
 		
 	ImageStore.prototype.loadImages = function(urls, completeCallback, updateCallback){
 		this.urls = urls;
 		this.completeCallback = completeCallback;
 		this.updateCallback = updateCallback != undefined ? updateCallback : undefined;
-		this.images = new Array();
+		this.images = [];
 		this.currentLoadIndex = 0;
 		this.loadNextImage();
-	}
+	};
 
 	ImageStore.prototype.stop = function(){
 		this.completeCallback = undefined;
 		this.updateCallback = undefined;
-		this.urls = new Array();
-	}
+		this.urls = [];
+	};
 	
 	ImageStore.prototype.getProgressPercent = function(){
 		return SimpleGeometry.normalize(this.currentLoadIndex, 0, this.urls.length);
-	}
+	};
 	
 	ImageStore.prototype.getProgressString = function(){
 		return this.currentLoadIndex+" / "+this.urls.length;
-	}
+	};
 
 	ImageStore.prototype.loadNextImage = function(){
 		if(this.currentLoadIndex >= this.urls.length){
@@ -39,14 +39,14 @@
 			_this.imageLoadComplete();
 		};
 
-		var url = this.urls[this.currentLoadIndex]
+		var url = this.urls[this.currentLoadIndex];
 		image.onerror = function(){
 			alert("ImageStore ERROR : "+url+" could not be loaded.");
-		}
+		};
 		image.src = this.urls[this.currentLoadIndex];
 		this.images.push(image);
 		this.currentLoadIndex++;
-	}
+	};
 	
 	ImageStore.prototype.imageLoadComplete = function(){
 		//console.log("ImageStore.imageLoadComplete()");
@@ -57,10 +57,8 @@
 			this.updateCallback();
 		}
 		this.loadNextImage();
-	}
+	};
 
 	window.ImageStore=ImageStore;
 	
 }(window));
-
-

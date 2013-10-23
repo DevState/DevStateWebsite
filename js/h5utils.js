@@ -92,7 +92,6 @@ function loadChainedScript( url, callback, cnt ) {
     }
 
     script.src = url;
-	
 	var parent = document.getElementsByTagName('head').item(0) || document.documentElement;
 	parent.appendChild(script);
     

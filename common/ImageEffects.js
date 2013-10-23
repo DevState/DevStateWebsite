@@ -1,7 +1,7 @@
 (function (window){
 
 
-	ImageEffects = function(){}
+	ImageEffects = function(){};
 	
 	ImageEffects.createGrayscaleImageFrom = function(image, width, height){
 		var canvas = document.createElement('canvas');
@@ -25,7 +25,7 @@
 		delete context;
 		delete canvas;
 		return copy;
-    }
+    };
 
 	ImageEffects.createInverseImageFrom = function(image, width, height){
 		var canvas = document.createElement('canvas');
@@ -49,7 +49,7 @@
 		delete context;
 		delete canvas;
 		return copy;
-    }
+    };
 	
 	ImageEffects.createBrightImageFrom = function(image, width, height){
 		var canvas = document.createElement('canvas');
@@ -73,7 +73,7 @@
 		delete context;
 		delete canvas;
 		return copy;
-    }
+    };
 	
 	ImageEffects.createDarkImageFrom = function(image, width, height){
 		var canvas = document.createElement('canvas');
@@ -97,7 +97,7 @@
 		delete context;
 		delete canvas;
 		return copy;
-    }
+    };
 	
 	ImageEffects.createPsychadelicImageFrom = function(image, width, height){
 		var canvas = document.createElement('canvas');
@@ -121,19 +121,19 @@
 		delete context;
 		delete canvas;
 		return copy;
-    }
+    };
 
 	ImageEffects.effects = new Array(	ImageEffects.createGrayscaleImageFrom, ImageEffects.createInverseImageFrom, 
 										ImageEffects.createBrightImageFrom, ImageEffects.createDarkImageFrom, ImageEffects.createPsychadelicImageFrom);
 	
-	ImageEffects.getRandomImageEffect = function(image, width, height){
+	ImageEffects.getRandomImageEffect = function(){
 		return ImageEffects.effects[Math.floor(Math.random()*ImageEffects.effects.length)];
-	}
+	};
 	
 	ImageEffects.createRandomEffectImageFrom = function(image, width, height){
 		var effect = ImageEffects.getRandomImageEffect();
 		return effect(image, width, height);
-	}
+	};
 	
 	//captureRect must contain the properties x, y, width, height
 	ImageEffects.renderReflection = function(canvas, captureRect, space, r,b,g){
@@ -141,7 +141,7 @@
 			space = 5;
 		}
 		if(!r){
-			r,g,b = "0xFF";
+			r = g = b = "0xFF";
 		}
 
 		context = canvas.getContext("2d");
@@ -162,7 +162,7 @@
 		context.fillStyle = gradient;
 		context.fillRect(captureRect.x, captureRect.y + captureRect.height + space, captureRect.width, captureRect.height);
 			
-    }
+    };
 	
 	ImageEffects.resizeImageDestructive = function(image, resizeCanvas, width, height){
 		if(!resizeCanvas){
@@ -173,7 +173,7 @@
 		var context = resizeCanvas.getContext("2d");
 		context.drawImage(image,0,0,width,height);
 		image.src = resizeCanvas.toDataURL();
-	}
+	};
 	
 	window.ImageEffects=ImageEffects;
 

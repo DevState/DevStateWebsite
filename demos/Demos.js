@@ -11,14 +11,14 @@
 		this.gifPlaybackFrameRate = 100;//generated gifs play at this speed
 		this.toolTip = "";
 		this.setUpDemo();
-	}
+	};
 	
 	//subclass extends superclass
 	AbstractDemo.prototype = Object.create(SimpleGeometry.Rectangle.prototype);
 	AbstractDemo.prototype.constructor = SimpleGeometry.Rectangle;
 
 	//subclasses override this incase of custom set ups (additional canvas etc.)
-	AbstractDemo.prototype.preSetUp = function(){}
+	AbstractDemo.prototype.preSetUp = function(){};
 
 	//subclasses override this incase of custom set ups
 	AbstractDemo.prototype.setUpDemo = function(){
@@ -30,14 +30,14 @@
 		this.canvas.height = this.height;
 		this.context2d = this.canvas.getContext("2d");
 		this.appendCanvas(this.canvas);
-	}
+	};
 	
 	AbstractDemo.prototype.appendCanvas = function(canvas) {
 		canvas.style.position = "absolute";
 		canvas.style.left = "0px";
 		canvas.style.top = "0px";
 		this.demoContainer.appendChild(canvas);
-	}	
+	};
 	
 	AbstractDemo.prototype.getGlobalDemoPosition = function () {
         var point = new SimpleGeometry.Point(0, 0);
@@ -55,35 +55,35 @@
 	//override in demos where multiple canvases are used, return canvases in correct stack z-sort order
 	AbstractDemo.prototype.getCaptureCanvases = function(){
 		return [this.canvas];
-	}
+	};
 	
 	AbstractDemo.prototype.run = function(){
 		this.clear();	
-	}
+	};
 	
 	AbstractDemo.prototype.clear = function(){
 		this.context2d.clearRect(0, 0, this.canvas.width, this.canvas.height);
 		//this.fillStyle="#000000"
 		//this.context2d.fillRect(0, 0, this.canvas.width, this.canvas.height);
-	}
+	};
 	
 	AbstractDemo.prototype.loadImagesWithImageStore = function(urls){
 		this.imageStore = new ImageStore();
 		var _this = this;
-		this.imageStore.loadImages(urls, function(event){_this.imageStoreLoadComplete();} , function(event){_this.imageStoreLoadProgress();});
-		this.spinner = new SimpleLoaderGraphic(this.width / 2, this.height / 2, 25, function(event){_this.updateSpinner();});
+		this.imageStore.loadImages(urls, function(){_this.imageStoreLoadComplete();} , function(){_this.imageStoreLoadProgress();});
+		this.spinner = new SimpleLoaderGraphic(this.width / 2, this.height / 2, 25, function(){_this.updateSpinner();});
 		this.spinner.play();		
-	}
+	};
 	
 	AbstractDemo.prototype.imageStoreLoadProgress = function (){
 		//console.log("AbstractDemo.imageStoreLoadProgress ",this.imageStore.getProgressString() );
 		this.spinner.loadingText = "Loading images "+this.imageStore.getProgressString();
-	}
+	};
 	
 	AbstractDemo.prototype.updateSpinner = function(){
 		this.clear();
 		this.spinner.render(this.context2d);
-	}
+	};
 		
 	AbstractDemo.prototype.imageStoreLoadComplete = function(){
 		//console.log("AbstractDemo.imageStoreLoadComplete()");
@@ -91,11 +91,11 @@
 		this.spinner.pause();
 		delete this.spinner;
 		this.useLoadedImageStoreImages();
-	}
+	};
 	
 	AbstractDemo.prototype.useLoadedImageStoreImages = function(){
 		console.log("AbstractDemo.useLoadedImageStoreImages(), this must be overridden in subclasses");
-	}
+	};
 	
 	//delete any instances, remove any listeners / callbacks
 	AbstractDemo.prototype.tearDown = function(){
@@ -116,21 +116,21 @@
 		delete this.context2d;
 		delete this.canvas;
 		this.customTearDown();
-	}
+	};
 	
 	AbstractDemo.prototype.customTearDown = function(){
 		//console.log("AbstractDemo.customTearDown()");
-	}
+	};
 	
 	AbstractDemo.prototype.startCustomCaptureAnimation = function(){
 		console.log("AbstractDemo.prototype.startCustomCaptureAnimation() must be overriden by subclasses");
-	}
+	};
 	
 	AbstractDemo.prototype.animationComplete = function(){
 		if(this.captureCompleteCallBack){
 			this.captureCompleteCallBack();
 		}
-	}
+	};
 	
 	window.AbstractDemo = AbstractDemo;
 	
@@ -149,7 +149,7 @@
 		AbstractDemo.call(this, x, y, width, height, demoContainer); //call super constructor.
 		this.toolTip = "Standard pie chart with a reflection. Click the pie chart to run open and close animations. Press reset for new data.";
 		this.gifPlaybackFrameRate = 200;
-	}
+	};
 	
 	//subclass extends superclass
 	PieChartDemo.prototype = Object.create(AbstractDemo.prototype);
@@ -160,7 +160,7 @@
 		var pie = new PieChart(this.x, this.y, this.width, this.height*.6, 10);
 		this.reflectionCaptureRect = new SimpleGeometry.Rectangle(pie.center.x-pie.radius, pie.center.y-pie.radius, pie.radius*2, pie.radius*2);
 		return pie;
-	}
+	};
 	
 	PieChartDemo.prototype.run = function(){
 		this.pieChart = this.createPieChart();
@@ -169,14 +169,14 @@
 		this.pieChartOpen = true;
 		this.animator = new UnitAnimator(1000, 20, function() {_this.updatePieChart()}, function() {_this.animationComplete()});
 		this.animator.start();
-	}
+	};
 	
 	PieChartDemo.prototype.updatePieChart = function(){
 		this.renderPieChart(this.animator.getAnimationPercent());
-	}
+	};
 	PieChartDemo.prototype.updatePieChartReverse = function(){
 		this.renderPieChart(1-this.animator.getAnimationPercent());
-	}
+	};
 	
 	PieChartDemo.prototype.renderPieChart = function(animationPercent){
 		this.clear();
@@ -185,22 +185,22 @@
 			return;
 		}
 		ImageEffects.renderReflection(this.canvas, this.reflectionCaptureRect);
-	}
+	};
 		
-	PieChartDemo.prototype.canvasClickHandler = function(event){
+	PieChartDemo.prototype.canvasClickHandler = function(){
 		if(this.animator.isAnimating()){
 			return;
 		}
 		var _this = this;
-		var callback = this.pieChartOpen ? function(event){_this.updatePieChartReverse();} : function(event){_this.updatePieChart();}
+		var callback = this.pieChartOpen ? function(){_this.updatePieChartReverse();} : function(){_this.updatePieChart();};
 		this.animator.reset(1000,20,callback );
 		this.animator.start();
 		this.pieChartOpen =!this.pieChartOpen;
-	}
+	};
 	
 	PieChartDemo.prototype.customTearDown = function(){
 		delete this.pieChart;
-	}
+	};
 	
 	window.PieChartDemo = PieChartDemo;
 	
@@ -215,7 +215,7 @@
 	DonutChartDemo = function(x, y, width, height, demoContainer){
 		PieChartDemo.call(this, x, y, width, height, demoContainer); //call super constructor.
 		this.toolTip = "Click the donut chart to run open and close animations. Press reset for new data.";
-	}
+	};
 	
 	//subclass extends superclass
 	DonutChartDemo.prototype = Object.create(PieChartDemo.prototype);
@@ -226,7 +226,7 @@
 		//console.log("DonutChartDemo.prototype.createPieChart()");
 		return new DonutChart(this.x,this.y,this.width,this.height);
 		//return new DonutChart(this.x+35,this.y+30,this.width/2-60,this.height/2-60,.3);
-	}
+	};
 	
 	window.DonutChartDemo = DonutChartDemo;
 
@@ -242,7 +242,7 @@
 		AbstractDemo.call(this, x, y, width, height, demoContainer); //call super constructor.
 		this.toolTip = "Click the line chart to run open and close animations. Press reset for new data.";
 		this.gifPlaybackFrameRate = 200;
-	}
+	};
 	
 	//subclass extends superclass
 	LineChartDemo.prototype = Object.create(AbstractDemo.prototype);
@@ -255,10 +255,10 @@
 		this.backGroundCanvas.height = this.height;
 		this.backGroundCanvasContext2d = this.backGroundCanvas.getContext("2d");
 		this.appendCanvas(this.backGroundCanvas);
-	}
+	};
 	LineChartDemo.prototype.getCaptureCanvases = function(){
 		return [this.backGroundCanvas, this.canvas];
-	}
+	};
 	
 	LineChartDemo.prototype.run = function(){
 		this.lineChart = new LineChart(this.x + 10, this.y, this.width, this.height);
@@ -267,42 +267,42 @@
 		this.lineChartOpen = true;
 		this.animator=new UnitAnimator(1000,20,function() {_this.updateLineChart()}, function() {_this.animationComplete()});
 		this.animator.start();
-	}	
+	};
 	
 	LineChartDemo.prototype.createBackground = function(){
 		this.background = new ChartBackground(this.x, this.y, this.width, this.height);
 		this.background.legendMargin = 10;
 		this.background.render(this.backGroundCanvasContext2d, 0, this.lineChart.max);
-	}
-	
+	};
+
 	LineChartDemo.prototype.updateLineChart = function(){
 		this.clear();
 		this.lineChart.render(this.context2d, this.animator.getAnimationPercent());
 		if(!this.background){
 			this.createBackground();
 		}
-	}
+	};
 	LineChartDemo.prototype.updateLineChartReverse = function(){
 		this.clear();
 		this.lineChart.render(this.context2d, 1-this.animator.getAnimationPercent());
-	}
+	};
 	
-	LineChartDemo.prototype.canvasClickHandler = function(event){
+	LineChartDemo.prototype.canvasClickHandler = function(){
 		if(this.animator.isAnimating()){
 			return;
 		}
 		var _this = this;
-		this.animator.reset(1000,20,this.lineChartOpen ? function(event){_this.updateLineChartReverse();} : function(event){_this.updateLineChart();} );
+		this.animator.reset(1000,20,this.lineChartOpen ? function(){_this.updateLineChartReverse();} : function(){_this.updateLineChart();} );
 		this.animator.start();
 		this.lineChartOpen =! this.lineChartOpen;
-	}
+	};
 	
 	LineChartDemo.prototype.customTearDown = function(){
 		delete this.lineChart;
 		this.demoContainer.removeChild(this.backGroundCanvas);
 		delete this.backGroundCanvasContext2d;
 		delete this.backGroundCanvas;
-	}
+	};
 	
 	window.LineChartDemo = LineChartDemo;
 	
@@ -317,7 +317,7 @@
 		AbstractDemo.call(this, x, y, width, height, demoContainer); //call super constructor.
 		this.toolTip = "Bar chart with fake 3d. Click the bar chart to run open and close animations. Press reset for new data.";
 		this.gifPlaybackFrameRate = 200;
-	}
+	};
 	
 	//subclass extends superclass
 	BarChartDemo.prototype = Object.create(AbstractDemo.prototype);
@@ -330,10 +330,10 @@
 		this.backGroundCanvas.height = this.height;
 		this.backGroundCanvasContext2d = this.backGroundCanvas.getContext("2d");
 		this.appendCanvas(this.backGroundCanvas);
-	}
+	};
 	BarChartDemo.prototype.getCaptureCanvases = function(){
 		return [this.backGroundCanvas, this.canvas];
-	}
+	};
 	
 	BarChartDemo.prototype.run = function(){
 		var extrude = 12;
@@ -345,14 +345,14 @@
 		this.animator = new UnitAnimator(1500,20,function() {_this.updateBarChart()}, function() {_this.animationComplete()});
 		//this.animator.start(UnitAnimator.getRandomEasingFunction());
 		this.animator.start(UnitAnimator.easeOutSine);
-	}
+	};
 
 	BarChartDemo.prototype.createBackground = function(){
 		this.background = new ChartBackground(this.x, this.y, this.width, this.height);
 		this.background.false3DExtrusion = this.barChart.extrudeWidth;
 		this.background.legendMargin = this.barChart.extrudeWidth + 3;
 		this.background.render(this.backGroundCanvasContext2d, 0, this.barChart.max);
-	}
+	};
 	
 	BarChartDemo.prototype.updateBarChart = function(){
 		this.clear();
@@ -361,28 +361,28 @@
 		if(!this.background){
 			this.createBackground();
 		}
-	}
+	};
 	BarChartDemo.prototype.updateBarChartReverse = function(){
 		this.clear();
 		this.barChart.render(this.context2d, 1 - this.animator.getAnimationPercent());
-	}
+	};
 	
-	BarChartDemo.prototype.canvasClickHandler = function(event){
+	BarChartDemo.prototype.canvasClickHandler = function(){
 		if(this.animator.isAnimating()){
 			return;
 		}
 		var _this = this;
-		this.animator.reset(1500,20,this.barChartOpen ? function(event){_this.updateBarChartReverse();} : function(event){_this.updateBarChart();} );
+		this.animator.reset(1500,20,this.barChartOpen ? function(){_this.updateBarChartReverse();} : function(){_this.updateBarChart();} );
 		this.animator.start(this.barChartOpen ? UnitAnimator.easeInSine : UnitAnimator.easeOutSine);
 		this.barChartOpen =! this.barChartOpen;
-	}
+	};
 	
 	BarChartDemo.prototype.customTearDown = function(){
 		delete this.barChart;
 		this.demoContainer.removeChild(this.backGroundCanvas);
 		delete this.backGroundCanvasContext2d;
 		delete this.backGroundCanvas;
-	}
+	};
 	
 	window.BarChartDemo = BarChartDemo;
 	
@@ -397,7 +397,7 @@
 		AbstractDemo.call(this, x, y, width, height, demoContainer); //call super constructor.
 		this.toolTip = "Click the left or right arrows to slide to next or previous image.";
 		this.customCaptureControls = true;
-	}
+	};
 	
 	//subclass extends superclass
 	BasicSlideShowDemo.prototype = Object.create(AbstractDemo.prototype);
@@ -408,7 +408,7 @@
 		this.basicSlideShow = new BasicSlideShow(this.x, this.y, this.width, this.height, this.context2d);
 		var _this = this;
 		this.canvas.addEventListener("click", function(event){_this.canvasClickHandler(event)}, false);//"mousedown"
-		var urls=new Array(
+		var urls=[
 			"assets/instagramPhotos/paperWeight.jpg",
 			"assets/instagramPhotos/peacock.jpg",
 			"assets/instagramPhotos/rufus.jpg",
@@ -421,15 +421,15 @@
 			"assets/instagramPhotos/snowBallLantern.jpg",
 			"assets/instagramPhotos/springSnow.jpg",
 			"assets/instagramPhotos/Keon0FucksGiven.jpg",
-			"assets/instagramPhotos/sunny.jpg");
+			"assets/instagramPhotos/sunny.jpg"];
 
 		this.loadImagesWithImageStore(urls);
-	}
+	};
 		
 	BasicSlideShowDemo.prototype.useLoadedImageStoreImages = function(){
 		//console.log("BasicSlideShowDemo.useLoadedImageStoreImages()");
 		this.basicSlideShow.setImages(this.imageStore.images);
-	}
+	};
 	
 	BasicSlideShowDemo.prototype.canvasClickHandler = function(event){
 		var x=event.pageX - this.canvas.offsetLeft;
@@ -443,15 +443,15 @@
 				this.basicSlideShow.previous();
 			}
 		}
-	}
+	};
 	
 	BasicSlideShowDemo.prototype.startCustomCaptureAnimation = function(){
 		this.basicSlideShow.next();
-	}
+	};
 	
 	BasicSlideShowDemo.prototype.customTearDown = function(){
 		delete this.basicSlideShow;
-	}
+	};
 	
 	window.BasicSlideShowDemo = BasicSlideShowDemo;
 
@@ -467,7 +467,7 @@
 		AbstractDemo.call(this, x, y, width, height, demoContainer); //call super constructor.
 		this.toolTip = "Click the arrows to rotate the carousel.";
 		this.customCaptureControls = true;
-	}
+	};
 	
 	//subclass extends superclass
 	ThumbnailCarouselDemo.prototype = Object.create(AbstractDemo.prototype);
@@ -476,7 +476,7 @@
 	ThumbnailCarouselDemo.prototype.run = function(){
 		var _this = this;
 		this.canvas.addEventListener("click", function(event){_this.canvasClickHandler(event)}, false);//"mousedown"
-		var urls=new Array(
+		var urls=[
 			"assets/instagramThumbs/paperWeight.jpg",
 			"assets/instagramThumbs/peacock.jpg",
 			"assets/instagramThumbs/rufus.jpg",
@@ -489,17 +489,17 @@
 			"assets/instagramThumbs/snowBallLantern.jpg",
 			"assets/instagramThumbs/springSnow.jpg",
 			"assets/instagramThumbs/Keon0FucksGiven.jpg",
-			"assets/instagramThumbs/sunny.jpg");
+			"assets/instagramThumbs/sunny.jpg"];
 
 		this.loadImagesWithImageStore(urls);
-	}
+	};
 	
 	ThumbnailCarouselDemo.prototype.useLoadedImageStoreImages = function(){
 		//console.log("ThumbnailCarouselDemo.useLoadedImageStoreImages()");
 		this.thumbnailCarousel = new ThumbnailCarousel(	this.x, this.y + this.height/2 - this.imageStore.images[0].height/2, 
 														this.width, this.imageStore.images[0].height+10, this.context2d);
 		this.thumbnailCarousel.setImages(this.imageStore.images);
-	}
+	};
 	
 	ThumbnailCarouselDemo.prototype.canvasClickHandler = function(event){
 		var x = event.pageX - this.canvas.offsetLeft;
@@ -519,15 +519,15 @@
 				this.thumbnailCarousel.previous();
 			}
 		}
-	}
+	};
 	
 	ThumbnailCarouselDemo.prototype.startCustomCaptureAnimation = function(){
 		this.thumbnailCarousel.next();
-	}
+	};
 	
 	ThumbnailCarouselDemo.prototype.customTearDown = function(){
 		delete this.thumbnailCarousel;
-	}
+	};
 	
 	window.ThumbnailCarouselDemo = ThumbnailCarouselDemo;
 	
@@ -542,7 +542,7 @@
 		AbstractDemo.call(this, x, y, width, height, demoContainer); //call super constructor.
 		this.toolTip = "Click the arrows to slide the cover flow.  Unfortunately this demo renders poorly on some devices.";
 		this.customCaptureControls = true;
-	}
+	};
 	
 	//subclass extends superclass
 	SimpleCoverFlowDemo.prototype = Object.create(AbstractDemo.prototype);
@@ -551,7 +551,7 @@
 	SimpleCoverFlowDemo.prototype.run = function(){
 		var _this = this;
 		this.canvas.addEventListener("click", function(event){_this.canvasClickHandler(event)}, false);//"mousedown"
-		var urls=new Array(
+		var urls = [
 			"assets/instagramThumbs/paperWeight.jpg",
 			"assets/instagramThumbs/peacock.jpg",
 			"assets/instagramThumbs/rufus.jpg",
@@ -564,17 +564,17 @@
 			"assets/instagramThumbs/snowBallLantern.jpg",
 			"assets/instagramThumbs/springSnow.jpg",
 			"assets/instagramThumbs/Keon0FucksGiven.jpg",
-			"assets/instagramThumbs/sunny.jpg");
+			"assets/instagramThumbs/sunny.jpg"];
 
 		this.loadImagesWithImageStore(urls);
-	}
+	};
 	
 	SimpleCoverFlowDemo.prototype.useLoadedImageStoreImages = function(){
 		//console.log("SimpleCoverFlowDemo.useLoadedImageStoreImages()");
 		this.coverFlow = new SimpleCoverFlow(	this.x, this.y + this.height/2 - this.imageStore.images[0].height/2, 
 														this.width, this.imageStore.images[0].height+10, this.context2d);
 		this.coverFlow.setImages(this.imageStore.images);
-	}
+	};
 	
 	SimpleCoverFlowDemo.prototype.canvasClickHandler = function(event){
 		var x = event.pageX - this.canvas.offsetLeft;
@@ -595,15 +595,15 @@
 				this.coverFlow.previous();
 			}
 		}
-	}
+	};
 	
 	SimpleCoverFlowDemo.prototype.startCustomCaptureAnimation = function(){
 		this.coverFlow.next();
-	}
+	};
 	
 	SimpleCoverFlowDemo.prototype.customTearDown = function(){
 		delete this.coverFlow;
-	}
+	};
 	
 	window.SimpleCoverFlowDemo = SimpleCoverFlowDemo;
 	
@@ -618,7 +618,7 @@
 		AbstractDemo.call(this, x, y, width, height, demoContainer); //call super constructor.
 		this.toolTip = "Click an image to see a fade effect from one random image to another.";
 		this.customCaptureControls = true;
-	}
+	};
 	//subclass extends superclass
 	ImageFaderDemo.prototype = Object.create(AbstractDemo.prototype);
 	ImageFaderDemo.prototype.constructor = AbstractDemo;	
@@ -641,23 +641,23 @@
 		this.canvas.addEventListener("click", function(event){_this.canvasClickHandler(event)}, false);//"mousedown"
 		this.ImageEffectFader = new ImageEffectFader(this.x, this.y, this.width, this.height, this.context2d);
 		this.showRandomImage();
-	}
+	};
 
 	ImageFaderDemo.prototype.showRandomImage = function(){
 		this.ImageEffectFader.setImage( this.urls[Math.floor(Math.random()*this.urls.length)] );	
-	}
+	};
 	
 	ImageFaderDemo.prototype.canvasClickHandler = function(){
 		this.showRandomImage();
-	}
+	};
 	
 	ImageFaderDemo.prototype.startCustomCaptureAnimation = function(){
 		this.showRandomImage();
-	}
+	};
 	
 	ImageFaderDemo.prototype.customTearDown = function(){
 		delete this.ImageEffectFader;
-	}
+	};
 	
 	window.ImageFaderDemo = ImageFaderDemo;
 	
@@ -670,7 +670,7 @@
 		AbstractDemo.call(this, x, y, width, height, demoContainer); //call super constructor.
 		this.toolTip = "Animation with random wandering movement and smoothly transitioning random colors. The two colors are complementary.";
 		this.customCaptureControls = true;
-	}
+	};
 	
 	//subclass extends superclass
 	WandererDemo.prototype = Object.create(AbstractDemo.prototype);
@@ -678,7 +678,7 @@
 	
 	WandererDemo.prototype.run = function(){
 		this.loadImagesWithImageStore(["assets/colorWheel.jpg"]);
-	}
+	};
 		
 	WandererDemo.prototype.useLoadedImageStoreImages = function(){
 		//console.log("WandererDemo.useLoadedImageStoreImages()");
@@ -705,7 +705,7 @@
 
 		this.canvas.addEventListener("click", function(event){_this.canvasClickHandler(event)}, false);//"mousedown"
 
-	}
+	};
 	
 	WandererDemo.prototype.wandererUpdateHandler = function(){
 		//console.log("wandererUpdateHandler()");
@@ -727,13 +727,13 @@
 		this.context2d.arc(opposingPoint.x, opposingPoint.y, this.wanderer.radius/2, 0, SimpleGeometry.PI2);
 		this.context2d.fill();
 		this.context2d.closePath();
-	}
+	};
 	
 	/*WandererDemo.prototype.canvasClickHandler = function(event){
 		//console.log("canvasClickHandlerWanderer()");
 		this.wanderer.pause();
 		this.colorWanderer.pause();
-	}*/
+	};*/
 	
 	WandererDemo.prototype.customTearDown = function(){
 		//console.log("WandererDemo.teardown()");
@@ -741,7 +741,7 @@
 		delete this.colorWanderer;
 		this.wanderer.pause();
 		delete this.wanderer;
-	}
+	};
 	
 	window.WandererDemo = WandererDemo;
 	
@@ -755,7 +755,7 @@
 	BlockSetAnimatorDemo = function(x, y, width, height, demoContainer){
 		AbstractDemo.call(this, x, y, width, height, demoContainer); //call super constructor.
 		this.toolTip = "Click the images or reset for a new random animation.";
-	}
+	};
 	
 	//subclass extends superclass
 	BlockSetAnimatorDemo.prototype = Object.create(AbstractDemo.prototype);
@@ -770,7 +770,7 @@
 			"assets/instagramThumbs/sakirisChips.jpg"];
 
 		this.loadImagesWithImageStore(urls);
-	}
+	};
 		
 	BlockSetAnimatorDemo.prototype.useLoadedImageStoreImages = function(){
 		//console.log("BlockSetAnimatorDemo.useLoadedImageStoreImages()",this.imageStore.images.length);
@@ -778,14 +778,14 @@
 		this.blockSetAnimator = new BlockSetAnimator(this.x, this.y+this.height/2 - this.imageStore.images[0].height/2, this.width, this.height);
 		this.blockSetAnimator.setImages(this.imageStore.images);
 		BlockSetAnimatorDemo.runRandomAnimation(this);
-	}
+	};
 	
-	BlockSetAnimatorDemo.prototype.canvasClickHandler = function(event){
+	BlockSetAnimatorDemo.prototype.canvasClickHandler = function(){
 		if(this.blockSetAnimator.isAnimating()){
 			return;
 		}
 		BlockSetAnimatorDemo.runRandomAnimation(this);
-	}
+	};
 	
 	BlockSetAnimatorDemo.getIntroEasingFunction = function(){
 		var easing = [UnitAnimator.easeLinear,
@@ -793,7 +793,7 @@
 									UnitAnimator.easeOutBounce,
 									UnitAnimator.easeOutElastic];
 		return easing[Math.floor( Math.random()*easing.length )];
-	}
+	};
 	
 	BlockSetAnimatorDemo.getEndtroEasingFunction = function(){
 		var easing = [UnitAnimator.easeLinear,
@@ -801,7 +801,7 @@
 									UnitAnimator.easeInBounce,
 									UnitAnimator.easeInElastic];
 		return easing[Math.floor( Math.random()*easing.length )];	
-	}
+	};
 	
 	//used for both image blocks and text effect demo  TODO : clean this up, too many conditionals
 	BlockSetAnimatorDemo.runRandomAnimation = function(demo){
@@ -832,21 +832,21 @@
 		demo.blockSetAnimator.setEasingFunction(easingFunction);
 		demo.blockSetAnimator.start (2000, 250, function(){demo.blockSetAnimationComplete()} , function(){demo.animationUpdate()});
 		demo.intro = !demo.intro;
-	}
+	};
 	
 	BlockSetAnimatorDemo.prototype.animationUpdate = function(){
 		this.clear();
 		this.blockSetAnimator.render(this.context2d);
-	}
+	};
 	
 	BlockSetAnimatorDemo.prototype.blockSetAnimationComplete = function(){
 		//console.log("BlockSetAnimatorDemo.blockSetAnimationComplete()");
 		this.animationComplete();
-	}
+	};
 	
 	BlockSetAnimatorDemo.prototype.customTearDown = function(){
 		delete this.blockSetAnimator;
-	}
+	};
 	
 	window.BlockSetAnimatorDemo = BlockSetAnimatorDemo;
 	
@@ -862,7 +862,7 @@
 		this.toolTip = "Click the text or reset for a new random animation.";
         this.gifPlaybackFrameRate = 100;
         this.captureFrameRate = 400;
-	}
+	};
 	
 	//subclass extends superclass
 	TextEffectDemo.prototype = Object.create(AbstractDemo.prototype);
@@ -878,28 +878,28 @@
 		this.blockSetAnimator = new BlockSetAnimator( this.x+8 , this.y + this.height/2 - images[0].height/2, this.width, this.height);
 		this.blockSetAnimator.setImages(images);
 		BlockSetAnimatorDemo.runRandomAnimation(this);
-	}
+	};
 	
-	TextEffectDemo.prototype.canvasClickHandler = function(event){
+	TextEffectDemo.prototype.canvasClickHandler = function(){
 		if(this.blockSetAnimator.isAnimating()){
 			return;
 		}
 		BlockSetAnimatorDemo.runRandomAnimation(this);
-	}
+	};
 	
 	TextEffectDemo.prototype.animationUpdate = function(){
 		this.clear();
 		this.blockSetAnimator.render(this.context2d);
-	}
+	};
 	
 	TextEffectDemo.prototype.blockSetAnimationComplete = function(){
 		//console.log("TextEffectDemo.blockSetAnimationComplete()");
 		this.animationComplete();
-	}
+	};
 	
 	TextEffectDemo.prototype.customTearDown = function(){
 		delete this.blockSetAnimator;
-	}
+	};
 	
 	window.TextEffectDemo = TextEffectDemo;
 	

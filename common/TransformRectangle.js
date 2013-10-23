@@ -16,7 +16,7 @@
 		this.transform = new SimpleGeometry.Transform();
 		this.imageTriangle = new SimpleGeometry.Triangle();
 		//console.log(this.topLeft.toString(),this.topRight.toString(), this.bottomRight.toString(), this.bottomLeft.toString() );
-	}
+	};
 
 	TransformRectangle.prototype.updatePoints =  function(topLeft, topRight, bottomRight, bottomLeft){
 		this.topLeft.x  =  topLeft.x;
@@ -27,11 +27,11 @@
 		this.bottomRight.y  =  bottomRight.y;
 		this.bottomLeft.x  =  bottomLeft.x;
 		this.bottomLeft.y  =  bottomLeft.y;
-	}
+	};
 	
 	TransformRectangle.prototype.updatePointsToTransformRectangle =  function(rect){
 		this.updatePoints(rect.topLeft, rect.topRight, rect.bottomRight, rect.bottomLeft);
-	}
+	};
 	
 	TransformRectangle.prototype.clone = function(){
 		return new TransformRectangle(	new SimpleGeometry.Point(this.topLeft.x,this.topLeft.y),
@@ -39,7 +39,7 @@
 										new SimpleGeometry.Point(this.bottomRight.x,this.bottomRight.y),
 										new SimpleGeometry.Point(this.bottomLeft.x,this.bottomLeft.y)
 										);
-	}
+	};
 
 	TransformRectangle.prototype.render  =  function(context2d, image){
 		if(image){
@@ -47,7 +47,7 @@
 		}
 		//this.renderOutline(context2d);
 		
-	}
+	};
 	
 	TransformRectangle.prototype.renderImage  =  function(context2d, image){
 		SimpleGeometry.setIdentityMatrixToContext(context2d);
@@ -95,7 +95,7 @@
 		context2d.closePath();
 		
 		SimpleGeometry.setIdentityMatrixToContext(context2d);
-	}
+	};
 	
 	TransformRectangle.prototype.updateTriangleTransform = function (sourceTriangle,transformedTriangle){
 		
@@ -113,7 +113,7 @@
 		
 		this.transform.skewX = Math.sin(xAngle)*xScale;
 		this.transform.skewY = Math.cos(yAngle)*yScale;
-	}
+	};
 	
 	TransformRectangle.prototype.renderOutline  =  function(context2d){
 		context2d.strokeStyle  =  "#FF0000";
@@ -133,7 +133,7 @@
 		context2d.lineTo(this.triangleB.a.x,this.triangleB.a.y);
 		context2d.stroke();
 		context2d.closePath();
-	}
+	};
 	
 	window.TransformRectangle  =  TransformRectangle;
 	

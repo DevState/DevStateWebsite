@@ -11,7 +11,7 @@
 
 		this.false3DExtrusion = 0;
 		this.legendMargin = 10;
-	}
+	};
 	
 	//subclass extends superclass
 	ChartBackground.prototype = Object.create(SimpleGeometry.Rectangle.prototype);
@@ -20,7 +20,7 @@
 	ChartBackground.prototype.setBgColors = function(bgColor,bgStrokeColor){
 		this.bgColor = bgColor;
 		this.bgStrokeColor = bgStrokeColor;
-	}
+	};
 
 	ChartBackground.prototype.render = function(context, min, max){
 		//color background
@@ -93,7 +93,7 @@
 			legend-=legendIncrement;
 		}
 		this.renderLegendValue(context, Math.round(legend), this.y+roundedYPos+gap);
-	}
+	};
 	
 	ChartBackground.prototype.renderLegendValue = function(context, value, yPosition){
 		/*context.shadowColor = this.lightColor;//SimpleGeometry.getRgbaStyleString(0x00,0x00,0x00,.4);
@@ -104,7 +104,7 @@
 		/*context.shadowOffsetX = 0;
 		context.shadowOffsetY = 0;
 		context.shadowBlur    = 0;	*/
-	}
+	};
 	
 	window.ChartBackground=ChartBackground;
 	

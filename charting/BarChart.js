@@ -13,7 +13,7 @@
 
         this.lightColor = DSColors.PINK_ORANGE;
         this.darkColor = DSColors.ORANGE;
-	}
+	};
 	
 	//subclass extends superclass
 	BarChart.prototype = Object.create(SimpleGeometry.Rectangle.prototype);
@@ -24,33 +24,33 @@
 	BarChart.prototype.setValues = function(values, max){
 		this.values=values;
 		this.max=max;
-	}
+	};
 	
 	BarChart.prototype.setRandomValues = function(){
-		var values = new Array();
+		var values = [];
 		var total = 3 + Math.floor(Math.random()*3);//between 4 and 8
 		while(total > 0){
 			values.push(10 + Math.floor(Math.random()*90));
 			total--;
 		}
 		this.setValues(values,100);
-	}
+	};
 	
 	//colors must be an array in the format ["#FF00FF","#FF00CC"...]
-	BarChart.prototype.setBarColors = function(colors){
-		this.colors=colors;	
-	}
+	BarChart.prototype.setBarColors = function (colors) {
+        this.colors = colors;
+    };
 	BarChart.prototype.setRandomColors = function(){
-		this.colors = new Array();
+		this.colors = [];
 		while(this.colors.length != this.values.length){
 			this.colors.push(SimpleGeometry.getRandomFillStyleColor());
 		}
-	}
+	};
 	
 	//move, Line Chart uses the same, maybe move to ChartBackground? Rename ChartBackground to ChartUtil?
 	BarChart.prototype.calculateYPosition = function(value,animationPercent){
 		return SimpleGeometry.interpolate( SimpleGeometry.normalize(value, 0, this.max) * animationPercent, this.getBottom(), this.y)
-	}
+	};
 	
 	BarChart.prototype.render = function(context,animationPercent){
 		if(!this.values){
@@ -108,7 +108,7 @@
 			context.fillRect(this.renderPoint.x, this.renderPoint.y, this.barWidth, this.y+this.height-this.renderPoint.y);
 			context.strokeRect(this.renderPoint.x, this.renderPoint.y, this.barWidth, this.y+this.height-this.renderPoint.y);
 		}
-	}
+	};
 
 	window.BarChart=BarChart;
 	

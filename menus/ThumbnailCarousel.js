@@ -15,7 +15,7 @@
 		if(images){
 			this.setImages(images);
 		}
-	}
+	};
 	
 	//subclass extends superclass
 	ThumbnailCarousel.prototype = Object.create(SimpleGeometry.Rectangle.prototype);
@@ -27,23 +27,24 @@
 		}
 		//console.log("ThumbnailCarousel.next this.currentIndex",this.currentIndex);
 		this.slide(1);
-	}
+	};
 	ThumbnailCarousel.prototype.previous = function(){
 		if(this.animator.isAnimating()){
 			return;
 		}
 		//console.log("ThumbnailCarousel.previous this.currentIndex",this.currentIndex);
 		this.slide(-1);
-	}
+	};
 	
 	ThumbnailCarousel.prototype.getCurrentImage = function(){
 		//console.log("ThumbnailCarousel.getCurrentImage()", this.currentIndex);
-		for(i=0; i<this.items.length; i++){
+		for(var i=0; i<this.items.length; i++){
 			if(this.items[i].itemId == (this.currentIndex== 0 ? 0 : (this.images.length - this.currentIndex)) ){
 				return this.items[i].image;
 			}
 		}
-	}
+        return null;
+	};
 	
 	//values is a multi dimentional Array with values, assumes all thumbnails are the same size
 	ThumbnailCarousel.prototype.setImages = function(images){
@@ -53,10 +54,10 @@
 		this.currentIndex = 0;
 		this.setUpCarousel();
 		this.renderThumbnails();
-	}
+	};
 	
 	ThumbnailCarousel.prototype.setUpCarousel = function(){
-		this.items = new Array();
+		this.items = [];
 		var radian = Math.PI / 2;
 		var center = this.getCenter();
 		var carouselBounds, scale;
@@ -76,11 +77,11 @@
 													this.anchorItem.rectangle.y - this.anchorItem.rectangle.height/2,  
 													this.anchorItem.rectangle.width, 
 													this.anchorItem.rectangle.height);
-	}
+	};
 
 	ThumbnailCarousel.itemsScaleSort = function(a,b){
 		return parseFloat(a.scale) - parseFloat(b.scale);
-	}
+	};
 
 	ThumbnailCarousel.prototype.renderThumbnailOutlines = function(){
 		this.context2d.fillStyle = this.outlineColor;
@@ -93,7 +94,7 @@
 											item.rectangle.height + this.outlineThickness*2+2 );// +2 to make room for the thumb drop shadows
 			}
 		}	
-	}
+	};
 	
 	ThumbnailCarousel.prototype.renderThumbnails = function(){
 		//this.context2d.fillStyle="#FFFFFF";
@@ -110,7 +111,7 @@
 			this.context2d.shadowOffsetX = 2;
 			this.context2d.shadowOffsetY = 2;		
 		}
-		for(i=0; i<this.items.length; i++){
+		for(var i=0; i<this.items.length; i++){
 			item = this.items[i];
 			if(SimpleGeometry.constrainRadianTo2PI(item.radian) <= Math.PI){
 				this.context2d.drawImage(	item.image, item.rectangle.x-item.rectangle.width/2, 
@@ -121,13 +122,13 @@
 		this.context2d.shadowOffsetY = 0;
 		this.context2d.shadowBlur = 0;
 		this.arrows.render(this.context2d);
-	}
+	};
 			
 	ThumbnailCarousel.prototype.updateCurrentIndex = function(direction){
 		this.currentIndex += direction;
 		this.currentIndex = this.currentIndex >= this.images.length ? 0 :  this.currentIndex;
 		this.currentIndex = this.currentIndex < 0 ? this.images.length-1 : this.currentIndex;
-	}
+	};
 	
 	ThumbnailCarousel.prototype.slide=function(direction){
 		this.anchorItemRadian = Math.PI / 2 + this.currentIndex * this.segmentRadian;
@@ -144,7 +145,7 @@
 		var _this=this;
 		this.animator.reset(500, 20, function(){_this.rotate()});
 		this.animator.start();
-	}
+	};
 	
 	ThumbnailCarousel.prototype.rotate=function(){
 		var radian = this.anchorItemRadian + (this.anchorItemTargetRadian - this.anchorItemRadian) * this.animator.getAnimationPercent();
@@ -159,7 +160,7 @@
 			item.rectangle.height = item.scale * item.image.height;
 		}
 		this.renderThumbnails();
-	}
+	};
 
 	window.ThumbnailCarousel = ThumbnailCarousel;
 	
@@ -171,7 +172,7 @@
 		this.scale = isNaN(scale) ? 1 : scale;
 		this.radian = isNaN(radian) ? 0 : radian;
 		this.rectangle = rectangle ? rectangle : new SimpleGeometry.Rectangle();
-	}
+	};
 	
 	window.ThumbnailCarouselItem = ThumbnailCarouselItem;
 	

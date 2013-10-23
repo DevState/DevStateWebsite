@@ -4,7 +4,7 @@
 
 (function (window){
 
-    DSColors = function(){}
+    DSColors = function(){};
 
     DSColors.GREEN = "#157b0f";
     DSColors.LIGHT_GREEN = "#77fd6f";

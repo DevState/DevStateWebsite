@@ -7,11 +7,11 @@
 	BlockSetAnimator = function(x, y, width, height){
 		SimpleGeometry.Point.call(this,x,y); //call super constructor.
 		this.frameRate = 20;
-		this.intervalId ;//make private
+		this.intervalId = -1;//make private
 		this.easingFunction = UnitAnimator.easeOutSine;
 		this.animator = new UnitAnimator(1000,20);
 		this.animator.easingFunction = UnitAnimator.easeLinear;
-	}
+	};
 	
 	//subclass extends superclass
 	BlockSetAnimator.prototype = Object.create(SimpleGeometry.Point.prototype);
@@ -19,27 +19,27 @@
 
 	BlockSetAnimator.prototype.setEasingFunction = function(easingFunction){
 		this.easingFunction = easingFunction;
-	}
+	};
 	
 	//Image or Canvas items, or sprite sheet?!
 	BlockSetAnimator.prototype.setImages = function(images){
-		this.blocks = new Array();
+		this.blocks = [];
 		var blockX = this.x;
 		for(var i=0; i<images.length; i++){
 			this.blocks[i] = new AnimationBlock(blockX, this.y, images[i]);
 			blockX += this.blocks[i].width;
 		}
-	}
+	};
 	
 	BlockSetAnimator.prototype.isAnimating = function(){
 		return this.animator && this.animator.isAnimating();
-	}
+	};
 	
 	//BlockSetAnimator.prototype.setAnimation = function(transformFrom, transformTo, alphaFrom, alphaTo){
 	BlockSetAnimator.prototype.setAnimation = function(blockTransformFrom, blockTransformTo){
 		this.transformFrom = blockTransformFrom;
 		this.transformTo = blockTransformTo;
-	}
+	};
 	
 	//duration is for the entire animation, delay is the amount of delay between the start of individual block animations
 	//both numbers are expressed in milliseconds
@@ -64,7 +64,7 @@
 		var _this = this;
 		this.animator.reset(duration, this.frameRate, function(){_this.update()}, function(){_this.complete()});
 		this.animator.start();
-	}
+	};
 	
 	//only one animator
 	//"main" animator has a linear ease
@@ -74,39 +74,39 @@
 	BlockSetAnimator.prototype.pause = function(){
 		//console.log("BlockSetAnimator.prototype.pause()");
 		//clearInterval(this.intervalId);
-	}
+	};
 	
 	BlockSetAnimator.prototype.resume = function(){
 		//console.log("BlockSetAnimator.prototype.resume()");
-	}
+	};
 	
 	BlockSetAnimator.prototype.reset= function(){
 		//console.log("BlockSetAnimator.prototype.reset()");
-	}
+	};
 
 	BlockSetAnimator.prototype.reverse = function(){
 		//console.log("BlockSetAnimator.prototype.reverse()");
-	}
+	};
 	
 	BlockSetAnimator.prototype.update = function(){
 		//console.log("BlockSetAnimator.update()",this.millisecondsAnimated);
 		this.millisecondsAnimated += this.frameRate;
 		this.dispatchUpdate();
-	}
+	};
 	
 	//easing (t, b, c, d)
 	//@t is the current time (or position) of the tween.
 	//@b is the beginning value of the property.
 	//@c is the change between the beginning and destination value of the property.
 	//@d is the total time of the tween.
-	BlockSetAnimator.prototype.setBlockTransform = function(block, index){			
+	BlockSetAnimator.prototype.setBlockTransform = function(block){
 		var normal = SimpleGeometry.normalize(this.millisecondsAnimated, block.animationBeginsAt, block.animationEndsAt);
 		block.transform.rotation = 	this.easingFunction(normal, this.transformFrom.rotation, this.transformTo.rotation-this.transformFrom.rotation, 1);
 		block.transform.scale = 	this.easingFunction(normal, this.transformFrom.scale, this.transformTo.scale-this.transformFrom.scale, 1);
 		block.transform.alpha = 	this.easingFunction(normal, this.transformFrom.alpha, this.transformTo.alpha-this.transformFrom.alpha, 1);
 		block.transform.x = 		this.easingFunction(normal, this.transformFrom.x, this.transformTo.x - this.transformFrom.x, 1);
 		block.transform.y = 		this.easingFunction(normal, this.transformFrom.y, this.transformTo.y - this.transformFrom.y, 1);
-	}
+	};
 		
 	BlockSetAnimator.prototype.render = function(context){
 		//console.log("render()");
@@ -129,23 +129,23 @@
 			SimpleGeometry.setIdentityMatrixToContext(context);
 		}
 		context.globalAlpha = 1;
-	}
+	};
 
 	BlockSetAnimator.prototype.dispatchUpdate = function(){
 		if(this.updateCallBack){
 			this.updateCallBack();
 		}
-	}
+	};
 
 	BlockSetAnimator.prototype.complete = function(){
 		this.dispatchComplete();
-	}
+	};
 	
 	BlockSetAnimator.prototype.dispatchComplete = function(){
 		if(this.completeCallBack){
 			this.completeCallBack();
 		}
-	}	
+	};
 	
 	window.BlockSetAnimator = BlockSetAnimator;
 	
@@ -158,14 +158,13 @@
 		this.image = image;
 		this.transform = new SimpleGeometry.Transform();
 		this.skipRender = true;
-	}
+        this.animationBeginsAt = 0;
+        this.animationEndsAt = 0;
+	};
 	
 	//subclass extends superclass
 	AnimationBlock.prototype = Object.create(SimpleGeometry.Rectangle.prototype);
 	AnimationBlock.prototype.constructor = SimpleGeometry.Rectangle;
-	
-	AnimationBlock.prototype.animationBeginsAt;
-	AnimationBlock.prototype.animationEndsAt;
 	
 	AnimationBlock.prototype.copyTransformValues = function(transform){
 		this.transform.scale = transform.scale;
@@ -175,7 +174,7 @@
 		this.transform.alpha = transform.alpha;
 		this.transform.horizontalAlign = transform.horizontalAlign;
 		this.transform.verticalAlign = transform.verticalAlign;
-	}
+	};
 	
 	AnimationBlock.prototype.getTranslateX = function(){
 		switch(this.transform.horizontalAlign){
@@ -185,7 +184,7 @@
 				return -this.width;
 		}
 		return 0; 
-	}
+	};
 	AnimationBlock.prototype.getTranslateY = function(){
 		switch(this.transform.verticalAlign){
 			case 1:
@@ -194,7 +193,7 @@
 				return -this.height;
 		}
 		return 0; 
-	}
+	};
 	
 	window.AnimationBlock = AnimationBlock;
 	
@@ -211,7 +210,8 @@
 		this.horizontalAlign = isNaN(horizontalAlign) && horizontalAlign<3 ? 0 : horizontalAlign;
 		//0 = top, 1 = center, 2 = bottom
 		this.verticalAlign = isNaN(verticalAlign) && verticalAlign<3 ? 0 : verticalAlign;
-	}
+	};
+
 	window.AnimationBlockTransform = AnimationBlockTransform;
 	
 }(window));

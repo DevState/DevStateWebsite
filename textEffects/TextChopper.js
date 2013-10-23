@@ -1,7 +1,7 @@
 (function (window){
 
 
-	TextChopper=function(){}
+	TextChopper=function(){};
 		
 	TextChopper.prototype.createImagesFromString = function(string, size, color, color2){
 		var characters = string.split("");		
@@ -54,14 +54,14 @@
 		}
         delete canvas;
 		return images;
-	}
+	};
 	
 	TextChopper.getFirstNonTransparentPixelYTopDown=function(context){
 		return point;
-	}
+	};
 	TextChopper.getFirstNonTransparentPixelYBottomUp=function(context){
 		return point;
-	}	
+	};
 	
 	window.TextChopper=TextChopper;
 	

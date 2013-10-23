@@ -9,7 +9,7 @@
 		SimpleGeometry.Rectangle.call(this, x, y, width, height); //call super constructor.
 		this.center = this.getCenter();
 		this.radius = this.width < this.height ? (this.width/2 - this.margin*2) : (this.height/2 - this.margin*2);
-	}
+	};
 	
 	//subclass extends superclass
 	PieChart.prototype = Object.create(SimpleGeometry.Rectangle.prototype);
@@ -21,11 +21,11 @@
 		for(var i=0; i<this.values.length; i++){
 			this.total+=this.values[i];
 		}
-	}
+	};
 	
 	PieChart.prototype.setRandomValues = function(){
 		var total = 1 + Math.floor(Math.random()*5);//between 1 and 6
-		values=new Array();
+		var values = [];
 		var value;
 		var pool = 100;
 		while(total>0){
@@ -36,19 +36,19 @@
 		}
 		values.push(pool);
 		this.setValues(values);	
-	}
+	};
 	
 	//colors must be an array in the format ["#FF00FF","#FF00CC"...]
 	PieChart.prototype.setColors = function(colors){
 		this.colors = colors;	
-	}
+	};
 
 	PieChart.prototype.setRandomColors = function(){
-		this.colors = new Array();
+		this.colors = [];
 		while(this.colors.length != this.values.length){
 			this.colors.push(SimpleGeometry.getRandomFillStyleColor());
 		}
-	}
+	};
 
 	PieChart.prototype.render = function(context,animationPercent){
 		if(!this.values){
@@ -82,7 +82,7 @@
 			startValue += value;
 		}
 		SimpleGeometry.setIdentityMatrixToContext(context);
-	}
+	};
 
 	window.PieChart=PieChart;
 	
@@ -96,13 +96,13 @@
 			this.holePercent = holePercent;
 		}
 		PieChart.call(this, x, y, width, height, margin); //call super constructor.
-	}
+	};
 	
 	//subclass extends superclass
 	DonutChart.prototype = Object.create(PieChart.prototype);
 	DonutChart.prototype.constructor = PieChart;
 
-	DonutChart.prototype.holePercent = .3
+	DonutChart.prototype.holePercent = .3;
 	
 	// Override the instance method
 	DonutChart.prototype.render = function(context,animationPercent){
@@ -112,7 +112,7 @@
 		context.arc(this.center.x, this.center.y, this.radius*this.holePercent, 0, SimpleGeometry.PI2);//x, y, this.radius, from, to
 		context.fill();
 		context.closePath();
-	}
+	};
 
 	window.DonutChart=DonutChart;
 

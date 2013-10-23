@@ -1,7 +1,7 @@
 (function (window){
 
 
-	ArrowButtons = function(){}
+	ArrowButtons = function(){};
 	
 	//container is a rectangle
 	ArrowButtons = function(container, arrowWidth, arrowHeight, margin){
@@ -11,8 +11,8 @@
 		this.margin = isNaN(margin) ? 5 : margin;
 		this.lineWidth = 5;
 		this.strokeStyle = SimpleGeometry.getRgbaStyleString(0xFF,0xFF,0xFF,1);
-		this.fillStyle = SimpleGeometry.getRgbaStyleString(0,0,0,1);;
-	}
+		this.fillStyle = SimpleGeometry.getRgbaStyleString(0,0,0,1);
+	};
 	
 	//subclass extends superclass
 	ArrowButtons.prototype = Object.create(SimpleGeometry.Rectangle.prototype);
@@ -21,7 +21,7 @@
 	ArrowButtons.prototype.render = function(context2d, hideLeft, hideRight){
 		context2d.beginPath();
 		context2d.lineWidth = this.lineWidth;
-		context2d.strokeStyle = this.strokeStyle
+		context2d.strokeStyle = this.strokeStyle;
 		context2d.fillStyle = this.fillStyle;
 		context2d.lineCap = "butt"; //"square";//
 		
@@ -49,7 +49,7 @@
 		context2d.closePath();
 		
 		context2d.lineWidth = 0;
-	}
+	};
 
 	window.ArrowButtons = ArrowButtons;
 	

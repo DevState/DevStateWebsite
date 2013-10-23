@@ -142,7 +142,7 @@ function lightBoxBeginClose(){
 }
 
 function setUpDemosMenu(){
-	demos = new Array();
+	demos = [];
 	var list = document.getElementById("demos");
 	var anchors = list.getElementsByTagName("a");
 	var images = list.getElementsByTagName("img");
@@ -187,7 +187,7 @@ function init(){
 	if(demos.indexOf(demoName)>-1){
 		showDemo(demoName);
 	}
-	window.onscroll = function (oEvent) {
+	window.onscroll = function () {
 		forceHideDemo();
 	}
 }

@@ -13,7 +13,7 @@
 		this.captureCanvas.height = canvases[0].height;
 		this.captureContext = this.captureCanvas.getContext("2d");
 		this.stopping = false;
-	}
+	};
 		
 	DemoCaptureTool.prototype.start = function(){
 		//console.log("DemoCaptureTool.start()");
@@ -26,24 +26,24 @@
 		this.gifEncoder.setDelay(this.playbackFrameRate);
 		this.gifEncoder.start();
 		this.capture();
-	}
+	};
 	
 	DemoCaptureTool.prototype.stop = function(){
 		//console.log("DemoCaptureTool.stop()");
 		clearInterval(this.intervalId);
 		this.gifEncoder.finish();
 		this.outputImage.src = 'data:image/gif;base64,'+encode64(this.gifEncoder.stream().getData());
-	}
+	};
 	
 	DemoCaptureTool.prototype.stopOnNextCapture = function(){
 		this.stopping = true;
-	}
+	};
 	
 	DemoCaptureTool.prototype.capture = function(){
 		//console.log("DemoCaptureTool.capture()");
 		this.captureContext.fillStyle="#FFFFFF";
 		this.captureContext.fillRect(0,0,this.captureCanvas.width,this.captureCanvas.height);
-		var context, canvas;
+		var canvas;
 		for(var i=0; i<this.canvases.length; i++){
 			canvas = this.canvases[i];
 			this.captureContext.drawImage(canvas, 0, 0);
@@ -59,7 +59,7 @@
 			//var image = new Image();
 			//window.location.href = image; // it will save locally
 		}
-	}
+	};
 	
 	
 	DemoCaptureTool.capturePng = function(canvases, outputImage, bgColor){
@@ -82,7 +82,7 @@
 
 		outputImage.src = captureCanvas.toDataURL("image/png");
 		
-	}
+	};
 
 	window.DemoCaptureTool=DemoCaptureTool;
 	

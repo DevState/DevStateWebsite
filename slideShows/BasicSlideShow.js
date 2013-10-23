@@ -16,7 +16,7 @@
 		this.arrows.strokeStyle = SimpleGeometry.getRgbaStyleString(0,0,0,.8);
 		this.arrows.fillStyle = SimpleGeometry.getRgbaStyleString(0xFF,0xFF,0xFF,.5);
 		this.currentIndex = 0;
-	}
+	};
 	
 	//subclass extends superclass
 	BasicSlideShow.prototype = Object.create(SimpleGeometry.Rectangle.prototype);
@@ -33,7 +33,7 @@
 		if(this.hasNext()){
 			this.slide(BasicSlideShow.NEXT_DIRECTION);
 		}
-	}
+	};
 	BasicSlideShow.prototype.previous = function(){
 		//console.log("BasicSlideShow.previous()");
 		if(this.animator.isAnimating()){
@@ -42,13 +42,13 @@
 		if(this.hasPrevious()){
 			this.slide(BasicSlideShow.PREV_DIRECTION);
 		}
-	}
+	};
 	BasicSlideShow.prototype.hasNext = function(){
 		return this.images && this.currentIndex < this.images.length-1;
-	}
+	};
 	BasicSlideShow.prototype.hasPrevious = function(){
 		return this.images && this.currentIndex>0;
-	}
+	};
 	
 	
 	//values is a multi dimentional Array with values
@@ -60,14 +60,14 @@
 		}
 		this.currentIndex=0;
 		this.skipToIndex(this.currentIndex);
-	}
+	};
 
 	BasicSlideShow.prototype.skipToIndex = function(index){
 		//add a fail safe in case sliding is active
 		this.context2d.drawImage(this.images[index],this.x,this.y, this.width, this.height);
 		this.currentIndex=index;
 		this.arrows.render(this.context2d, !this.hasPrevious(), !this.hasNext());
-	}
+	};
 	
 	BasicSlideShow.prototype.slide = function(direction){
 		this.slideDirection = direction;
@@ -81,7 +81,7 @@
 		var _this=this;
 		this.animator.reset(1000, 20, function(){_this.updateSlide()},function(){_this.slideComplete()});
 		this.animator.start();
-	}
+	};
 	
 	BasicSlideShow.prototype.updateSlide = function(){
 		//console.log("BasicSlideShow.updateSlide()",this.animator.getAnimationPercent());
@@ -91,7 +91,7 @@
 		}else{
 			this.updateSlidePrevious();		
 		}
-	}
+	};
 	BasicSlideShow.prototype.updateSlideNext = function(){
 		//sx, sy start clipping at
 		//swidth,sheight clipping width
@@ -112,7 +112,7 @@
 							imageX, this.rightImage.height,
 							this.getRight() - rectX,this.y,
 							rectX, this.height);
-	}
+	};
 	
 	BasicSlideShow.prototype.updateSlidePrevious = function(){
 		var imageX = this.leftImage.width - this.leftImage.width * this.animator.getAnimationPercent();
@@ -129,13 +129,13 @@
 								this.getRight() - rectX,this.y,
 								rectX, this.height);	
 		}
-	}
+	};
 		
 	BasicSlideShow.prototype.slideComplete = function(){
 		//console.log("BasicSlideShow.slideComplete()");
 		this.currentIndex -= this.slideDirection;
 		this.arrows.render(this.context2d, !this.hasPrevious(), !this.hasNext());
-	}
+	};
 
 	window.BasicSlideShow=BasicSlideShow;
 	

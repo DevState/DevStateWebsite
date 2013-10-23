@@ -45,28 +45,28 @@
 
 		this.backgroundOpacity = .8;
 		this.borderThickness = 4;
-	}
+	};
 	
 	DSLightBox.prototype.lightBoxOverlayDivClickHandler = function (event){
 		this.close(event);
-	}
-    DSLightBox.prototype.closeButtonOverHandler = function (event){
+	};
+    DSLightBox.prototype.closeButtonOverHandler = function (){
         this.closeButton.src = "assets/closeButtonOver.png";
-	}
-    DSLightBox.prototype.closeButtonOutHandler = function (event){
+	};
+    DSLightBox.prototype.closeButtonOutHandler = function (){
         this.closeButton.src = "assets/closeButton.png";
-	}
+	};
 	
 	DSLightBox.prototype.setContent = function(content){
 		this.contentDiv.appendChild(content);
-	}
+	};
 	DSLightBox.prototype.removeContent = function(content){
 		this.contentDiv.removeChild(content);
-	}
+	};
 	
 	DSLightBox.prototype.isOpen = function(){
 		return this.contentDiv.style.display=="block"
-	}
+	};
 	
 	DSLightBox.prototype.open = function(contentRect){
 		this.contentRect = contentRect;
@@ -93,7 +93,7 @@
 		this.borderDiv.style.display = this.overlayDiv.style.display = this.contentDiv.style.display = "block";
 		
 		this.closeButton.style.left = (this.contentRect.getRight() - this.closeButton.width/2) + "px";
-		this.closeButton.style.top = (top + this.contentRect.getBottom() - this.closeButton.height/2) + "px";;
+		this.closeButton.style.top = (top + this.contentRect.getBottom() - this.closeButton.height/2) + "px";
 		
 		var _this = this;
 		this.animator.reset(1000,20,function(){_this.fadeIn()} , function(){_this.openComplete()});
@@ -101,13 +101,13 @@
 		if(this.beginOpenCallback != undefined){
 			this.beginOpenCallback();
 		}
-	}
+	};
 	
 	DSLightBox.prototype.fadeIn = function(){
 		this.overlayDiv.style.opacity = this.animator.getAnimationPercent()*this.backgroundOpacity;
 		this.contentDiv.style.opacity = this.animator.getAnimationPercent();
 		this.borderDiv.style.opacity = this.animator.getAnimationPercent();
-	}
+	};
 	
 	DSLightBox.prototype.fadeOut = function(){
 		this.overlayDiv.style.opacity = (1-this.animator.getAnimationPercent())*this.backgroundOpacity;
@@ -121,7 +121,7 @@
 		this.contentDiv.style.top = Math.round(this.contentRect.y)+"px";
 		this.contentDiv.style.width = Math.round(this.contentRect.width)+"px";
 		this.contentDiv.style.height = Math.round(this.contentRect.height)+"px";
-	}
+	};
 	
 	DSLightBox.prototype.close = function(event){
         this.fadeOutBeginRect = this.contentRect.clone();
@@ -133,7 +133,7 @@
 		if(this.beginCloseCallback != undefined){
 			this.beginCloseCallback();
 		}
-	}
+	};
 	
 	DSLightBox.prototype.openComplete = function(){
 		//console.log("DSLightBox.openComplete()");
@@ -145,7 +145,7 @@
 			this.openCompleteCallback();
 		}
 		this.closeButton.style.display = "block";
-	}
+	};
 	
 	DSLightBox.prototype.closeComplete = function(){
 		//console.log("DSLightBox.closeComplete()");
@@ -153,7 +153,7 @@
 		if(this.closeCompleteCallback != undefined){
 			this.closeCompleteCallback();
 		}
-	}
+	};
 	
 	//on resize, no animation
 	DSLightBox.prototype.forceClose = function(){
@@ -162,7 +162,7 @@
 		}
 		this.animator.pause();
 		this.closeComplete();
-	}
+	};
 
 	window.DSLightBox=DSLightBox;
 	

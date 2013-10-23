@@ -7,7 +7,7 @@
 		this.showDots=true;
 		this.renderPoint=new SimpleGeometry.Point();//Use one instance, instead of a local variable in method. TODO make static
 		this.margin = 30;
-	}
+	};
 	
 	//subclass extends superclass
 	LineChart.prototype = Object.create(SimpleGeometry.Rectangle.prototype);
@@ -18,8 +18,7 @@
 		this.min=0;
 		this.max=100;
 		this.values=values;
-		var value;
-		var longestArray = 0;
+        var longestArray = 0;
 		for(var i=0; i<this.values.length; i++){
 			for(var j=0;j<this.values[i].length;j++){
 				if(this.values[i].length > longestArray){
@@ -35,15 +34,15 @@
 			}
 		}
 		//console.log("LineChart.setValues() lines : ",this.values.length," min:",this.min," max:",this.max);
-	}
+	};
 	
 	LineChart.prototype.setRandomValues = function(){
-		var values = new Array();
+		var values = [];
 		var lines = 2 + Math.floor(Math.random()*2);//between 2 and 3
 		var points = 10 + Math.floor(Math.random()*10);//between 10 and 40
 		var line,pointValue;
 		while(lines>0){
-			line = new Array();
+			line = [];
 			pointValue = values.length*30+Math.floor(Math.random()*30);
 			for(var i=0;i<points;i++){
 				line[i] = pointValue;
@@ -55,19 +54,19 @@
 			lines--;
 		}
 		this.setValues(values);	
-	}
+	};
 	
 	//colors must be an array in the format ["#FF00FF","#FF00CC"...]
 	LineChart.prototype.setLineColors = function(colors){
 		this.colors=colors;	
-	}
+	};
 	LineChart.prototype.setRandomColors = function(){
-		this.colors = new Array();
+		this.colors = [];
 		while(this.colors.length != this.values.length){
 			this.colors.push(SimpleGeometry.getRandomFillStyleColor(1,123));
 		}
 		//console.log("LineChart.setRandomColors",this.colors);
-	}
+	};
 	
 	LineChart.prototype.render = function(context,animationPercent){
 		//console.log("LineChart.render()");
@@ -84,11 +83,11 @@
 		for (var i = 0; i < this.values.length; i++) {
 			this.renderLine(context,this.values[i],this.colors[i],animationPercent);
 		}
-	}
+	};
 	
 	LineChart.prototype.calculateYPosition = function(value,animationPercent){
 		return SimpleGeometry.interpolate( SimpleGeometry.normalize(value, this.min, this.max) * animationPercent, this.getBottom(), this.y)
-	}
+	};
 	
 	LineChart.prototype.renderLine = function(context, line, color, animationPercent){
 		if(animationPercent==0){
@@ -115,7 +114,7 @@
 		//render dots
 		context.strokeStyle = color;
 		context.fillStyle = "#FFFFFF";
-		for (var i = 0; i < line.length; i++) {
+		for (i = 0; i < line.length; i++) {
 			context.beginPath();
 			this.renderPoint.x = this.x + this.margin + (this.pointSpacer * i);			
 			this.renderPoint.y = this.calculateYPosition(line[i],animationPercent);
@@ -124,7 +123,7 @@
 			context.stroke();
 			context.closePath();
 		}
-	}
+	};
 
 	window.LineChart=LineChart;
 	

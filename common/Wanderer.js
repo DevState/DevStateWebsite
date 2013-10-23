@@ -25,7 +25,7 @@
 		this.velocityIncrement = 0;
 		this.opposingPoint = new SimpleGeometry.Point();
 		SimpleGeometry.Point.call(this,0,0); //call super constructor.
-	}
+	};
 	
 	//subclass extends superclass
 	Wanderer.prototype = Object.create(SimpleGeometry.Point.prototype);
@@ -36,12 +36,12 @@
 		this.radian = isNaN(this.startRadian) ? Math.random() * SimpleGeometry.PI2 : this.startRadian; 
 		this.radius = Math.random() * this.circle.radius;
 		this.setNextTarget();
-	}
+	};
 	
 	Wanderer.prototype.pause = function(){
 		//console.log("Wanderer.prototype.pause()");
 		clearInterval(this.intervalId);
-	}
+	};
 	
 	//refactor, make private
 	Wanderer.prototype.setNextTarget = function(){
@@ -58,7 +58,7 @@
 		
 		var _this = this;
 		this.intervalId = setInterval(function(){_this.update();}, this.frameRate);//TODO : find easier to explain solution
-	}
+	};
 	
 	//refactor, make private
 	Wanderer.prototype.update = function(){
@@ -78,20 +78,20 @@
 			this.setNextTarget();
 		}
 		this.dispatchUpdate();
-	}
+	};
 	
 	Wanderer.prototype.dispatchUpdate = function(){
 		if(this.updateCallBack){
 			this.updateCallBack();
 		}
-	}
+	};
 	
 	Wanderer.prototype.getOpposingPoint = function(){
 		var opposingRadian = SimpleGeometry.constrainRadianTo2PI( this.radian + Math.PI );
 		this.opposingPoint.x = this.circle.x + Math.cos(opposingRadian) * this.radius;
 		this.opposingPoint.y = this.circle.y + Math.sin(opposingRadian) * this.radius;
 		return this.opposingPoint;
-	}	
+	};
 	
 	window.Wanderer = Wanderer;
 	
