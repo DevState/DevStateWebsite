@@ -6,7 +6,6 @@
 
 	BasicSlideShow = function(x, y, width, height, context2d, images){
 		SimpleGeometry.Rectangle.call(this,x,y,width,height); //call super constructor.
-		this.background=new ChartBackground(x,y,width,height);
 		this.context2d=context2d;
 		if(images){
 			this.setImages(images);
@@ -55,9 +54,10 @@
 	BasicSlideShow.prototype.setImages = function(images){
 		this.images = images;
 		var resizeCanvas = document.createElement('canvas');
+        /*  This was extremely slow. To keep things up to speed, all images have been resized to the standard DevState 400x400 demo size
 		for(var i=0; i<this.images.length; i++){
 			ImageEffects.resizeImageDestructive(this.images[i] , resizeCanvas, this.width , this.height);
-		}
+		}*/
 		this.currentIndex=0;
 		this.skipToIndex(this.currentIndex);
 	};

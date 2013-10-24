@@ -6,7 +6,6 @@
 
 	ImageEffectFader = function(x,y,width,height,context2d){
 		SimpleGeometry.Rectangle.call(this,x,y,width,height); //call super constructor.
-		this.background=new ChartBackground(x,y,width,height);
 		this.context2d=context2d;
 		this.animator = new UnitAnimator();
 	};

@@ -118,6 +118,7 @@
 			}
 			
 			function showDemo(demoName){
+                console.log("showDemo()")
 				if(currentDemo){
 					currentDemo.tearDown();
 				}
@@ -160,6 +161,7 @@
 			}
 			
 			function captureDemo(){
+                console.log("captureDemo");
 				var captureOutputImage = document.getElementById("captureOutput");
 				captureTool = new DemoCaptureTool(currentDemo.captureFrameRate, currentDemo.gifPlaybackFrameRate, currentDemo.getCaptureCanvases(), captureOutputImage);
 				currentDemo.captureCompleteCallBack = endCaptureDemoHandler;

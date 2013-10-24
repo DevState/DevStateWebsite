@@ -2,7 +2,7 @@
 (function (window){
 
 	DemoCaptureTool = function(captureFrameRate, playbackFrameRate, canvases, outputImage){
-		//console.log("DemoCaptureTool constructor ",captureFrameRate, playbackFrameRate);
+		console.log("DemoCaptureTool constructor ",captureFrameRate, playbackFrameRate);
 		this.captureFrameRate = captureFrameRate;
 		this.playbackFrameRate = playbackFrameRate;
 		this.canvases = canvases;
@@ -16,7 +16,7 @@
 	};
 		
 	DemoCaptureTool.prototype.start = function(){
-		//console.log("DemoCaptureTool.start()");
+		console.log("DemoCaptureTool.start()");
 		this.numCaptures = 0;
 		var _this = this;
 		this.intervalId = setInterval(function(){_this.capture();}, this.captureFrameRate);
@@ -29,7 +29,7 @@
 	};
 	
 	DemoCaptureTool.prototype.stop = function(){
-		//console.log("DemoCaptureTool.stop()");
+		console.log("DemoCaptureTool.stop()");
 		clearInterval(this.intervalId);
 		this.gifEncoder.finish();
 		this.outputImage.src = 'data:image/gif;base64,'+encode64(this.gifEncoder.stream().getData());

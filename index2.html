@@ -2,176 +2,118 @@
 
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
-	
-	<meta name="description" content="Devstate : Finest HTML5 Canvas and WebGL Workshops By Frank Reitberger and Sakri Rosenstrom delivered to your doorstep" />
-	<meta name="keywords" content="Sakri, Rosenstrom, Frank, Reitberger, HTML5, Canvas, WebGL, workshops, trainings" />
-	<meta name="author" content="Sakri Rosenstrom, Frank Reitberger" />
-	
-	<!--[if lt IE 9]>
-	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-	<![endif]-->
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
 
-	<title>DevState : Finest Html5 and WebGL Workshops</title>
+    <meta name="description" content="Devstate : Finest HTML5 Canvas and WebGL Workshops By Frank Reitberger and Sakri Rosenstrom delivered to your doorstep" />
+    <meta name="keywords" content="Sakri, Rosenstrom, Frank, Reitberger, HTML5, Canvas, WebGL, workshops, trainings" />
+    <meta name="author" content="Sakri Rosenstrom, Frank Reitberger" />
 
-<!-- GOOGLE ANALYTICS -->
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    <!--[if lt IE 9]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
 
-  ga('create', 'UA-44531934-1', 'devstate.net');
-  
-if(location.hostname && location.hostname.toLowerCase().indexOf("devstate")>-1){
-	ga('send', 'pageview');
-}
-  
-</script>
+    <title>DevState : Finest Html5 and WebGL Workshops</title>
 
-	<link rel="stylesheet" type="text/css" href="css/devstate.min.css">
-	<link rel="shortcut icon" href="http://www.devstate.net/assets/favicon.ico">
-	
-	<script src="js/h5utils.js"></script>
-	<script src="js/main.js"></script>
-	
-	<!-- Common javascript files -->
-	<script type="text/javascript" src="common/SimpleGeometry.min.js" ></script>
-	<script type="text/javascript" src="common/DSColors.min.js" ></script>
-	<script type="text/javascript" src="common/UnitAnimator.min.js" ></script>
-	<script type="text/javascript" src="common/SimpleLoaderGraphic.min.js" ></script><!-- TODO : MOVE -->
-	<script type="text/javascript" src="common/ArrowButtons.min.js" ></script><!-- TODO : MOVE -->
-	<script type="text/javascript" src="common/ImageStore.min.js" ></script>
-	<script type="text/javascript" src="common/ImageEffects.min.js" ></script>
-	<script type="text/javascript" src="common/Wanderer.min.js" ></script><!-- TODO : MOVE -->
-	<script type="text/javascript" src="common/BlockSetAnimator.min.js" ></script><!-- TODO : MOVE -->
-	<script type="text/javascript" src="common/TransformRectangle.min.js" ></script>
-	<script type="text/javascript" src="common/DSLightBox.min.js" ></script>
-	
-	<!-- Charting javascript files -->
-	<script type="text/javascript" src="charting/PieChart.min.js" ></script>
-	<script type="text/javascript" src="charting/ChartBackground.min.js" ></script>
-	<script type="text/javascript" src="charting/LineChart.min.js" ></script>
-	<script type="text/javascript" src="charting/BarChart.min.js" ></script>
-	
-	<!-- Slideshow javascript files -->
-	<script type="text/javascript" src="slideShows/BasicSlideShow.min.js" ></script>
-	<script type="text/javascript" src="slideShows/ImageEffectFader.min.js" ></script>
-	
-	<!-- Menu javascript files -->
-	<script type="text/javascript" src="menus/ThumbnailCarousel.min.js" ></script>
-	<script type="text/javascript" src="menus/SimpleCoverFlow.min.js" ></script>
-	
-	<!-- Text Effects javascript files -->
-	<script type="text/javascript" src="textEffects/TextChopper.min.js" ></script>
-	
-	<!-- Demos -->
-	<script type="text/javascript" src="demos/Demos.min.js" ></script>
+    <!-- GOOGLE ANALYTICS -->
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-44531934-1', 'devstate.net');
+
+        if(location.hostname && location.hostname.toLowerCase().indexOf("devstate")>-1){
+            ga('send', 'pageview');
+        }
+
+    </script>
+
+    <link rel="shortcut icon" href="http://www.devstate.net/assets/favicon.ico">
+
+    <!-- Check out all our source code on GitHub : https://github.com/DevState/DevStateWebsite -->
+
+    <link rel="stylesheet" type="text/css" href="css/devstate.min.css">
+
+    <!-- Common javascript files -->
+    <!--<script type="text/javascript" src="common/DSClassManager.min.js" ></script>
+    <script type="text/javascript" src="common/SimpleGeometry.min.js" ></script>
+    <script type="text/javascript" src="common/DSColors.min.js" ></script>
+    <script type="text/javascript" src="common/UnitAnimator.min.js" ></script>
+    <script type="text/javascript" src="common/SimpleLoaderGraphic.min.js" ></script>
+    <script type="text/javascript" src="common/ImageStore.min.js" ></script>
+    <script type="text/javascript" src="common/DSLightBox.min.js" ></script>
+    <script type="text/javascript" src="common/DSLightBox.min.js" ></script>-->
+    <script type="text/javascript" src="common/DSClassManager.js" ></script>
+    <script type="text/javascript" src="common/SimpleGeometry.js" ></script>
+    <script type="text/javascript" src="common/DSColors.js" ></script>
+    <script type="text/javascript" src="common/UnitAnimator.js" ></script>
+    <script type="text/javascript" src="common/SimpleLoaderGraphic.js" ></script>
+    <script type="text/javascript" src="common/ImageStore.js" ></script>
+    <script type="text/javascript" src="common/DSLightBox.js" ></script>
+    <script type="text/javascript" src="common/DSLightBox.js" ></script>
+
+    <!-- Demos -->
+    <!--<script type="text/javascript" src="demos/Demos.min.js" ></script>
+    <script src="js/main.min.js"></script>-->
+    <script type="text/javascript" src="demos/Demos.js" ></script>
+    <script src="js/main.js"></script>
 
 </head>
 
 <body onresize="resizeHandler()">
 <div class="wrapper">
-	<div id="top">
+    <div id="top">
         <div id="logo">
             <img id="logoimage" src="assets/devstate.png" alt="logo">
         </div>
-    
+
         <nav>
             <ul>
-            	<!--<li><a href="#top">HOME</a></li>-->
-				<li><a href="availability.html">Booking</a></li>
+                <!--<li><a href="#top">HOME</a></li>-->
+                <li><a href="availability.html">Booking</a></li>
                 <li><a href="blog.html">Blog</a></li>
                 <li><a href="faq.html">FAQ</a></li>
                 <li><a href="about.html">About</a></li>
-            </ul>      
+            </ul>
         </nav>
-	    <hr class="topDivider"/>
-	    <hr class="topDivider"/>
+        <hr class="topDivider"/>
+        <hr class="topDivider"/>
     </div>
-    
-
 
     <header style="display:none;">
-    	<h1>Finest Html5 Canvas and WebGL Workshops</h1>
+        <h1>Finest Html5 Canvas and WebGL Workshops</h1>
     </header>
-    
+
     <aside id="about" class=" left">
-    	<h3>Finest Html5 Canvas and WebGL <span class="orangeText">Workshops<span></h3>
-    	<ol>
-			<li><p>Select demos below which your group wants to master</p></li>
-			<li><p>We will create a custom workshop based on your selections</p></li>
-			<li><p>We will travel to you and deliver the workshop</p></li>
-		</ol>
+        <h3>Finest Html5 Canvas and WebGL <span class="orangeText">Workshops<span></h3>
+        <ol>
+            <li><p>Select demos below which your group wants to master</p></li>
+            <li><p>We will create a custom workshop based on your selections</p></li>
+            <li><p>We will travel to you and deliver the workshop</p></li>
+        </ol>
     </aside>
     <aside class="right">
-    	<h3>Who we are:</h3>
-    	<p><a href="http://www.dasprinzip.com/prinzipiell/" target="_blank">Frank Reitberger</a> 
-		and <a href="http://www.sakri.net" target="_blank">Sakri Rosenstrom</a> 
-		share a combined 30 years of coding experience with a focus on graphics. 
-		Over the years we've enjoyed presenting at many conferences and decided to join forces as DevState to share our
-		skills and expertese in the form of workshops.  <a href="about.html">Read More...</a>
+        <h3>Who we are:</h3>
+        <p><a href="http://www.dasprinzip.com/prinzipiell/" target="_blank">Frank Reitberger</a>
+            and <a href="http://www.sakri.net" target="_blank">Sakri Rosenstrom</a>
+            share a combined 30 years of coding experience with a focus on graphics.
+            Over the years we've enjoyed presenting at many conferences and decided to join forces as DevState to share our
+            skills and expertese in the form of workshops.  <a href="about.html">Read More...</a>
     </aside>
     <div class="clearfix"></div>
-    
-    <section id="demos">
-	
-    	<div class="item">
-        	<a href="#PieChart"><img src="assets/demoThumbnails/pieChart.png" alt="Pie Chart"></a>
-        </div>
-		
-    	<!-- TODO : COMBINE <div class="item">
-        	<a href="#DonutChart"><img src="assets/demoThumbnails/donutChart.png" alt="Donut Chart"></a>
-        </div>-->
-	
-    	<div class="item">
-        	<a href="#BarChart"><img src="assets/demoThumbnails/barChart.png" alt="Bar Chart"></a>
-        </div>
-		
-    	<div class="item">
-        	<a href="#LineChart"><img src="assets/demoThumbnails/lineChart.png" alt="Line Chart"></a>
-        </div>
-		
-    	<div class="item">
-        	<a href="#BasicSlideShow"><img src="assets/demoThumbnails/basicSlideShow.png" alt="Basic Slide Show"></a>
-        </div>
-		
-    	<div class="item">
-        	<a href="#ImageFader"><img src="assets/demoThumbnails/imageFader.png" alt="Image Fader"></a>
-        </div>
 
-    	<div class="item">
-        	<a href="#BlockSetAnimator"><img src="assets/demoThumbnails/blockSetAnimator.png" alt="Block set animator"></a>
-        </div>
-		
-    	<div class="item">
-        	<a href="#TextEffect"><img src="assets/demoThumbnails/textEffect.png" alt="Text Effect"></a>
-        </div>
-		
-    	<div class="item">
-        	<a href="#ThumbnailCarousel"><img src="assets/demoThumbnails/thumbCarousel.png" alt="Thumbnail Carousel"></a>
-        </div>
-		
-    	<div class="item">
-        	<a href="#SimpleCoverFlow"><img src="assets/demoThumbnails/coverFlow.png" alt="Cover Flow"></a>
-        </div>
-		
-    	<div class="item">
-        	<a href="#Wanderer"><img src="assets/demoThumbnails/wanderer.png" alt="Wanderer"></a>
-        </div>
-        
-        <div class="clearfix"></div>
-    </section>
-	
+    <section id="demos"></section>
+
 </div>
 
 <hr class="bottomDivider"/>
 
 <footer>
-	<div id="socialbar" >
-		<iframe frameborder="0" src="socialLinks.html" width="100%px" align="middle"></iframe>
-	</div>
+    <div id="socialbar" >
+        <iframe frameborder="0" src="socialLinks.html" width="100%px" align="middle"></iframe>
+    </div>
 </footer>
 
 </body>

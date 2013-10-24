@@ -1,7 +1,7 @@
 
 //===============================::DEMOS / LIGHTBOX::===========================
 
-
+var classManager;
 var demos;
 var currentDemo;
 var currentDemoName;
@@ -58,6 +58,25 @@ var lightBoxHeight = 400;
 var lightBoxVerticalLayoutHeight = 600;
 var demoSize = 400;
 
+function viewportSize() {
+
+    var e = window, a = 'inner';
+    if ( !( 'innerWidth' in window ) ) {
+
+        a = 'client';
+        e = document.documentElement || document.body;
+
+    }
+
+    return { width : e[ a+'Width' ] , height : e[ a+'Height' ] }
+
+}
+
+function isHorizontalLayout(){
+    var size = viewportSize();
+    return size.width > size.height;
+}
+
 function showDemo(demoName){
 	var size = viewportSize();
 	contentRect = new SimpleGeometry.Rectangle();
@@ -85,34 +104,45 @@ function showDemo(demoName){
 	lightBox.open(contentRect);
 }
 
+var currentDemoClass;
+
 function setUpDemo(demoName){
 	currentDemoName = demoName;
-	currentDemo = new this[demoName+"Demo"](demoRect.x, demoRect.y, demoRect.width, demoRect.height, lightBox.contentDiv);
-	currentDemo.run();
-	var padding = 10;
-	detailsDiv = document.createElement("div");
-	detailsDiv.style.position = "absolute";
-	if(isHorizontalLayout()){
-		detailsDiv.style.left = (padding+demoRect.width)+"px";
-		detailsDiv.style.top = padding+"px";
-		detailsDiv.style.width = (contentRect.width-demoRect.width-padding*2) + "px";
-		detailsDiv.style.height = (contentRect.height-padding*2) + "px";
-	}else{
-		detailsDiv.style.left = padding+"px";
-		detailsDiv.style.top = (padding+demoRect.height)+"px";
-		detailsDiv.style.width = (contentRect.width-padding*2) + "px";
-		detailsDiv.style.height = (contentRect.height-demoRect.height-padding*2) + "px";	
-	}
-	detailsDiv.style.fontFamily = "Sans-serif";
-	var detailsHtml = "<h2 class='demoTitle' >"+demoName+"</h2><p style='padding-top:20px'>"+currentDemo.toolTip+"</p>";
-	detailsHtml +="<p class='lightboxControls' ><a href = 'javascript:void(0)' onclick = 'lightBoxPreviousDemoClickHandler()'>Previous</a>";
-	detailsHtml +="<a href = 'javascript:void(0)' onclick = 'lightBoxResetDemoClickHandler()' style='padding-left:20px'>Reset</a>";
-	detailsHtml +="<a href = 'javascript:void(0)' onclick = 'lightBoxNextDemoClickHandler()' style='padding-left:20px'>Next</a></p>";
-	detailsDiv.innerHTML = detailsHtml;
-	lightBox.setContent(detailsDiv);
-	if(location.hostname && location.hostname.toLowerCase().indexOf("devstate")>-1){
-		ga("send", "event", "DemoView", demoName);
-	}
+    currentDemoClass = this[(currentDemoName+"Demo")];
+    classManager.loadDemo(currentDemoName, demoJSLoadHandler, demoJSLoadErrorHandler);
+}
+
+function demoJSLoadHandler(){
+    currentDemo = new currentDemoClass(demoRect.x, demoRect.y, demoRect.width, demoRect.height, lightBox.contentDiv);
+    currentDemo.run();
+    var padding = 10;
+    detailsDiv = document.createElement("div");
+    detailsDiv.style.position = "absolute";
+    if(isHorizontalLayout()){
+        detailsDiv.style.left = (padding+demoRect.width)+"px";
+        detailsDiv.style.top = padding+"px";
+        detailsDiv.style.width = (contentRect.width-demoRect.width-padding*2) + "px";
+        detailsDiv.style.height = (contentRect.height-padding*2) + "px";
+    }else{
+        detailsDiv.style.left = padding+"px";
+        detailsDiv.style.top = (padding+demoRect.height)+"px";
+        detailsDiv.style.width = (contentRect.width-padding*2) + "px";
+        detailsDiv.style.height = (contentRect.height-demoRect.height-padding*2) + "px";
+    }
+    detailsDiv.style.fontFamily = "Sans-serif";
+    var detailsHtml = "<h2 class='demoTitle' >"+currentDemoName+"</h2><p style='padding-top:20px'>"+currentDemo.toolTip+"</p>";
+    detailsHtml +="<p class='lightboxControls' ><a href = 'javascript:void(0)' onclick = 'lightBoxPreviousDemoClickHandler(event)'>Previous</a>";
+    detailsHtml +="<a href = 'javascript:void(0)' onclick = 'lightBoxResetDemoClickHandler()' style='padding-left:20px'>Reset</a>";
+    detailsHtml +="<a href = 'javascript:void(0)' onclick = 'lightBoxNextDemoClickHandler()' style='padding-left:20px'>Next</a></p>";
+    detailsDiv.innerHTML = detailsHtml;
+    lightBox.setContent(detailsDiv);
+    if(location.hostname && location.hostname.toLowerCase().indexOf("devstate")>-1){
+        ga("send", "event", "DemoView", demoName);
+    }
+}
+
+function demoJSLoadErrorHandler(){
+    console.log("demoJSLoadErrorHandler()");
 }
 
 function tearDownDemo(){
@@ -143,15 +173,19 @@ function lightBoxBeginClose(){
 
 function setUpDemosMenu(){
 	demos = [];
-	var list = document.getElementById("demos");
-	var anchors = list.getElementsByTagName("a");
-	var images = list.getElementsByTagName("img");
-	for(var i = 0 ; i < anchors.length; i++){
-		anchors[i].onclick = demoLinkClickHandler;
-		demos[i] = getDemoFromHash(anchors[i].hash);
-		images[i].onmouseover = showGif;
-		images[i].onmouseout = showPng;
+    var demosHtml = "";
+    var demo;
+	for(var i = 0 ; i < classManager.demos.length; i++){
+        demo = classManager.demos[i];
+        demos[i] = demo.name;
+        demosHtml += '<div class="item">';
+        demosHtml += '<a href="#'+demo.name+'" onclick = "demoLinkClickHandler(event)">';
+        demosHtml += '<img src="'+demo.thumbnail+'" onmouseover="showGif(event)" onmouseout="showPng(event)">';
+        demosHtml += '</a>';
+        demosHtml += '</div>';
 	}
+    demosHtml += '<div class="clearfix"></div>';
+    document.getElementById("demos").innerHTML = demosHtml;
 }
 
 function showGif(event){
@@ -178,6 +212,7 @@ function demoLinkClickHandler(event){
 
 function init(){
 	//console.log("init()");
+    classManager = new DSClassManager();
 	setUpDemosMenu();
 	lightBox = new DSLightBox(undefined, lightBoxOpenComplete, lightBoxBeginClose);
 	if(!window.location.hash) {

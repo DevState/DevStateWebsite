@@ -158,6 +158,7 @@
 	PieChartDemo.prototype.createPieChart = function(){
 		this.showReflection = true;
 		var pie = new PieChart(this.x, this.y, this.width, this.height*.6, 10);
+        //pie.colors = [DSColors.GREEN, DSColors.LIGHT_GREEN , DSColors.ORANGE, DSColors.PINK_ORANGE , "#3db5d2", "#d1eff9" ];
 		this.reflectionCaptureRect = new SimpleGeometry.Rectangle(pie.center.x-pie.radius, pie.center.y-pie.radius, pie.radius*2, pie.radius*2);
 		return pie;
 	};
@@ -408,20 +409,14 @@
 		this.basicSlideShow = new BasicSlideShow(this.x, this.y, this.width, this.height, this.context2d);
 		var _this = this;
 		this.canvas.addEventListener("click", function(event){_this.canvasClickHandler(event)}, false);//"mousedown"
-		var urls=[
-			"assets/instagramPhotos/paperWeight.jpg",
-			"assets/instagramPhotos/peacock.jpg",
-			"assets/instagramPhotos/rufus.jpg",
-			"assets/instagramPhotos/sakBeer.jpg",
-			"assets/instagramPhotos/SakEU.jpg",
-			"assets/instagramPhotos/sakirisChips.jpg",
-			"assets/instagramPhotos/silverTower.jpg",
-			"assets/instagramPhotos/oneWay.jpg",
-			"assets/instagramPhotos/botaniqueLady.jpg",
-			"assets/instagramPhotos/snowBallLantern.jpg",
-			"assets/instagramPhotos/springSnow.jpg",
-			"assets/instagramPhotos/Keon0FucksGiven.jpg",
-			"assets/instagramPhotos/sunny.jpg"];
+        var urls=[
+            "assets/demoImages/surf4.jpg",
+            "assets/demoImages/skate4.jpg",
+            "assets/demoImages/skate3.jpg",
+            "assets/demoImages/snowboard2.jpg",
+            "assets/demoImages/snowboard3.jpg",
+            "assets/demoImages/surf3.jpg"
+            ];
 
 		this.loadImagesWithImageStore(urls);
 	};
@@ -435,7 +430,7 @@
 		var x=event.pageX - this.canvas.offsetLeft;
 		var y=event.pageY - this.canvas.offsetTop;
 		var globalPostion = this.getGlobalDemoPosition();
-		var point=new SimpleGeometry.Point(x-globalPostion.x,y-globalPostion.y);
+		var point = new SimpleGeometry.Point(x-globalPostion.x,y-globalPostion.y);
 		if(this.basicSlideShow.containsPoint(point)){
 			if(point.x > this.basicSlideShow.x + this.basicSlideShow.width/2){
 				this.basicSlideShow.next();
@@ -460,6 +455,53 @@
 
 
 
+    //================::IMAGE FADER::===================
+
+    ImageFaderDemo = function(x, y, width, height, demoContainer){
+        AbstractDemo.call(this, x, y, width, height, demoContainer); //call super constructor.
+        this.toolTip = "Click an image to see a fade effect from one random image to another.";
+        this.customCaptureControls = true;
+    };
+    //subclass extends superclass
+    ImageFaderDemo.prototype = Object.create(AbstractDemo.prototype);
+    ImageFaderDemo.prototype.constructor = AbstractDemo;
+
+    ImageFaderDemo.prototype.run = function(){
+        this.urls=[
+            "assets/demoImages/snowboard3.jpg",
+            "assets/demoImages/skate3.jpg",
+            "assets/demoImages/skate1.jpg",
+            "assets/demoImages/snowboard2.jpg",
+            "assets/demoImages/surf3.jpg",
+            "assets/demoImages/surf4.jpg"];
+        var _this = this;
+        this.canvas.addEventListener("click", function(event){_this.canvasClickHandler(event)}, false);//"mousedown"
+        this.ImageEffectFader = new ImageEffectFader(this.x, this.y, this.width, this.height, this.context2d);
+        this.showRandomImage();
+    };
+
+    ImageFaderDemo.prototype.showRandomImage = function(){
+        this.ImageEffectFader.setImage( this.urls[Math.floor(Math.random()*this.urls.length)] );
+    };
+
+    ImageFaderDemo.prototype.canvasClickHandler = function(){
+        this.showRandomImage();
+    };
+
+    ImageFaderDemo.prototype.startCustomCaptureAnimation = function(){
+        this.showRandomImage();
+    };
+
+    ImageFaderDemo.prototype.customTearDown = function(){
+        delete this.ImageEffectFader;
+    };
+
+    window.ImageFaderDemo = ImageFaderDemo;
+
+
+
+
+
 	
 	//================::THUMBNAIL CAROUSEL::===================
 
@@ -477,19 +519,19 @@
 		var _this = this;
 		this.canvas.addEventListener("click", function(event){_this.canvasClickHandler(event)}, false);//"mousedown"
 		var urls=[
-			"assets/instagramThumbs/paperWeight.jpg",
-			"assets/instagramThumbs/peacock.jpg",
-			"assets/instagramThumbs/rufus.jpg",
-			"assets/instagramThumbs/sakBeer.jpg",
-			"assets/instagramThumbs/SakEU.jpg",
-			"assets/instagramThumbs/sakirisChips.jpg",
-			"assets/instagramThumbs/silverTower.jpg",
-			"assets/instagramThumbs/oneWay.jpg",
-			"assets/instagramThumbs/botaniqueLady.jpg",
-			"assets/instagramThumbs/snowBallLantern.jpg",
-			"assets/instagramThumbs/springSnow.jpg",
-			"assets/instagramThumbs/Keon0FucksGiven.jpg",
-			"assets/instagramThumbs/sunny.jpg"];
+			"assets/demoImageThumbnails/skate1.jpg",
+			"assets/demoImageThumbnails/skate2.jpg",
+			"assets/demoImageThumbnails/skate3.jpg",
+			"assets/demoImageThumbnails/skate4.jpg",
+			"assets/demoImageThumbnails/skate5.jpg",
+			"assets/demoImageThumbnails/snowboard1.jpg",
+			"assets/demoImageThumbnails/snowboard2.jpg",
+			"assets/demoImageThumbnails/snowboard3.jpg",
+			"assets/demoImageThumbnails/snowboard4.jpg",
+			"assets/demoImageThumbnails/surf1.jpg",
+			"assets/demoImageThumbnails/surf2.jpg",
+			"assets/demoImageThumbnails/surf3.jpg",
+			"assets/demoImageThumbnails/surf4.jpg"];
 
 		this.loadImagesWithImageStore(urls);
 	};
@@ -498,6 +540,7 @@
 		//console.log("ThumbnailCarouselDemo.useLoadedImageStoreImages()");
 		this.thumbnailCarousel = new ThumbnailCarousel(	this.x, this.y + this.height/2 - this.imageStore.images[0].height/2, 
 														this.width, this.imageStore.images[0].height+10, this.context2d);
+        //this.thumbnailCarousel.outlineColor = DSColors.ORANGE;
 		this.thumbnailCarousel.setImages(this.imageStore.images);
 	};
 	
@@ -552,19 +595,19 @@
 		var _this = this;
 		this.canvas.addEventListener("click", function(event){_this.canvasClickHandler(event)}, false);//"mousedown"
 		var urls = [
-			"assets/instagramThumbs/paperWeight.jpg",
-			"assets/instagramThumbs/peacock.jpg",
-			"assets/instagramThumbs/rufus.jpg",
-			"assets/instagramThumbs/sakBeer.jpg",
-			"assets/instagramThumbs/SakEU.jpg",
-			"assets/instagramThumbs/sakirisChips.jpg",
-			"assets/instagramThumbs/silverTower.jpg",
-			"assets/instagramThumbs/oneWay.jpg",
-			"assets/instagramThumbs/botaniqueLady.jpg",
-			"assets/instagramThumbs/snowBallLantern.jpg",
-			"assets/instagramThumbs/springSnow.jpg",
-			"assets/instagramThumbs/Keon0FucksGiven.jpg",
-			"assets/instagramThumbs/sunny.jpg"];
+            "assets/demoImageThumbnails/skate1.jpg",
+            "assets/demoImageThumbnails/skate2.jpg",
+            "assets/demoImageThumbnails/skate3.jpg",
+            "assets/demoImageThumbnails/skate4.jpg",
+            "assets/demoImageThumbnails/skate5.jpg",
+            "assets/demoImageThumbnails/snowboard1.jpg",
+            "assets/demoImageThumbnails/snowboard2.jpg",
+            "assets/demoImageThumbnails/snowboard3.jpg",
+            "assets/demoImageThumbnails/snowboard4.jpg",
+            "assets/demoImageThumbnails/surf1.jpg",
+            "assets/demoImageThumbnails/surf2.jpg",
+            "assets/demoImageThumbnails/surf3.jpg",
+            "assets/demoImageThumbnails/surf4.jpg"];
 
 		this.loadImagesWithImageStore(urls);
 	};
@@ -606,60 +649,7 @@
 	};
 	
 	window.SimpleCoverFlowDemo = SimpleCoverFlowDemo;
-	
-	
-	
-	
-	
-	
-	//================::IMAGE FADER::===================	
-	
-	ImageFaderDemo = function(x, y, width, height, demoContainer){
-		AbstractDemo.call(this, x, y, width, height, demoContainer); //call super constructor.
-		this.toolTip = "Click an image to see a fade effect from one random image to another.";
-		this.customCaptureControls = true;
-	};
-	//subclass extends superclass
-	ImageFaderDemo.prototype = Object.create(AbstractDemo.prototype);
-	ImageFaderDemo.prototype.constructor = AbstractDemo;	
-	
-	ImageFaderDemo.prototype.run = function(){
-		this.urls=["assets/instagramPhotos/paperWeight.jpg",
-			"assets/instagramPhotos/peacock.jpg",
-			"assets/instagramPhotos/rufus.jpg",
-			"assets/instagramPhotos/sakBeer.jpg",
-			"assets/instagramPhotos/SakEU.jpg",
-			"assets/instagramPhotos/sakirisChips.jpg",
-			"assets/instagramPhotos/silverTower.jpg",
-			"assets/instagramPhotos/oneWay.jpg",
-			"assets/instagramPhotos/botaniqueLady.jpg",
-			"assets/instagramPhotos/snowBallLantern.jpg",
-			"assets/instagramPhotos/springSnow.jpg",
-			"assets/instagramPhotos/Keon0FucksGiven.jpg",
-			"assets/instagramPhotos/sunny.jpg"];
-		var _this = this;
-		this.canvas.addEventListener("click", function(event){_this.canvasClickHandler(event)}, false);//"mousedown"
-		this.ImageEffectFader = new ImageEffectFader(this.x, this.y, this.width, this.height, this.context2d);
-		this.showRandomImage();
-	};
 
-	ImageFaderDemo.prototype.showRandomImage = function(){
-		this.ImageEffectFader.setImage( this.urls[Math.floor(Math.random()*this.urls.length)] );	
-	};
-	
-	ImageFaderDemo.prototype.canvasClickHandler = function(){
-		this.showRandomImage();
-	};
-	
-	ImageFaderDemo.prototype.startCustomCaptureAnimation = function(){
-		this.showRandomImage();
-	};
-	
-	ImageFaderDemo.prototype.customTearDown = function(){
-		delete this.ImageEffectFader;
-	};
-	
-	window.ImageFaderDemo = ImageFaderDemo;
 	
 	
 	
@@ -764,10 +754,11 @@
 	BlockSetAnimatorDemo.prototype.run = function(){
 		var _this = this;
 		this.canvas.addEventListener("click", function(event){_this.canvasClickHandler(event)}, false);//"mousedown"
-		var urls=["assets/instagramThumbs/paperWeight.jpg",
-			"assets/instagramThumbs/sakBeer.jpg",
-			"assets/instagramThumbs/SakEU.jpg",
-			"assets/instagramThumbs/sakirisChips.jpg"];
+        var urls = [
+            "assets/demoImageThumbnails/skate3.jpg",
+            "assets/demoImageThumbnails/snowboard3.jpg",
+            "assets/demoImageThumbnails/surf3.jpg",
+            "assets/demoImageThumbnails/surf4.jpg"];
 
 		this.loadImagesWithImageStore(urls);
 	};
