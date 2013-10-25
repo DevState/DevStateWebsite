@@ -13,6 +13,25 @@ function resizeHandler(){
 	forceHideDemo();
 }
 
+function viewportSize() {
+    var e = window, a = 'inner';
+    if ( !( 'innerWidth' in window ) ) {
+
+        a = 'client';
+        e = document.documentElement || document.body;
+
+    }
+
+    return { width : e[ a+'Width' ] , height : e[ a+'Height' ] }
+
+}
+
+function isHorizontalLayout(){
+    var size = viewportSize();
+    return size.width > size.height;
+}
+
+
 function forceHideDemo(){
 	if(lightBox.isOpen()){
 		hideDemo(true);
@@ -49,33 +68,19 @@ function lightBoxResetDemoClickHandler(){
 	tearDownDemo();
 	setUpDemo(currentDemoName);
 	if(location.hostname && location.hostname.toLowerCase().indexOf("devstate")>-1){
-		ga("send", "event", "resetDemo", demoName);
+		ga("send", "event", "resetDemo", currentDemoName);
 	}
+}
+
+function lightBoxSubMenuClickHandler(demoName){
+    tearDownDemo();
+    setUpDemo(demoName);
 }
 
 var lightBoxWidth = 700;
 var lightBoxHeight = 400;
 var lightBoxVerticalLayoutHeight = 600;
 var demoSize = 400;
-
-function viewportSize() {
-
-    var e = window, a = 'inner';
-    if ( !( 'innerWidth' in window ) ) {
-
-        a = 'client';
-        e = document.documentElement || document.body;
-
-    }
-
-    return { width : e[ a+'Width' ] , height : e[ a+'Height' ] }
-
-}
-
-function isHorizontalLayout(){
-    var size = viewportSize();
-    return size.width > size.height;
-}
 
 function showDemo(demoName){
 	var size = viewportSize();
@@ -131,6 +136,13 @@ function demoJSLoadHandler(){
     }
     detailsDiv.style.fontFamily = "Sans-serif";
     var detailsHtml = "<h2 class='demoTitle' >"+currentDemoName+"</h2><p style='padding-top:20px'>"+currentDemo.toolTip+"</p>";
+    if(currentDemo.subMenu.length>0){
+        detailsHtml +="<p class='lightboxSubMenu' >";
+        for(var i=0; i< currentDemo.subMenu.length; i++){
+            detailsHtml +="<a href = 'javascript:void(0)' onclick = 'lightBoxSubMenuClickHandler(\""+currentDemo.subMenu[i]+"\")'>"+currentDemo.subMenu[i]+"</a>";
+        }
+        detailsHtml +="</p>";
+    }
     detailsHtml +="<p class='lightboxControls' ><a href = 'javascript:void(0)' onclick = 'lightBoxPreviousDemoClickHandler(event)'>Previous</a>";
     detailsHtml +="<a href = 'javascript:void(0)' onclick = 'lightBoxResetDemoClickHandler()' style='padding-left:20px'>Reset</a>";
     detailsHtml +="<a href = 'javascript:void(0)' onclick = 'lightBoxNextDemoClickHandler()' style='padding-left:20px'>Next</a></p>";
@@ -177,6 +189,9 @@ function setUpDemosMenu(){
     var demo;
 	for(var i = 0 ; i < classManager.demos.length; i++){
         demo = classManager.demos[i];
+        if(!demo.includeInMenu){
+            continue;
+        }
         demos[i] = demo.name;
         demosHtml += '<div class="item">';
         demosHtml += '<a href="#'+demo.name+'" onclick = "demoLinkClickHandler(event)">';

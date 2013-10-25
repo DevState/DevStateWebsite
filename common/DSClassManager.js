@@ -9,20 +9,20 @@
     //TODO consider moving elsewhere. Some central repository of demos is needed
     DSClassManager.prototype.setDemoResources = function() {
         this.demos = [];
-        this.demos.push(new DSDemoResource ("PieChart", "pieChart.png", ["common/ImageEffects", "charting/PieChart"]) );
-        //this.demos.push(new DSDemoResource (DonutChart, "donutChart.png", ["charting/PieChart"]) );//TODO : combine with pie chart in light box
-        this.demos.push(new DSDemoResource ("BarChart", "barChart.png", ["charting/ChartBackground","charting/BarChart"]) );
-        this.demos.push(new DSDemoResource ("LineChart", "lineChart.png", ["charting/ChartBackground","charting/LineChart"]) );
+        this.demos.push(new DSDemoResource ("PieChart", "pieChart.png", ["common/ImageEffects", "charting/PieChart"], true) );
+        this.demos.push(new DSDemoResource ("DonutChart", "donutChart.png", ["charting/PieChart"], false) );
+        this.demos.push(new DSDemoResource ("BarChart", "barChart.png", ["charting/ChartBackground","charting/BarChart"], true) );
+        this.demos.push(new DSDemoResource ("LineChart", "lineChart.png", ["charting/ChartBackground","charting/LineChart"], true) );
         this.demos.push(new DSDemoResource ("BasicSlideShow", "basicSlideShow.png",
-            ["common/ImageEffects", "common/ArrowButtons" , "slideShows/BasicSlideShow"]) );
+            ["common/ImageEffects", "common/ArrowButtons" , "slideShows/BasicSlideShow"], true) );
         this.demos.push(new DSDemoResource ("ImageFader", "imageFader.png",
-            ["common/ImageEffects", "slideShows/ImageEffectFader" ]) );
-        this.demos.push(new DSDemoResource ("BlockSetAnimator", "blockSetAnimator.png", ["common/BlockSetAnimator"] ) );
-        this.demos.push(new DSDemoResource ("TextEffect", "textEffect.png", ["textEffects/TextChopper", "common/BlockSetAnimator"] ) );
-        this.demos.push(new DSDemoResource ("ThumbnailCarousel", "thumbCarousel.png", ["common/ArrowButtons" ,"menus/ThumbnailCarousel"]) );
+            ["common/ImageEffects", "slideShows/ImageEffectFader" ], true) );
+        this.demos.push(new DSDemoResource ("BlockSetAnimator", "blockSetAnimator.png", ["common/BlockSetAnimator"] , true) );
+        this.demos.push(new DSDemoResource ("TextEffect", "textEffect.png", ["textEffects/TextChopper", "common/BlockSetAnimator"] , true) );
+        this.demos.push(new DSDemoResource ("ThumbnailCarousel", "thumbCarousel.png", ["common/ArrowButtons" ,"menus/ThumbnailCarousel"], true) );
         this.demos.push(new DSDemoResource ("SimpleCoverFlow", "coverFlow.png",
-            ["common/ArrowButtons","common/TransformRectangle", "menus/SimpleCoverFlow"]) );
-        this.demos.push(new DSDemoResource ("Wanderer", "wanderer.png", ["common/Wanderer"]) );
+            ["common/ArrowButtons","common/TransformRectangle", "menus/SimpleCoverFlow"], true) );
+        this.demos.push(new DSDemoResource ("Wanderer", "wanderer.png", ["common/Wanderer"], true) );
     };
 
     DSClassManager.prototype.scriptIsLoaded = function( url ) {
@@ -105,7 +105,8 @@
 
     //====================:: Dev State Demo Resource ::==================================
 
-    DSDemoResource = function(name, thumbnail, dependencies){
+    DSDemoResource = function(name, thumbnail, dependencies, includeInMenu){
+        this.includeInMenu = includeInMenu;
         this.name = name;
         this.thumbnail = "assets/demoThumbnails/"+thumbnail;
         this.setDependencies(dependencies);

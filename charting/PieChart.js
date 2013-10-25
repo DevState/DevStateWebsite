@@ -80,11 +80,8 @@
 			context.fill();
 			context.closePath();
 
-            // create radial gradient
             gradient = context.createRadialGradient( 0, 0, this.radius*.85, 0, 0, this.radius-1);
-            // light blue
             gradient.addColorStop(0, SimpleGeometry.getRgbaStyleString(0,0,0,0));
-            // dark blue
             gradient.addColorStop(1, SimpleGeometry.getRgbaStyleString(0,0,0,.3));
 
             context.fillStyle = gradient;
@@ -121,14 +118,80 @@
 	DonutChart.prototype.holePercent = .3;
 	
 	// Override the instance method
-	DonutChart.prototype.render = function(context,animationPercent){
+/*	DonutChart.prototype.render = function(context,animationPercent){
 		PieChart.prototype.render.call(this,context,animationPercent);
 		context.fillStyle = "#FFFFFF";
 		context.beginPath();
 		context.arc(this.center.x, this.center.y, this.radius*this.holePercent, 0, SimpleGeometry.PI2);//x, y, this.radius, from, to
 		context.fill();
 		context.closePath();
-	};
+	};*/
+
+    DonutChart.prototype.render = function(context,animationPercent){
+        if(!this.values){
+            this.setRandomValues();
+        }
+        if(!this.colors){
+            this.setRandomColors();
+        }
+        if(isNaN(animationPercent)){
+            animationPercent=1;
+        }
+        //console.log("PieChart.render",this.values.toString(),this.colors.toString());
+        var startValue = 0;
+        var value;
+        var startRadian,endRadian,gradient;
+        context.translate(this.center.x, this.center.y);
+        context.rotate(-Math.PI/2);
+        for(var i=0; i<this.values.length; i++){
+            value = this.values[i]*animationPercent;
+            context.beginPath();
+            context.moveTo(0,0);
+            context.fillStyle = this.colors[i];
+            startRadian = SimpleGeometry.map(startValue,0,this.total,0,SimpleGeometry.PI2);
+            endRadian = SimpleGeometry.map(startValue+value,0,this.total,0,SimpleGeometry.PI2);
+
+            //console.log("\t",startRadian,endRadian);
+            context.arc(0, 0, this.radius, startRadian, endRadian);//x, y, this.radius, from, to
+            context.lineTo(0,0);
+            context.fill();
+            context.closePath();
+
+            gradient = context.createRadialGradient( 0, 0, this.radius*.85, 0, 0, this.radius-1);
+            gradient.addColorStop(0, SimpleGeometry.getRgbaStyleString(0,0,0,0));
+            gradient.addColorStop(1, SimpleGeometry.getRgbaStyleString(0,0,0,.3));
+
+            context.fillStyle = gradient;
+            context.beginPath();
+            context.moveTo(0,0);
+            context.arc(0, 0, this.radius, startRadian, endRadian);
+            context.lineTo(0,0);
+            context.fill();
+            context.closePath();
+
+            gradient = context.createRadialGradient( 0, 0, this.radius*this.holePercent, 0, 0, this.radius*this.holePercent + this.radius *.85);
+            gradient.addColorStop(0, SimpleGeometry.getRgbaStyleString(0,0,0,.5));
+            gradient.addColorStop(1, SimpleGeometry.getRgbaStyleString(0,0,0,0));
+
+            context.fillStyle = gradient;
+            context.beginPath();
+            context.moveTo(0,0);
+            context.arc(0, 0, this.radius, startRadian, endRadian);
+            context.lineTo(0,0);
+            context.fill();
+            context.closePath();
+
+            startValue += value;
+        }
+
+        context.beginPath();
+        context.fillStyle = "#FFFFFF";
+        context.arc(0, 0, this.radius*this.holePercent, 0, SimpleGeometry.PI2);//x, y, this.radius, from, to
+        context.fill();
+        context.closePath();
+
+        SimpleGeometry.setIdentityMatrixToContext(context);
+    };
 
 	window.DonutChart=DonutChart;
 

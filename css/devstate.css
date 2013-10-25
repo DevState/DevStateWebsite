@@ -276,6 +276,27 @@ header{
 	color: #ff342e; 
 }
 
+.lightboxSubMenu{
+    font-family:'sf_collegiate_solidregular', Arial, Helvetica, sans-serif;
+    font-size:24px;
+    padding-top:20px;
+    text-align:center;
+
+    bottom:35px;
+    width:100%;
+}
+
+.lightboxSubMenu a{
+    margin-left: 3px;
+    margin-right: 3px;
+    text-decoration:none;
+    color: #ff342e;
+}
+
+.lightboxSubMenu a:hover{
+    color:#000000;
+}
+
 /* ----------------------- DEMO LIGHBOX CONTENT START ------------------------- */
 
 .bottomDivider{

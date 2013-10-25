@@ -10,6 +10,7 @@
 		this.captureFrameRate = 300; //frames for generated gifs are captured at this rate
 		this.gifPlaybackFrameRate = 100;//generated gifs play at this speed
 		this.toolTip = "";
+        this.subMenu = [];
 		this.setUpDemo();
 	};
 	
@@ -147,8 +148,9 @@
 	
 	PieChartDemo = function(x, y, width, height, demoContainer){
 		AbstractDemo.call(this, x, y, width, height, demoContainer); //call super constructor.
-		this.toolTip = "Standard pie chart with a reflection. Click the pie chart to run open and close animations. Press reset for new data.";
+		this.toolTip = "Standard pie chart with a reflection. Click the pie chart to open and close. Press reset for new data.";
 		this.gifPlaybackFrameRate = 200;
+        this.subMenu=["PieChart","DonutChart"];
 	};
 	
 	//subclass extends superclass
@@ -225,7 +227,9 @@
 	DonutChartDemo.prototype.createPieChart = function(){
 		this.showReflection = false;
 		//console.log("DonutChartDemo.prototype.createPieChart()");
-		return new DonutChart(this.x,this.y,this.width,this.height);
+        var donut = new DonutChart(this.x,this.y,this.width,this.height);
+        donut.colors = [DSColors.GREEN, DSColors.LIGHT_GREEN , DSColors.ORANGE, DSColors.PINK_ORANGE , "#3db5d2", "#d1eff9" ];
+		return donut;
 		//return new DonutChart(this.x+35,this.y+30,this.width/2-60,this.height/2-60,.3);
 	};
 	
