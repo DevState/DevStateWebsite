@@ -63,7 +63,7 @@
 		//console.log("PieChart.render",this.values.toString(),this.colors.toString());
 		var startValue = 0;
 		var value;
-		var startRadian,endRadian;
+		var startRadian,endRadian,gradient;
 		context.translate(this.center.x, this.center.y);
 		context.rotate(-Math.PI/2);
 		for(var i=0; i<this.values.length; i++){
@@ -79,6 +79,22 @@
 			context.lineTo(0,0);
 			context.fill();
 			context.closePath();
+
+            // create radial gradient
+            gradient = context.createRadialGradient( 0, 0, this.radius*.85, 0, 0, this.radius-1);
+            // light blue
+            gradient.addColorStop(0, SimpleGeometry.getRgbaStyleString(0,0,0,0));
+            // dark blue
+            gradient.addColorStop(1, SimpleGeometry.getRgbaStyleString(0,0,0,.3));
+
+            context.fillStyle = gradient;
+            context.beginPath();
+            context.moveTo(0,0);
+            context.arc(0, 0, this.radius, startRadian, endRadian);
+            context.lineTo(0,0);
+            context.fill();
+            context.closePath();
+
 			startValue += value;
 		}
 		SimpleGeometry.setIdentityMatrixToContext(context);

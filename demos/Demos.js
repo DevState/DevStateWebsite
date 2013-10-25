@@ -157,8 +157,8 @@
 	
 	PieChartDemo.prototype.createPieChart = function(){
 		this.showReflection = true;
-		var pie = new PieChart(this.x, this.y, this.width, this.height*.6, 10);
-        //pie.colors = [DSColors.GREEN, DSColors.LIGHT_GREEN , DSColors.ORANGE, DSColors.PINK_ORANGE , "#3db5d2", "#d1eff9" ];
+		var pie = new PieChart(this.x, this.y, this.width, this.height*.7, 10);
+        pie.colors = [DSColors.GREEN, DSColors.LIGHT_GREEN , DSColors.ORANGE, DSColors.PINK_ORANGE , "#3db5d2", "#d1eff9" ];
 		this.reflectionCaptureRect = new SimpleGeometry.Rectangle(pie.center.x-pie.radius, pie.center.y-pie.radius, pie.radius*2, pie.radius*2);
 		return pie;
 	};
@@ -263,6 +263,7 @@
 	
 	LineChartDemo.prototype.run = function(){
 		this.lineChart = new LineChart(this.x + 10, this.y, this.width, this.height);
+        this.lineChart.colors = [DSColors.GREEN, DSColors.LIGHT_GREEN , DSColors.ORANGE, DSColors.PINK_ORANGE , "#3db5d2", "#d1eff9" ];
 		var _this = this;
 		this.canvas.addEventListener("click", function(event){_this.canvasClickHandler(event)}, false);//"mousedown"
 		this.lineChartOpen = true;
@@ -665,7 +666,21 @@
 	//subclass extends superclass
 	WandererDemo.prototype = Object.create(AbstractDemo.prototype);
 	WandererDemo.prototype.constructor = AbstractDemo;
-	
+
+    WandererDemo.prototype.preSetUp = function(){
+        this.backGroundCanvas = document.createElement('canvas');
+        //console.log("BarChartDemo.preSetUp() ",this.backGroundCanvas);
+        this.backGroundCanvas.width = this.width;
+        this.backGroundCanvas.height = this.height;
+        this.backGroundCanvasContext2d = this.backGroundCanvas.getContext("2d");
+        this.backGroundCanvasContext2d.fillStyle = "#072e4d";
+        this.backGroundCanvasContext2d.fillRect(0, 0, this.width, this.height);
+        this.appendCanvas(this.backGroundCanvas);
+    };
+    WandererDemo.prototype.getCaptureCanvases = function(){
+        return [this.backGroundCanvas, this.canvas];
+    };
+
 	WandererDemo.prototype.run = function(){
 		this.loadImagesWithImageStore(["assets/colorWheel.jpg"]);
 	};
@@ -679,7 +694,7 @@
 		this.colorWheelContext = this.colorWheelCanvas.getContext("2d");
 		this.colorWheelContext.drawImage(this.imageStore.images[0],0,0);
 		
-		this.context2d.fillStyle = "#000000";
+		this.context2d.fillStyle = "#072e4d";
 		this.context2d.fillRect(0, 0, this.canvas.width, this.canvas.height);
 		
 		var _this = this;
@@ -699,7 +714,8 @@
 	
 	WandererDemo.prototype.wandererUpdateHandler = function(){
 		//console.log("wandererUpdateHandler()");
-		this.context2d.fillStyle = SimpleGeometry.getRgbaStyleString(0 , 0 , 0, .05);
+
+		this.context2d.fillStyle = SimpleGeometry.getRgbaStyleString(7 , 46 , 77, .05);
 		this.context2d.fillRect(0,0, this.canvas.width, this.canvas.height);
 		
 		var color = this.colorWheelContext.getImageData(this.colorWanderer.x, this.colorWanderer.y, 1, 1).data;				
@@ -731,6 +747,9 @@
 		delete this.colorWanderer;
 		this.wanderer.pause();
 		delete this.wanderer;
+        this.demoContainer.removeChild(this.backGroundCanvas);
+        delete this.backGroundCanvasContext2d;
+        delete this.backGroundCanvas;
 	};
 	
 	window.WandererDemo = WandererDemo;
