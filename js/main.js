@@ -1,13 +1,5 @@
 
-//===============================::DEMOS / LIGHTBOX::===========================
-
-var classManager;
-var demos;
-var currentDemo;
-var currentDemoName;
-var detailsDiv;
-var demoRect;
-var contentRect;
+//===============================::GENERAL METHODS::===========================
 
 function resizeHandler(){
 	forceHideDemo();
@@ -32,6 +24,8 @@ function isHorizontalLayout(){
 }
 
 
+//===============================::DEMOS / LIGHTBOX::===========================
+
 function forceHideDemo(){
 	if(lightBox.isOpen()){
 		hideDemo(true);
@@ -43,22 +37,20 @@ function lightBoxOverlayDivClick(){
 }
 
 function lightBoxNextDemoClickHandler(){
-	var index = demos.indexOf(currentDemoName);
-	index = index < demos.length-1 ? index+1 : 0;
 	tearDownDemo();
-	setUpDemo(demos[index]);
-	location.hash=demos[index];
+    var demoName = classManager.getNextDemoName();
+	setUpDemo(demoName);
+	location.hash = demoName;
 	if(location.hostname && location.hostname.toLowerCase().indexOf("devstate")>-1){
 		ga("send", "event", "nextDemo");
 	}
 }
 
 function lightBoxPreviousDemoClickHandler(){
-	var index = demos.indexOf(currentDemoName);
-	index = index > 0 ? index-1 : demos.length-1;
 	tearDownDemo();
-	setUpDemo(demos[index]);
-	location.hash=demos[index];
+    var demoName = classManager.getPreviousDemoName();
+	setUpDemo(demoName);
+	location.hash = demoName;
 	if(location.hostname && location.hostname.toLowerCase().indexOf("devstate")>-1){
 		ga("send", "event", "previousDemo");
 	}
@@ -66,9 +58,9 @@ function lightBoxPreviousDemoClickHandler(){
 
 function lightBoxResetDemoClickHandler(){
 	tearDownDemo();
-	setUpDemo(currentDemoName);
+	setUpDemo(classManager.currentDemoName);
 	if(location.hostname && location.hostname.toLowerCase().indexOf("devstate")>-1){
-		ga("send", "event", "resetDemo", currentDemoName);
+		ga("send", "event", "resetDemo", classManager.currentDemoName);
 	}
 }
 
@@ -82,7 +74,15 @@ var lightBoxHeight = 400;
 var lightBoxVerticalLayoutHeight = 600;
 var demoSize = 400;
 
+var classManager;
+var currentDemo;
+var currentDemoClass;
+var detailsDiv;
+var demoRect;
+var contentRect;
+
 function showDemo(demoName){
+    //console.log("showDemo()", demoName);
 	var size = viewportSize();
 	contentRect = new SimpleGeometry.Rectangle();
 	demoRect = new SimpleGeometry.Rectangle(0,0,demoSize,demoSize);
@@ -105,16 +105,14 @@ function showDemo(demoName){
 		contentRect.width = lightBoxHeight;
 		contentRect.height = lightBoxVerticalLayoutHeight;
 	}
-	currentDemoName = demoName;
 	lightBox.open(contentRect);
 }
 
-var currentDemoClass;
+
 
 function setUpDemo(demoName){
-	currentDemoName = demoName;
-    currentDemoClass = this[(currentDemoName+"Demo")];
-    classManager.loadDemo(currentDemoName, demoJSLoadHandler, demoJSLoadErrorHandler);
+    currentDemoClass = this[(demoName+"Demo")];
+    classManager.loadDemo(demoName, demoJSLoadHandler, demoJSLoadErrorHandler);
 }
 
 function demoJSLoadHandler(){
@@ -135,11 +133,12 @@ function demoJSLoadHandler(){
         detailsDiv.style.height = (contentRect.height-demoRect.height-padding*2) + "px";
     }
     detailsDiv.style.fontFamily = "Sans-serif";
-    var detailsHtml = "<h2 class='demoTitle' >"+currentDemoName+"</h2><p style='padding-top:20px'>"+currentDemo.toolTip+"</p>";
-    if(currentDemo.subMenu.length>0){
+    var detailsHtml = "<h2 class='demoTitle' >"+classManager.currentDemoName+"</h2><p style='padding-top:20px'>"+currentDemo.toolTip+"</p>";
+    var subMenu = classManager.getSubmenuForDemoName(classManager.currentDemoName);
+    if(subMenu.length > 0){
         detailsHtml +="<p class='lightboxSubMenu' >";
-        for(var i=0; i< currentDemo.subMenu.length; i++){
-            detailsHtml +="<a href = 'javascript:void(0)' onclick = 'lightBoxSubMenuClickHandler(\""+currentDemo.subMenu[i]+"\")'>"+currentDemo.subMenu[i]+"</a>";
+        for(var i=0; i< subMenu.length; i++){
+            detailsHtml +="<a href = 'javascript:void(0)' onclick = 'lightBoxSubMenuClickHandler(\""+subMenu[i]+"\")'>"+subMenu[i]+"</a>";
         }
         detailsHtml +="</p>";
     }
@@ -175,7 +174,7 @@ function hideDemo(forceClose){
 }
 
 function lightBoxOpenComplete(){
-	setUpDemo(currentDemoName);
+	setUpDemo(lastClickedDemoName);
 }
 
 function lightBoxBeginClose(){
@@ -183,16 +182,17 @@ function lightBoxBeginClose(){
 	location.hash="";
 }
 
+var lastClickedDemoName;
+function demoLinkClickHandler(event){
+    lastClickedDemoName = getDemoFromHash(event.currentTarget.hash);
+    showDemo(lastClickedDemoName);
+}
+
 function setUpDemosMenu(){
-	demos = [];
     var demosHtml = "";
     var demo;
-	for(var i = 0 ; i < classManager.demos.length; i++){
-        demo = classManager.demos[i];
-        if(!demo.includeInMenu){
-            continue;
-        }
-        demos[i] = demo.name;
+	for(var i = 0 ; i < classManager.navigationItems.length; i++){
+        demo = classManager.getDemoResourceForNavigationItem(classManager.navigationItems[i]);
         demosHtml += '<div class="item">';
         demosHtml += '<a href="#'+demo.name+'" onclick = "demoLinkClickHandler(event)">';
         demosHtml += '<img src="'+demo.thumbnail+'" onmouseover="showGif(event)" onmouseout="showPng(event)">';
@@ -221,9 +221,7 @@ function getDemoFromHash(hash){
 	return hash.split("#")[1];
 }
 
-function demoLinkClickHandler(event){
-	showDemo(getDemoFromHash(event.currentTarget.hash));
-}
+
 
 function init(){
 	//console.log("init()");
@@ -234,7 +232,8 @@ function init(){
 		return;
 	}
 	var demoName = getDemoFromHash(window.location.hash);
-	if(demos.indexOf(demoName)>-1){
+	if(classManager.getDemoResourceByName(demoName)){
+        lastClickedDemoName = demoName;
 		showDemo(demoName);
 	}
 	window.onscroll = function () {

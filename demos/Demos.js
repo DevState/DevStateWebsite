@@ -10,7 +10,6 @@
 		this.captureFrameRate = 300; //frames for generated gifs are captured at this rate
 		this.gifPlaybackFrameRate = 100;//generated gifs play at this speed
 		this.toolTip = "";
-        this.subMenu = [];
 		this.setUpDemo();
 	};
 	
@@ -150,7 +149,6 @@
 		AbstractDemo.call(this, x, y, width, height, demoContainer); //call super constructor.
 		this.toolTip = "Standard pie chart with a reflection. Click the pie chart to open and close. Press reset for new data.";
 		this.gifPlaybackFrameRate = 200;
-        this.subMenu=["PieChart","DonutChart"];
 	};
 	
 	//subclass extends superclass
@@ -677,7 +675,7 @@
         this.backGroundCanvas.width = this.width;
         this.backGroundCanvas.height = this.height;
         this.backGroundCanvasContext2d = this.backGroundCanvas.getContext("2d");
-        this.backGroundCanvasContext2d.fillStyle = "#072e4d";
+        this.backGroundCanvasContext2d.fillStyle = "#00000";
         this.backGroundCanvasContext2d.fillRect(0, 0, this.width, this.height);
         this.appendCanvas(this.backGroundCanvas);
     };
@@ -698,7 +696,7 @@
 		this.colorWheelContext = this.colorWheelCanvas.getContext("2d");
 		this.colorWheelContext.drawImage(this.imageStore.images[0],0,0);
 		
-		this.context2d.fillStyle = "#072e4d";
+		this.context2d.fillStyle = "#000000";
 		this.context2d.fillRect(0, 0, this.canvas.width, this.canvas.height);
 		
 		var _this = this;
@@ -719,7 +717,7 @@
 	WandererDemo.prototype.wandererUpdateHandler = function(){
 		//console.log("wandererUpdateHandler()");
 
-		this.context2d.fillStyle = SimpleGeometry.getRgbaStyleString(7 , 46 , 77, .05);
+		this.context2d.fillStyle = SimpleGeometry.getRgbaStyleString(0 , 0 , 0, .05);;//SimpleGeometry.getRgbaStyleString(7 , 46 , 77, .05);
 		this.context2d.fillRect(0,0, this.canvas.width, this.canvas.height);
 		
 		var color = this.colorWheelContext.getImageData(this.colorWanderer.x, this.colorWanderer.y, 1, 1).data;				
