@@ -1,8 +1,6 @@
 (function (window){
 
 
-	ArrowButtons = function(){};
-	
 	//container is a rectangle
 	ArrowButtons = function(container, arrowWidth, arrowHeight, margin){
 		SimpleGeometry.Rectangle.call(this,container.x, container.y, container.width, container.height); //call super constructor.

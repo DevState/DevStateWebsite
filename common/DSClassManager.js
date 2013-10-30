@@ -12,28 +12,41 @@
         this.navigationItems = [];
         this.demos.push(new DSDemoResource ("PieChart", "pieChart.png", ["common/ImageEffects", "charting/PieChart"]) );
         this.navigationItems.push(new DSDemoNavigationItem("PieChart", ["PieChart", "DonutChart"]));
+
         this.demos.push(new DSDemoResource ("DonutChart", "donutChart.png", ["charting/PieChart"]) );
         this.demos.push(new DSDemoResource ("BarChart", "barChart.png", ["charting/ChartBackground","charting/BarChart"]) );
-        this.navigationItems.push(new DSDemoNavigationItem("BarChart"));
+
+        this.navigationItems.push(new DSDemoNavigationItem("BarChart", ["BarChart", "LineChart"]));
         this.demos.push(new DSDemoResource ("LineChart", "lineChart.png", ["charting/ChartBackground","charting/LineChart"]) );
-        this.navigationItems.push(new DSDemoNavigationItem("LineChart"));
+        //this.navigationItems.push(new DSDemoNavigationItem("LineChart"));
+
+        this.demos.push(new DSDemoResource ("Isometry", "isometry.png", ["common/Isometric"]) );
+        this.navigationItems.push(new DSDemoNavigationItem("Isometry"));
+
         this.demos.push(new DSDemoResource ("BasicSlideShow", "basicSlideShow.png",
             ["common/ImageEffects", "common/ArrowButtons" , "slideShows/BasicSlideShow"]) );
         this.navigationItems.push(new DSDemoNavigationItem("BasicSlideShow"));
+
         this.demos.push(new DSDemoResource ("ImageFader", "imageFader.png",
             ["common/ImageEffects", "slideShows/ImageEffectFader" ]) );
         this.navigationItems.push(new DSDemoNavigationItem("ImageFader"));
+
         this.demos.push(new DSDemoResource ("BlockSetAnimator", "blockSetAnimator.png", ["common/BlockSetAnimator"]) );
         this.navigationItems.push(new DSDemoNavigationItem("BlockSetAnimator"));
+
         this.demos.push(new DSDemoResource ("TextEffect", "textEffect.png", ["textEffects/TextChopper", "common/BlockSetAnimator"]) );
         this.navigationItems.push(new DSDemoNavigationItem("TextEffect"));
+
         this.demos.push(new DSDemoResource ("ThumbnailCarousel", "thumbCarousel.png", ["common/ArrowButtons" ,"menus/ThumbnailCarousel"]) );
         this.navigationItems.push(new DSDemoNavigationItem("ThumbnailCarousel"));
+
         this.demos.push(new DSDemoResource ("SimpleCoverFlow", "coverFlow.png",
             ["common/ArrowButtons","common/TransformRectangle", "menus/SimpleCoverFlow"]) );
         this.navigationItems.push(new DSDemoNavigationItem("SimpleCoverFlow"));
+
         this.demos.push(new DSDemoResource ("Wanderer", "wanderer.png", ["common/Wanderer"]) );
         this.navigationItems.push(new DSDemoNavigationItem("Wanderer"));
+
         this.currentDemoName = "";
     };
 

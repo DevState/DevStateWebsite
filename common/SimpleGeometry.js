@@ -287,10 +287,17 @@
         return new SimpleGeometry.Point3d(this.x, this.y, this.z);
     };
 
+    SimpleGeometry.Point3d.prototype.copyValuesTo = function(point3d){
+        point3d.x = this.x;
+        point3d.y = this.y;
+        point3d.z = this.z;
+    };
+
     SimpleGeometry.Point3d.prototype.equals = function(point){
         return this.x==point.x && this.y==point.y && this.z==point.z;
     };
 
+    //TODO move this elsewhere, currently used in Test3d.html
     SimpleGeometry.Point3d.prototype.project = function(focalLength, projectionCenter){
         var t = focalLength / (focalLength+this.z);
         if (!projectionCenter){

@@ -914,5 +914,58 @@
 	};
 	
 	window.TextEffectDemo = TextEffectDemo;
+
+
+
+
+
+
+
+
+    //================::ISOMETRY::===================
+
+    IsometryDemo = function(x, y, width, height, demoContainer){
+        AbstractDemo.call(this, x, y, width, height, demoContainer); //call super constructor.
+        this.toolTip = "Click the text or reset for a new random animation.";
+        this.gifPlaybackFrameRate = 100;
+        this.captureFrameRate = 400;
+    };
+
+    //subclass extends superclass
+    IsometryDemo.prototype = Object.create(AbstractDemo.prototype);
+    IsometryDemo.prototype.constructor = AbstractDemo;
+
+    IsometryDemo.prototype.run = function(){
+
+        var _this = this;
+
+        this.space = new IsometricSpaceLeft(this.width, this.height, 200, 140, 200);
+        var pointA = new SimpleGeometry.Point3d(0.1, 0.1, 0.1);
+        var pointB = new SimpleGeometry.Point3d(0.1, 0.8, 0.8);
+        this.plane = new IsometricPlane(this.context2d, this.space, pointA, pointB);
+        this.plane.setStyles("#CCCCAA", 1, "FF0000", 1, 1);
+        //this.plane.render();
+
+        pointA = new SimpleGeometry.Point3d(0.5, 0.1, 0.1);
+        pointB = new SimpleGeometry.Point3d(0.9, 0.9, 0.1);
+        var pointC = new SimpleGeometry.Point3d(0.9, 0.1, 0.9);
+
+        this.square = new IsometricSquare(this.context2d, this.space, pointA, pointB, pointC);
+        this.square.setStyles("#AACCCC", 1, "0000FF", 1, 1);
+        this.square.render();
+
+        this.space.renderWireframe(this.context2d);
+    };
+
+    IsometryDemo.prototype.animationUpdate = function(){
+        this.clear();
+        this.blockSetAnimator.render(this.context2d);
+    };
+
+    IsometryDemo.prototype.customTearDown = function(){
+        delete this.blockSetAnimator;
+    };
+
+    window.IsometryDemo = IsometryDemo;
 	
 }(window));
