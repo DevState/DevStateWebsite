@@ -257,6 +257,13 @@ header{
 	font-size:35px;
 }
 
+.demoTitleThin{
+    font-family:'sf_collegiate_solidregular', Arial, Helvetica, sans-serif;
+    font-size:35px;
+    text-align:center;
+    width:100%;
+}
+
 .lightboxControls{
 	font-family:'sf_collegiate_solidregular', Arial, Helvetica, sans-serif;
 	font-size:24px;
@@ -297,7 +304,7 @@ header{
     color:#000000;
 }
 
-/* ----------------------- DEMO LIGHBOX CONTENT START ------------------------- */
+/* ----------------------- DEMO LIGHBOX CONTENT END ------------------------- */
 
 .bottomDivider{
 	width: 100%;
@@ -375,11 +382,11 @@ footer{
 }
 
 @media only screen and (max-width: 720px) {
-	
+
 	/*#top{
 		height:140px;
 	}*/
-	
+
 	#logo{
 		width:60px;
 		display:block;
@@ -416,13 +423,7 @@ footer{
 	
 	#demos{
 		width:460px;	
-}
-
-	.item{
-		width:160px;
-		height:160px;
-		margin:10px;
-	}
+    }
 	
 	.topDivider{
 		width: 100%;
@@ -435,10 +436,39 @@ footer{
 		width:300px;	
 	}
 
-	.item{
-		width:140px;
-		height:140px;
-		margin:7px;
-	}
+}
+
+@media only screen and (max-width: 400px) {
+
+    /* ----------------------- DEMO LIGHBOX CONTENT START ------------------------- */
+
+    .demoTitle{
+        font-size:32px;
+    }
+
+    .demoTitleThin{
+        font-size:32px;
+    }
+
+    .lightboxControls{
+        font-family:'sf_collegiate_solidregular', Arial, Helvetica, sans-serif;
+        font-size:22px;
+        padding-top:20px;
+        text-align:center;
+        position:absolute;
+        bottom:10px;
+        width:100%;
+    }
+
+    .lightboxSubMenu{
+        font-family:'sf_collegiate_solidregular', Arial, Helvetica, sans-serif;
+        font-size:22px;
+        padding-top:20px;
+        text-align:center;
+
+        bottom:25px;
+        width:100%;
+    }
+
 
 }

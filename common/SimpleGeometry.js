@@ -293,6 +293,12 @@
         point3d.z = this.z;
     };
 
+    SimpleGeometry.Point3d.prototype.updateValues = function(x,y,z){
+        this.x = x;
+        this.y = y;
+        this.z = z;
+    };
+
     SimpleGeometry.Point3d.prototype.equals = function(point){
         return this.x==point.x && this.y==point.y && this.z==point.z;
     };

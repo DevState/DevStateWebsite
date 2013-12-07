@@ -6,7 +6,7 @@
 
     //=========================::ABSTRACT ISOMETRIC SPACE::============================
 
-    AbstractIsometricSpace = function(stageWidth, stageHeight, width, height, depth) {
+    var AbstractIsometricSpace = function(stageWidth, stageHeight, width, height, depth) {
         //console.log("AbstractIsometricSpace.constructor()",stageWidth, stageHeight, width, height, depth);
         this.frontLeftTop = new SimpleGeometry.Point();
         this.frontLeftBottom = new SimpleGeometry.Point();
@@ -111,7 +111,7 @@
 
     //=========================::ISOMETRIC SPACE LEFT::============================
 
-    IsometricSpaceLeft = function (stageWidth, stageHeight, width, height, depth) {
+    var IsometricSpaceLeft = function (stageWidth, stageHeight, width, height, depth) {
         AbstractIsometricSpace.call(this, stageWidth, stageHeight, width, height, depth); //call super constructor.
         //console.log("IsometricSpaceLeft constructor", stageWidth, stageHeight, width, height, depth);
     };
@@ -151,7 +151,7 @@
 
     //=========================::ISOMETRIC PLANE::============================
 
-    IsometricPlane = function(context, space, pointA, pointB) {
+    var IsometricPlane = function(context, space, pointA, pointB, pointC, pointD) {
         if (typeof pointA === "undefined") { pointA = null; }
         if (typeof pointB === "undefined") { pointB = null; }
         this.lineWeight = 1;
@@ -160,29 +160,13 @@
         this.fillAlpha = 1;
         this.context = context;
         this.space = space;
-        this.pointA = new SimpleGeometry.Point3d();
-        this.pointB = new SimpleGeometry.Point3d();
-        this.pointC = new SimpleGeometry.Point3d();
-        this.pointD = new SimpleGeometry.Point3d();
-        updatePoints(pointA ? pointA : new SimpleGeometry.Point3D() , pointB ? pointB : new SimpleGeometry.Point3D();
+        this.pointA = pointA ? pointA : new SimpleGeometry.Point3d();
+        this.pointB = pointB ? pointB : new SimpleGeometry.Point3d();
+        this.pointC = pointC ? pointC : new SimpleGeometry.Point3d();
+        this.pointD = pointD ? pointD : new SimpleGeometry.Point3d();
+        this.points = [this.pointA, this.pointB, this.pointC, this.pointD];
     };
 
-    IsometricPlane.prototype.updatePoints = function(pointA, pointB){
-        pointA.copyValuesTo(this.pointA);
-        pointB.copyValuesTo(this.pointB);
-
-        pointC.x = Math.min(this.PointA.x, this.PointB.x);
-        pointC.y = Math.min(this.PointA.y, this.PointB.y);
-        pointC.z = Math.min(this.PointA.z, this.PointB.z);
-
-        pointD.x = Math.max(this.PointA.x, this.PointB.x);
-        pointD.y = Math.max(this.PointA.y, this.PointB.y);
-        pointD.z = Math.max(this.PointA.z, this.PointB.z);
-    }
-
-
-    IsometricPlane.renderPoint = new SimpleGeometry.Point();
-    IsometricPlane.renderPoint3D = new SimpleGeometry.Point3d();
 
     IsometricPlane.prototype.setStyles = function (fillColor, fillAlpha, lineColor, lineWeight, lineAlpha) {
         if (typeof fillAlpha === "undefined") { fillAlpha = 1; }
@@ -196,80 +180,24 @@
         this.lineAlpha = lineAlpha;
     };
 
+    IsometricPlane.renderPoint = new SimpleGeometry.Point();//only used inside render(), optimization rather than creating a local variable everytime
+
     IsometricPlane.prototype.render = function () {
-        this.context.beginPath();
-        console.log("IsometricPlane.render() pointA : " + this.pointA + " , pointB : " + this.pointB);
         this.prepareRender();
 
-        this.pointA.copyValuesTo(IsometricPlane.renderPoint3D);
-        this.space.project(IsometricPlane.renderPoint3D, IsometricPlane.renderPoint);
-        console.log("\tIsometricPlane.renderPoint : " + IsometricPlane.renderPoint);
-        this.context.moveTo(IsometricPlane.renderPoint.x, IsometricPlane.renderPoint.y);
-
-        IsometricPlane.renderPoint3D.x = this.pointB.x;
-        IsometricPlane.renderPoint3D.z = this.pointB.z;
-        this.space.project(IsometricPlane.renderPoint3D, IsometricPlane.renderPoint);
-        console.log("\tIsometricPlane.renderPoint : " + IsometricPlane.renderPoint);
-        this.context.lineTo(IsometricPlane.renderPoint.x, IsometricPlane.renderPoint.y);
-
-
-        this.pointB.copyValuesTo(IsometricPlane.renderPoint3D);
-        this.space.project(IsometricPlane.renderPoint3D, IsometricPlane.renderPoint);
-        console.log("\tIsometricPlane.renderPoint : " + IsometricPlane.renderPoint);
-        this.context.lineTo(IsometricPlane.renderPoint.x, IsometricPlane.renderPoint.y);
-
-        IsometricPlane.renderPoint3D.x = this.pointA.x;
-        IsometricPlane.renderPoint3D.z = this.pointA.z;
-        this.space.project(IsometricPlane.renderPoint3D, IsometricPlane.renderPoint);
-        console.log("\tIsometricPlane.renderPoint : " + IsometricPlane.renderPoint);
-        this.context.lineTo(IsometricPlane.renderPoint.x, IsometricPlane.renderPoint.y);
-
-        this.pointA.copyValuesTo(IsometricPlane.renderPoint3D);
-        this.space.project(IsometricPlane.renderPoint3D, IsometricPlane.renderPoint);
-        console.log("\tIsometricPlane.renderPoint : " + IsometricPlane.renderPoint);
-        this.context.lineTo(IsometricPlane.renderPoint.x, IsometricPlane.renderPoint.y);
-
-        this.context.fill();
-        this.context.stroke();
-        this.context.closePath();
-    };
-
-    IsometricPlane.prototype.renderHorizontal = function () {
         this.context.beginPath();
-        console.log("IsometricPlane.render() pointA : " + this.pointA + " , pointB : " + this.pointB);
-        this.prepareRender();
-
-        this.pointA.copyValuesTo(IsometricPlane.renderPoint3D);
-        this.space.project(IsometricPlane.renderPoint3D, IsometricPlane.renderPoint);
-        console.log("\tIsometricPlane.renderPoint : " + IsometricPlane.renderPoint);
-        this.context.moveTo(IsometricPlane.renderPoint.x, IsometricPlane.renderPoint.y);
-
-        IsometricPlane.renderPoint3D.x = this.pointB.x;
-        IsometricPlane.renderPoint3D.y = this.pointB.y;
-        this.space.project(IsometricPlane.renderPoint3D, IsometricPlane.renderPoint);
-        console.log("\tIsometricPlane.renderPoint : " + IsometricPlane.renderPoint);
-        this.context.lineTo(IsometricPlane.renderPoint.x, IsometricPlane.renderPoint.y);
-
-
-        this.pointB.copyValuesTo(IsometricPlane.renderPoint3D);
-        this.space.project(IsometricPlane.renderPoint3D, IsometricPlane.renderPoint);
-        console.log("\tIsometricPlane.renderPoint : " + IsometricPlane.renderPoint);
-        this.context.lineTo(IsometricPlane.renderPoint.x, IsometricPlane.renderPoint.y);
-
-        IsometricPlane.renderPoint3D.x = this.pointA.x;
-        IsometricPlane.renderPoint3D.y = this.pointA.y;
-        this.space.project(IsometricPlane.renderPoint3D, IsometricPlane.renderPoint);
-        console.log("\tIsometricPlane.renderPoint : " + IsometricPlane.renderPoint);
-        this.context.lineTo(IsometricPlane.renderPoint.x, IsometricPlane.renderPoint.y);
-
-        this.pointA.copyValuesTo(IsometricPlane.renderPoint3D);
-        this.space.project(IsometricPlane.renderPoint3D, IsometricPlane.renderPoint);
-        console.log("\tIsometricPlane.renderPoint : " + IsometricPlane.renderPoint);
-        this.context.lineTo(IsometricPlane.renderPoint.x, IsometricPlane.renderPoint.y);
-
+        for(var i=0;i<4;i++){
+            this.space.project(this.points[i], IsometricPlane.renderPoint);
+            //console.log("\tIsometricPlane.renderPoint : " + IsometricPlane.renderPoint);
+            if(i==0){
+                this.context.moveTo(IsometricPlane.renderPoint.x, IsometricPlane.renderPoint.y);
+            }else{
+                this.context.lineTo(IsometricPlane.renderPoint.x, IsometricPlane.renderPoint.y);
+            }
+        }
+        this.context.closePath();
         this.context.fill();
         this.context.stroke();
-        this.context.closePath();
     };
 
     IsometricPlane.prototype.prepareRender = function () {
@@ -287,27 +215,58 @@
 
     //=========================::ISOMETRIC SQUARE::============================
 
-    IsometricSquare = function(context, space, pointA, pointB, pointC){
+    var IsometricSquare = function(context, space, x, y, z, width, height, depth){
         this.context = context;
         this.space = space;
-        this.pointA = pointA ? pointA : new SimpleGeometry.Point3D();
-        this.pointB = pointB ? pointB : new SimpleGeometry.Point3D();
-        this.pointC = pointC ? pointC : new SimpleGeometry.Point3D();
-        this.planeLeft = new IsometricPlane(context,space,this.pointA.clone(), this.pointB.clone());
-        this.planeRight = new IsometricPlane(context,space,this.pointB.clone(), this.pointC.clone());
-        this.planeTop = new IsometricPlane(context,space,this.pointA.clone(), this.pointC.clone());
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.width = width;
+        this.height = height;
+        this.depth = depth;
+        this.planeLeft = new IsometricPlane(context, space);
+        this.planeRight = new IsometricPlane(context, space);
+        this.planeTop = new IsometricPlane(context, space);
+        this.updatePlanes();
     };
 
-    IsometricSquare.prototype.setStyles = function (fillColor, fillAlpha, lineColor, lineWeight, lineAlpha) {
+    IsometricSquare.prototype.updatePlanes = function(){
+        this.planeLeft.pointA.updateValues(this.x, this.y, this.z);
+        this.planeLeft.pointB.updateValues(this.x+this.width, this.y, this.z);
+        this.planeLeft.pointC.updateValues(this.x+this.width, this.y+this.height, this.z);
+        this.planeLeft.pointD.updateValues(this.x, this.y+this.height, this.z);
+
+        this.planeRight.pointA.updateValues(this.x+this.width, this.y, this.z);
+        this.planeRight.pointB.updateValues(this.x+this.width, this.y, this.z+this.depth);
+        this.planeRight.pointC.updateValues(this.x+this.width, this.y+this.height, this.z+this.depth);
+        this.planeRight.pointD.updateValues(this.x+this.width, this.y+this.height, this.z);
+
+        this.planeTop.pointA.updateValues(this.x, this.y+this.height, this.z);
+        this.planeTop.pointB.updateValues(this.x, this.y+this.height, this.z+this.depth);
+        this.planeTop.pointC.updateValues(this.x+this.width, this.y+this.height, this.z+this.depth);
+        this.planeTop.pointD.updateValues(this.x+this.width, this.y+this.height, this.z);
+
+    }
+
+    IsometricSquare.prototype.setLeftPlaneStyle = function (fillColor, fillAlpha, lineColor, lineWeight, lineAlpha) {
         this.planeLeft.setStyles(fillColor, fillAlpha, lineColor, lineWeight, lineAlpha);
+    };
+    IsometricSquare.prototype.setRightPlaneStyle = function (fillColor, fillAlpha, lineColor, lineWeight, lineAlpha) {
         this.planeRight.setStyles(fillColor, fillAlpha, lineColor, lineWeight, lineAlpha);
+    };
+    IsometricSquare.prototype.setTopPlaneStyle = function (fillColor, fillAlpha, lineColor, lineWeight, lineAlpha) {
         this.planeTop.setStyles(fillColor, fillAlpha, lineColor, lineWeight, lineAlpha);
     };
+
+    IsometricSquare.prototype.setHeight = function(value){
+        this.height = value;
+        this.updatePlanes();
+    }
 
     IsometricSquare.prototype.render = function(){
         this.planeLeft.render();
         this.planeRight.render();
-        this.planeTop.renderHorizontal();
+        this.planeTop.render();
     };
 
     window.IsometricSquare = IsometricSquare;

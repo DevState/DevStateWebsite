@@ -69,10 +69,14 @@ function lightBoxSubMenuClickHandler(demoName){
     setUpDemo(demoName);
 }
 
-var lightBoxWidth = 700;
-var lightBoxHeight = 400;
+//TODO : these should be renamed to lighbox proportions or so (lightBoxLongSide, lightBoxShortSide)
+var lightBoxLongSide = 700;
+var lightBoxShortSide = 400;
 var lightBoxVerticalLayoutHeight = 600;
-var demoSize = 400;
+
+//TODO: this is a temporary solution to support devices.  Some hardcoded features (text sizes etc.) need to be made dynamic for the lightbox size to be dynamic
+var smallDemoSize = 300;
+var largeDemoSize = 400;
 
 var classManager;
 var currentDemo;
@@ -85,26 +89,36 @@ function showDemo(demoName){
     //console.log("showDemo()", demoName);
 	var size = viewportSize();
 	contentRect = new SimpleGeometry.Rectangle();
-	demoRect = new SimpleGeometry.Rectangle(0,0,demoSize,demoSize);
-	if(size.width < lightBoxWidth && size.height < lightBoxWidth){
-		//TODO : find a slightly better solution for this, maybe use
-		alert("Sorry, your screen is too small to show this demo :(");
-		return;
-	}
-	
+    if(size.width>largeDemoSize && size.height>largeDemoSize){
+        demoRect = new SimpleGeometry.Rectangle(0,0,largeDemoSize,largeDemoSize);
+    }else{
+        demoRect = new SimpleGeometry.Rectangle(0,0,smallDemoSize,smallDemoSize);
+    }
+
+    var lightBoxScale = demoRect.width/lightBoxShortSide;
 	if(isHorizontalLayout()){
 		//horizontal layout
-		contentRect.x = size.width/2 - lightBoxWidth/2;
-		contentRect.y = size.height/2 - lightBoxHeight/2;
-		contentRect.width = lightBoxWidth;
-		contentRect.height = lightBoxHeight;
+        contentRect.width = lightBoxLongSide*lightBoxScale;
+        contentRect.height = lightBoxShortSide*lightBoxScale;
 	}else{
 		//vertical layout
-		contentRect.x = size.width/2 - lightBoxHeight/2;
-		contentRect.y = size.height/2 - lightBoxWidth/2;
-		contentRect.width = lightBoxHeight;
-		contentRect.height = lightBoxVerticalLayoutHeight;
+        contentRect.width = lightBoxShortSide*lightBoxScale;
+        contentRect.height = lightBoxVerticalLayoutHeight*lightBoxScale;
 	}
+
+    contentRect.x = size.width/2 - contentRect.width/2;
+    contentRect.y = size.height/2 - contentRect.height/2;
+    /*
+    console.log("showDemo()", demoName);
+    console.log("size : ", size.width, size.height);
+    console.log(contentRect.toString());*/
+
+    if(size.width < contentRect.width || size.height < contentRect.height){
+        //TODO : find a slightly better solution for this, maybe use
+        alert("Sorry, your screen is too small to show this demo :(");
+        return;
+    }
+
 	lightBox.open(contentRect);
 }
 
@@ -113,6 +127,25 @@ function showDemo(demoName){
 function setUpDemo(demoName){
     currentDemoClass = this[(demoName+"Demo")];
     classManager.loadDemo(demoName, demoJSLoadHandler, demoJSLoadErrorHandler);
+}
+
+function getDemoToolTip(demo){
+    //return contentRect.width < largeDemoSize ? demo.toolTipShort : demo.toolTip;
+    return contentRect.width < largeDemoSize ? "" : demo.toolTip;
+}
+
+function getResetString(){
+    //return contentRect.width < largeDemoSize ? demo.toolTipShort : demo.toolTip;
+    return contentRect.height < largeDemoSize ? "F5" : "Reset";
+}
+
+function getLightBoxDemoTitle(demo){
+    return (demoRect.width<largeDemoSize && demo.shortDemoName!="") ? demo.shortDemoName : classManager.currentDemoName ;
+}
+
+//TODO : merge with getLightBoxDemoTitle
+function getDemoBoxTitleStyle(demo){
+    return isHorizontalLayout() ? "demoTitle" : "demoTitleThin";
 }
 
 function demoJSLoadHandler(){
@@ -133,7 +166,7 @@ function demoJSLoadHandler(){
         detailsDiv.style.height = (contentRect.height-demoRect.height-padding*2) + "px";
     }
     detailsDiv.style.fontFamily = "Sans-serif";
-    var detailsHtml = "<h2 class='demoTitle' >"+classManager.currentDemoName+"</h2><p style='padding-top:20px'>"+currentDemo.toolTip+"</p>";
+    var detailsHtml = "<h2 class='"+getDemoBoxTitleStyle()+"' >"+getLightBoxDemoTitle(currentDemo)+"</h2><p style='padding-top:20px'>"+getDemoToolTip(currentDemo)+"</p>";
     var subMenu = classManager.getSubmenuForDemoName(classManager.currentDemoName);
     if(subMenu.length > 0){
         detailsHtml +="<p class='lightboxSubMenu' >";
@@ -143,12 +176,12 @@ function demoJSLoadHandler(){
         detailsHtml +="</p>";
     }
     detailsHtml +="<p class='lightboxControls' ><a href = 'javascript:void(0)' onclick = 'lightBoxPreviousDemoClickHandler(event)'>Previous</a>";
-    detailsHtml +="<a href = 'javascript:void(0)' onclick = 'lightBoxResetDemoClickHandler()' style='padding-left:20px'>Reset</a>";
+    detailsHtml +="<a href = 'javascript:void(0)' onclick = 'lightBoxResetDemoClickHandler()' style='padding-left:20px'>"+getResetString()+"</a>";
     detailsHtml +="<a href = 'javascript:void(0)' onclick = 'lightBoxNextDemoClickHandler()' style='padding-left:20px'>Next</a></p>";
     detailsDiv.innerHTML = detailsHtml;
     lightBox.setContent(detailsDiv);
     if(location.hostname && location.hostname.toLowerCase().indexOf("devstate")>-1){
-        ga("send", "event", "DemoView", demoName);
+        ga("send", "event", "DemoView", classManager.currentDemoName);
     }
 }
 

@@ -10,6 +10,8 @@
 		this.captureFrameRate = 300; //frames for generated gifs are captured at this rate
 		this.gifPlaybackFrameRate = 100;//generated gifs play at this speed
 		this.toolTip = "";
+		this.toolTipShort = "";
+        this.shortDemoName = "";
 		this.setUpDemo();
 	};
 	
@@ -148,6 +150,7 @@
 	PieChartDemo = function(x, y, width, height, demoContainer){
 		AbstractDemo.call(this, x, y, width, height, demoContainer); //call super constructor.
 		this.toolTip = "Standard pie chart with a reflection. Click the pie chart to open and close. Press reset for new data.";
+		this.toolTipShort = "Click the pie chart to open and close. Press reset for new data.";
 		this.gifPlaybackFrameRate = 200;
 	};
 	
@@ -216,6 +219,8 @@
 	DonutChartDemo = function(x, y, width, height, demoContainer){
 		PieChartDemo.call(this, x, y, width, height, demoContainer); //call super constructor.
 		this.toolTip = "Click the donut chart to run open and close animations. Press reset for new data.";
+        this.toolTipShort = "Click donut to open/close, press reset for new data.";
+        this.shortDemoName = "Donut";
 	};
 	
 	//subclass extends superclass
@@ -320,6 +325,7 @@
 	BarChartDemo = function(x, y, width, height, demoContainer){
 		AbstractDemo.call(this, x, y, width, height, demoContainer); //call super constructor.
 		this.toolTip = "Bar chart with fake 3d. Click the bar chart to run open and close animations. Press reset for new data.";
+        this.toolTipShort = "Click the bar chart to open/close, press reset for new data.";
 		this.gifPlaybackFrameRate = 200;
 	};
 	
@@ -401,6 +407,7 @@
 		AbstractDemo.call(this, x, y, width, height, demoContainer); //call super constructor.
 		this.toolTip = "Click the left or right arrows to slide to next or previous image.";
 		this.customCaptureControls = true;
+        this.shortDemoName = "SlideShow";
 	};
 	
 	//subclass extends superclass
@@ -464,6 +471,7 @@
         AbstractDemo.call(this, x, y, width, height, demoContainer); //call super constructor.
         this.toolTip = "Click an image to see a fade effect from one random image to another.";
         this.customCaptureControls = true;
+        this.shortDemoName = "Fader";
     };
     //subclass extends superclass
     ImageFaderDemo.prototype = Object.create(AbstractDemo.prototype);
@@ -512,6 +520,7 @@
 		AbstractDemo.call(this, x, y, width, height, demoContainer); //call super constructor.
 		this.toolTip = "Click the arrows to rotate the carousel.";
 		this.customCaptureControls = true;
+        this.shortDemoName = "Carousel";
 	};
 	
 	//subclass extends superclass
@@ -587,7 +596,9 @@
 	SimpleCoverFlowDemo = function(x, y, width, height, demoContainer){
 		AbstractDemo.call(this, x, y, width, height, demoContainer); //call super constructor.
 		this.toolTip = "Click the arrows to slide the cover flow.  Unfortunately this demo renders poorly on some devices.";
+        this.toolTipShort = "Click arrows to slide (renders poorly on some devices).";
 		this.customCaptureControls = true;
+        this.shortDemoName = "Coverflow";
 	};
 	
 	//subclass extends superclass
@@ -766,6 +777,7 @@
 	BlockSetAnimatorDemo = function(x, y, width, height, demoContainer){
 		AbstractDemo.call(this, x, y, width, height, demoContainer); //call super constructor.
 		this.toolTip = "Click the images or reset for a new random animation.";
+        this.shortDemoName = "Blocks";
 	};
 	
 	//subclass extends superclass
@@ -924,9 +936,9 @@
 
     //================::ISOMETRY::===================
 
-    IsometryDemo = function(x, y, width, height, demoContainer){
+    var IsometryDemo = function(x, y, width, height, demoContainer){
         AbstractDemo.call(this, x, y, width, height, demoContainer); //call super constructor.
-        this.toolTip = "Click the text or reset for a new random animation.";
+        this.toolTip = "Isometric projection of the Devstate logo in a gentle breeze.";
         this.gifPlaybackFrameRate = 100;
         this.captureFrameRate = 400;
     };
@@ -936,30 +948,67 @@
     IsometryDemo.prototype.constructor = AbstractDemo;
 
     IsometryDemo.prototype.run = function(){
+        this.loadImagesWithImageStore(["assets/tinyLogo.png"]);
+    };
 
-        var _this = this;
+    IsometryDemo.prototype.useLoadedImageStoreImages = function(){
+
+        var image = this.imageStore.images[0];
+
+        var canvas = document.createElement('canvas');
+        var context = canvas.getContext('2d');
+        context.drawImage(image, 0, 0 );
+        var imagePixels = context.getImageData(0, 0, image.width, image.height);
 
         this.space = new IsometricSpaceLeft(this.width, this.height, 200, 140, 200);
-        var pointA = new SimpleGeometry.Point3d(0.1, 0.1, 0.1);
-        var pointB = new SimpleGeometry.Point3d(0.1, 0.8, 0.8);
-        this.plane = new IsometricPlane(this.context2d, this.space, pointA, pointB);
-        this.plane.setStyles("#CCCCAA", 1, "FF0000", 1, 1);
-        //this.plane.render();
 
-        pointA = new SimpleGeometry.Point3d(0.5, 0.1, 0.1);
-        pointB = new SimpleGeometry.Point3d(0.9, 0.9, 0.1);
-        var pointC = new SimpleGeometry.Point3d(0.9, 0.1, 0.9);
+        this.squares = [];
+        var square, n;
+        for(var i=0;i<10;i++){
+            for(var j=0;j<10;j++){
+                square = new IsometricSquare(this.context2d, this.space, i *.1, 0,.9-j *.1, .1, Math.random(), .1);
+                n = (i * 4) * imagePixels.width + j * 4;
+                square.setLeftPlaneStyle(DSColors.GREEN, 1, "000000", 1, 1);
+                square.setRightPlaneStyle(DSColors.GREEN, 1, "000000", 1, 1);
+                square.setTopPlaneStyle(imagePixels.data[n] > 0 ? DSColors.LIGHT_GREEN : DSColors.ORANGE, 1, "000000", 1, 1);
+                this.squares.push(square);
+            }
+        }
 
-        this.square = new IsometricSquare(this.context2d, this.space, pointA, pointB, pointC);
-        this.square.setStyles("#AACCCC", 1, "0000FF", 1, 1);
-        this.square.render();
-
-        this.space.renderWireframe(this.context2d);
+        this.animator = new UnitAnimator();
+        this.radian = 0;
+        this.reStartWave();
     };
+
+    IsometryDemo.prototype.animationComplete = function(){
+        if(this.captureCompleteCallBack){
+            this.captureCompleteCallBack();
+        }
+        this.reStartWave();
+    };
+
+    IsometryDemo.prototype.reStartWave = function(){
+        var _this = this;
+        this.animator.reset(1000+Math.random()*1000, 20, function() {_this.animationUpdate()}, function() {_this.animationComplete()});
+        this.animator.start();
+    }
 
     IsometryDemo.prototype.animationUpdate = function(){
         this.clear();
-        this.blockSetAnimator.render(this.context2d);
+        this.radian = SimpleGeometry.PI2 * this.animator.getAnimationPercent();
+        var step = SimpleGeometry.PI2/10;
+        var cos, sin;
+        for(var i=0;i<10;i++){
+            for(var j=0;j<10;j++){
+               square = this.squares[i*10+j];
+               //square.setHeight((1+Math.cos(this.radian+i*step))/2);
+               cos = .25+(1+Math.cos(this.radian+i*step))/6 ;
+               sin = .25+(1+Math.sin(this.radian+j*step))/6 ;
+               square.setHeight((cos+sin)/2);
+               square.render();
+            }
+        }
+
     };
 
     IsometryDemo.prototype.customTearDown = function(){
