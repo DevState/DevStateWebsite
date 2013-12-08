@@ -428,6 +428,10 @@ footer{
 	.topDivider{
 		width: 100%;
 	}
+
+    footer{
+        height:400px;
+    }
 }
 
 @media only screen and (max-width: 510px) {

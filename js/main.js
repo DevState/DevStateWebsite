@@ -3,6 +3,7 @@
 
 function resizeHandler(){
 	forceHideDemo();
+    lightBox.isMobile = isMobile();
 }
 
 function viewportSize() {
@@ -24,10 +25,18 @@ function isHorizontalLayout(){
 }
 
 
+//http://stackoverflow.com/questions/1005153/auto-detect-mobile-browser-via-user-agent
+//not 100% sure this will work...
+function isMobile() {
+    //console.log("BCHWMemoryGame.isMobile()", navigator.appVersion );
+    var size = viewportSize();
+    return navigator.appVersion.toLowerCase().indexOf("mobile") > -1 || Math.min(size.width, size.height)<400;//TODO: 400 is arbitrary number...
+}
+
 //===============================::DEMOS / LIGHTBOX::===========================
 
 function forceHideDemo(){
-	if(lightBox.isOpen()){
+	if(lightBox && lightBox.isOpen()){
 		hideDemo(true);
 	}
 }
@@ -100,10 +109,18 @@ function showDemo(demoName){
 		//horizontal layout
         contentRect.width = lightBoxLongSide*lightBoxScale;
         contentRect.height = lightBoxShortSide*lightBoxScale;
+        //show only demo on smaller screens
+        if(size.width<contentRect.width){
+            contentRect.width = smallDemoSize;
+        }
 	}else{
 		//vertical layout
         contentRect.width = lightBoxShortSide*lightBoxScale;
         contentRect.height = lightBoxVerticalLayoutHeight*lightBoxScale;
+        //show only demo on smaller screens
+        if(size.height<contentRect.height){
+            contentRect.height = smallDemoSize;
+        }
 	}
 
     contentRect.x = size.width/2 - contentRect.width/2;
@@ -115,7 +132,10 @@ function showDemo(demoName){
 
     if(size.width < contentRect.width || size.height < contentRect.height){
         //TODO : find a slightly better solution for this, maybe use
-        alert("Sorry, your screen is too small to show this demo :(");
+        alert("Sorry, your screen or resolution is too small("+size.width+"x"+size.height+") to show this demo");
+        if(location.hostname && location.hostname.toLowerCase().indexOf("devstate")>-1){
+            ga("send", "event", "screenTooSmall", size.width+"x"+size.height);
+        }
         return;
     }
 
@@ -146,6 +166,10 @@ function getLightBoxDemoTitle(demo){
 //TODO : merge with getLightBoxDemoTitle
 function getDemoBoxTitleStyle(demo){
     return isHorizontalLayout() ? "demoTitle" : "demoTitleThin";
+}
+
+function smallSize(){
+    return contentRect.width==smallDemoSize && contentRect.height==smallDemoSize;
 }
 
 function demoJSLoadHandler(){
@@ -179,7 +203,7 @@ function demoJSLoadHandler(){
     detailsHtml +="<a href = 'javascript:void(0)' onclick = 'lightBoxResetDemoClickHandler()' style='padding-left:20px'>"+getResetString()+"</a>";
     detailsHtml +="<a href = 'javascript:void(0)' onclick = 'lightBoxNextDemoClickHandler()' style='padding-left:20px'>Next</a></p>";
     detailsDiv.innerHTML = detailsHtml;
-    lightBox.setContent(detailsDiv);
+    lightBox.setContent(smallSize() ? undefined : detailsDiv);
     if(location.hostname && location.hostname.toLowerCase().indexOf("devstate")>-1){
         ga("send", "event", "DemoView", classManager.currentDemoName);
     }
@@ -260,7 +284,7 @@ function init(){
 	//console.log("init()");
     classManager = new DSClassManager();
 	setUpDemosMenu();
-	lightBox = new DSLightBox(undefined, lightBoxOpenComplete, lightBoxBeginClose);
+	lightBox = new DSLightBox(undefined, lightBoxOpenComplete, lightBoxBeginClose, undefined, isMobile());
 	if(!window.location.hash) {
 		return;
 	}

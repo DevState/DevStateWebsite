@@ -1,11 +1,13 @@
 (function (window){
 
 
-	DSLightBox = function(beginOpenCallback, openCompleteCallback, beginCloseCallback, closeCompleteCallback){
+	DSLightBox = function(beginOpenCallback, openCompleteCallback, beginCloseCallback, closeCompleteCallback, isMobile){
 		this.beginOpenCallback = beginOpenCallback;
 		this.openCompleteCallback = openCompleteCallback;
 		this.beginCloseCallback = beginCloseCallback;
 		this.closeCompleteCallback = closeCompleteCallback;
+        this.isMobile = isMobile;
+        console.log("DSLightBoxConstructor : ",this.isMobile);
 		
 		this.contentDiv = document.createElement("div");
 		this.overlayDiv = document.createElement("div");
@@ -58,10 +60,19 @@
 	};
 	
 	DSLightBox.prototype.setContent = function(content){
-		this.contentDiv.appendChild(content);
+        if(content){
+            this.contentDiv.appendChild(content);
+        }
 	};
+
+    //TODO: this is a temporary hack to support small screen sizes, in which case content is not added using setContent
 	DSLightBox.prototype.removeContent = function(content){
-		this.contentDiv.removeChild(content);
+        try{
+            this.contentDiv.removeChild(content);
+        }catch(error){
+            //nope
+        }
+
 	};
 	
 	DSLightBox.prototype.isOpen = function(){
@@ -94,13 +105,17 @@
 		
 		this.closeButton.style.left = (this.contentRect.getRight() - this.closeButton.width/2) + "px";
 		this.closeButton.style.top = (top + this.contentRect.getBottom() - this.closeButton.height/2) + "px";
-		
-		var _this = this;
-		this.animator.reset(1000,20,function(){_this.fadeIn()} , function(){_this.openComplete()});
+
+        var _this = this;
+        if(this.isMobile){
+            this.animator.reset(100,25,function(){_this.fadeIn()} , function(){_this.openComplete()});
+        }else{
+            this.animator.reset(800,20,function(){_this.fadeIn()} , function(){_this.openComplete()});
+        }
 		this.animator.start();
-		if(this.beginOpenCallback != undefined){
-			this.beginOpenCallback();
-		}
+        if(this.beginOpenCallback != undefined){
+            this.beginOpenCallback();
+        }
 	};
 	
 	DSLightBox.prototype.fadeIn = function(){
@@ -108,25 +123,30 @@
 		this.contentDiv.style.opacity = this.animator.getAnimationPercent();
 		this.borderDiv.style.opacity = this.animator.getAnimationPercent();
 	};
-	
-	DSLightBox.prototype.fadeOut = function(){
-		this.overlayDiv.style.opacity = (1-this.animator.getAnimationPercent())*this.backgroundOpacity;
-		this.contentDiv.style.opacity = 1-this.animator.getAnimationPercent();
 
-        this.contentRect.width = SimpleGeometry.interpolate(this.animator.getAnimationPercent(), this.fadeOutBeginRect.width, this.fadeOutTargetRect.width );
-        this.contentRect.height = SimpleGeometry.interpolate(this.animator.getAnimationPercent(), this.fadeOutBeginRect.height, this.fadeOutTargetRect.height );
-        this.contentRect.x = SimpleGeometry.interpolate(this.animator.getAnimationPercent(), this.fadeOutBeginRect.x, this.fadeOutTargetRect.x );
-        this.contentRect.y = SimpleGeometry.interpolate(this.animator.getAnimationPercent(), this.fadeOutBeginRect.y, this.fadeOutTargetRect.y );
-        this.contentDiv.style.left = Math.round(this.contentRect.x)+"px";
-		this.contentDiv.style.top = Math.round(this.contentRect.y)+"px";
-		this.contentDiv.style.width = Math.round(this.contentRect.width)+"px";
-		this.contentDiv.style.height = Math.round(this.contentRect.height)+"px";
-	};
+    DSLightBox.prototype.openComplete = function(){
+        //console.log("DSLightBox.openComplete()");
+        if(this.animator && this.animator.isAnimating()){
+            this.animator.pause();
+        }
+        this.overlayDiv.style.opacity = this.backgroundOpacity;
+        if(this.openCompleteCallback != undefined){
+            this.openCompleteCallback();
+        }
+        this.closeButton.style.display = "block";
+    };
+
+
+
 	
 	DSLightBox.prototype.close = function(event){
         this.fadeOutBeginRect = this.contentRect.clone();
         this.fadeOutTargetRect = new SimpleGeometry.Rectangle(event.pageX-25, event.pageY-25, 50, 50);
 		this.closeButton.style.display = this.borderDiv.style.display = "none";
+        if(this.isMobile){
+            this.forceClose();
+            return;
+        }
 		var _this = this;
 		this.animator.reset(1000,20,function(){_this.fadeOut()} , function(){_this.closeComplete()});
 		this.animator.start();
@@ -134,18 +154,22 @@
 			this.beginCloseCallback();
 		}
 	};
+
+    DSLightBox.prototype.fadeOut = function(){
+        this.overlayDiv.style.opacity = (1-this.animator.getAnimationPercent())*this.backgroundOpacity;
+        this.contentDiv.style.opacity = 1-this.animator.getAnimationPercent();
+
+        this.contentRect.width = SimpleGeometry.interpolate(this.animator.getAnimationPercent(), this.fadeOutBeginRect.width, this.fadeOutTargetRect.width );
+        this.contentRect.height = SimpleGeometry.interpolate(this.animator.getAnimationPercent(), this.fadeOutBeginRect.height, this.fadeOutTargetRect.height );
+        this.contentRect.x = SimpleGeometry.interpolate(this.animator.getAnimationPercent(), this.fadeOutBeginRect.x, this.fadeOutTargetRect.x );
+        this.contentRect.y = SimpleGeometry.interpolate(this.animator.getAnimationPercent(), this.fadeOutBeginRect.y, this.fadeOutTargetRect.y );
+        this.contentDiv.style.left = Math.round(this.contentRect.x)+"px";
+        this.contentDiv.style.top = Math.round(this.contentRect.y)+"px";
+        this.contentDiv.style.width = Math.round(this.contentRect.width)+"px";
+        this.contentDiv.style.height = Math.round(this.contentRect.height)+"px";
+    };
 	
-	DSLightBox.prototype.openComplete = function(){
-		//console.log("DSLightBox.openComplete()");
-        if(this.animator && this.animator.isAnimating()){
-            this.animator.pause();
-        }
-		this.overlayDiv.style.opacity = this.backgroundOpacity;
-		if(this.openCompleteCallback != undefined){
-			this.openCompleteCallback();
-		}
-		this.closeButton.style.display = "block";
-	};
+
 	
 	DSLightBox.prototype.closeComplete = function(){
 		//console.log("DSLightBox.closeComplete()");

@@ -787,11 +787,20 @@
 	BlockSetAnimatorDemo.prototype.run = function(){
 		var _this = this;
 		this.canvas.addEventListener("click", function(event){_this.canvasClickHandler(event)}, false);//"mousedown"
-        var urls = [
-            "assets/demoImageThumbnails/skate3.jpg",
-            "assets/demoImageThumbnails/snowboard3.jpg",
-            "assets/demoImageThumbnails/surf3.jpg",
-            "assets/demoImageThumbnails/surf4.jpg"];
+        //TODO : Find a better solution for this
+        if(this.height<400){
+            var urls = [
+                "assets/demoImageThumbnails/skate3_75x75.jpg",
+                "assets/demoImageThumbnails/snowboard3_75x75.jpg",
+                "assets/demoImageThumbnails/surf3_75x75.jpg",
+                "assets/demoImageThumbnails/surf4_75x75.jpg"];
+        }else{
+            var urls = [
+                "assets/demoImageThumbnails/skate3.jpg",
+                "assets/demoImageThumbnails/snowboard3.jpg",
+                "assets/demoImageThumbnails/surf3.jpg",
+                "assets/demoImageThumbnails/surf4.jpg"];
+        }
 
 		this.loadImagesWithImageStore(urls);
 	};
@@ -898,7 +907,8 @@
 		this.canvas.addEventListener("click", function(event){_this.canvasClickHandler(event)}, false);//"mousedown"
         var chopper = new TextChopper();
 		//var images = chopper.createImagesFromString("DEVSTATE",100, "#77fd6f", "#157b0f");
-		var images = chopper.createImagesFromString("DEVSTATE",100, DSColors.LIGHT_GREEN, DSColors.GREEN);
+        //TODO : hardcoded font size numbers. This needs to be fixed!
+		var images = chopper.createImagesFromString("DEVSTATE",this.height<400 ? 74 : 100, DSColors.LIGHT_GREEN, DSColors.GREEN);
 		this.blockSetAnimator = new BlockSetAnimator( this.x+8 , this.y + this.height/2 - images[0].height/2, this.width, this.height);
 		this.blockSetAnimator.setImages(images);
 		BlockSetAnimatorDemo.runRandomAnimation(this);
