@@ -1,6 +1,8 @@
 
 //===============================::GENERAL METHODS::===========================
 
+//TODO : move to DSUtils.js
+
 function resizeHandler(){
 	forceHideDemo();
     lightBox.isMobile = isMobile();
@@ -9,14 +11,10 @@ function resizeHandler(){
 function viewportSize() {
     var e = window, a = 'inner';
     if ( !( 'innerWidth' in window ) ) {
-
         a = 'client';
         e = document.documentElement || document.body;
-
     }
-
     return { width : e[ a+'Width' ] , height : e[ a+'Height' ] }
-
 }
 
 function isHorizontalLayout(){
@@ -245,22 +243,11 @@ function demoLinkClickHandler(event){
     showDemo(lastClickedDemoName);
 }
 
-function setUpDemosMenu(){
-    var demosHtml = "";
-    var demo;
-	for(var i = 0 ; i < classManager.navigationItems.length; i++){
-        demo = classManager.getDemoResourceForNavigationItem(classManager.navigationItems[i]);
-        demosHtml += '<div class="item">';
-        demosHtml += '<a href="#'+demo.name+'" onclick = "demoLinkClickHandler(event)">';
-        demosHtml += '<img src="'+demo.thumbnail+'" onmouseover="showGif(event)" onmouseout="showPng(event)">';
-        demosHtml += '</a>';
-        demosHtml += '</div>';
-	}
-    demosHtml += '<div class="clearfix"></div>';
-    document.getElementById("demos").innerHTML = demosHtml;
-}
-
+//TODO : these two seem a bit risky...
 function showGif(event){
+    if(!isMobile()){
+        return;
+    }
 	var path = event.target.src.split("/");
 	var file = path[path.length-1].split(".png")[0];
 	path[path.length-1] = file+".gif";
@@ -268,6 +255,9 @@ function showGif(event){
 }
 
 function showPng(event){
+    if(!isMobile()){
+        return;
+    }
 	var path = event.target.src.split("/");
 	var file = path[path.length-1].split(".gif")[0];
 	path[path.length-1] = file+".png";
@@ -278,112 +268,48 @@ function getDemoFromHash(hash){
 	return hash.split("#")[1];
 }
 
-/*
 
- <demosMenu>
+var demosXML;
 
-     <menuItem>
-         <demos>
-             <demo>
-                 <id>PieChart</id>
-                 <name>Pie Chart</name>
-                 <thumb>pieChart</thumb>
-                 <dependencies>
-                     <path><![CDATA[common/ImageEffects]]></path>
-                     <path><![CDATA[charting/PieChart]]></path>
-                 </dependencies>
-             </demo>
-             <demo>
-             <id>DonutChart</id>
-             <name>Donut Chart</name>
-             <thumb>donutChart</thumb>
-             <dependencies>
-                 <path><![CDATA[common/ImageEffects]]></path>
-                 <path><![CDATA[charting/PieChart]]></path>
-             </dependencies>
-             </demo>
-         </demos>
-     </menuItem>
-
- </demosMenu>
-
-*/
-
-function createTagWithValue(name, value, tab){
-    return tab+"<"+name+">"+value+"</"+name+">\n";
+function parseDemosXML(){
+    var demosXMLSource = document.getElementById("demosMenuXML").textContent;
+    var parser = new DOMParser();
+    demosXML = parser.parseFromString(demosXMLSource, "application/xml");
 }
 
-function createTagWithCDATAValue(name, value, tab){
-    return tab+"<"+name+"><![CDATA["+value+"]]></"+name+">\n";
+//TODO : move to DSUtils.js
+function getNodeValue(node, nodeName){
+    return node.getElementsByTagName(nodeName)[0].childNodes[0].nodeValue;
 }
 
-
-function generateDemoXML(demo, tab){
-    /*
-     this.customCaptureControls = false;
-     this.captureFrameRate = 300; //frames for generated gifs are captured at this rate
-     this.gifPlaybackFrameRate = 100;//generated gifs play at this speed
-     this.toolTip = "";
-     this.toolTipShort = "";
-     this.shortDemoName = "";
-     */
-    var demoInstance = new this[demo.name+"Demo"]();
-    var demoXML = tab+"<demo>\n";
-    demoXML+=createTagWithValue("id", demo.name, tab+"\t");
-    demoXML+=createTagWithValue("name", demo.name, tab+"\t");
-    demoXML+=createTagWithValue("thumb",demo.rawThumbnail.split(".png")[0], tab+"\t");
-
-    demoXML+=createTagWithValue("customCaptureControls",demoInstance.customCaptureControls, tab+"\t");
-    demoXML+=createTagWithValue("captureFrameRate",demoInstance.captureFrameRate, tab+"\t");
-    demoXML+=createTagWithValue("gifPlaybackFrameRate",demoInstance.gifPlaybackFrameRate, tab+"\t");
-    demoXML+=createTagWithValue("toolTip",demoInstance.toolTip, tab+"\t");
-    demoXML+=createTagWithValue("toolTipShort",demoInstance.toolTipShort, tab+"\t");
-    demoXML+=createTagWithValue("shortDemoName",demoInstance.shortDemoName, tab+"\t");
-
-    demoXML+=(tab+"\t<dependencies>\n");
-    for(var i=0; i<demo.rawDependencies.length; i++){
-        demoXML+=createTagWithCDATAValue("path",demo.rawDependencies[i],tab+"\t\t");
+function setUpDemosMenuFromXML(){
+    var menuItems = demosXML.getElementsByTagName( "menuItem");
+    var demosHtml = "";
+    var demo;
+    for(var i = 0 ; i < menuItems.length; i++){
+        demo = menuItems[i].getElementsByTagName("demo")[0];
+        demosHtml += '<div class="item">';
+        demosHtml += '<a href="#'+getNodeValue(demo,"id")+'" onclick = "demoLinkClickHandler(event)">';
+        demosHtml += '<img src="assets/demoThumbnails/'+getNodeValue(demo,"thumb")+'.png" onmouseover="showGif(event)" onmouseout="showPng(event)">';
+        demosHtml += '</a>';
+        demosHtml += '</div>';
     }
-    demoXML+=(tab+"\t</dependencies>\n");
-    demoXML += (tab+"</demo>\n");
-    return demoXML;
-}
-
-function generateDemosXML(){
-    console.log("generateDemosXML()");
-    var demosXML = "<demosMenu>\n";
-    var navItem, demo, i, j;
-    for(i = 0 ; i < classManager.navigationItems.length; i++){
-        demosXML+="\t<menuItem>\n";
-        demosXML+="\t\t<demos>\n";
-        navItem = classManager.navigationItems[i];
-        if(navItem.subMenu && navItem.subMenu.length>1){
-            for(j=0; j<navItem.subMenu.length; j++){
-                demo = classManager.getDemoResourceByName(navItem.subMenu[i]);
-                demosXML+=generateDemoXML(demo, "\t\t\t");
-            }
-        }else{
-            demo = classManager.getDemoResourceByName(navItem.demoName);
-            demosXML+=generateDemoXML(demo, "\t\t\t");
-        }
-
-        demosXML+="\t\t</demos>\n";
-        demosXML+="\t</menuItem>\n";
-    }
-    demosXML += "</demosMenu>";
-    console.log(demosXML);
+    demosHtml += '<div class="clearfix"></div>';
+    document.getElementById("demos").innerHTML = demosHtml;
 }
 
 
 function init(){
 	//console.log("init()");
-    classManager = new DSClassManager();
-	setUpDemosMenu();
+    parseDemosXML();
+    classManager = new DSClassManager(demosXML);
+
+	setUpDemosMenuFromXML();
 	lightBox = new DSLightBox(undefined, lightBoxOpenComplete, lightBoxBeginClose, undefined, isMobile());
     window.onscroll = function () {
         forceHideDemo();
     }
-    generateDemosXML();
+
 	if(!window.location.hash) {
 		return;
 	}

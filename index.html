@@ -76,227 +76,170 @@
             - The first demo in a menuItem will be displayed in the home page navigation
       -->
 
-    <script id="purchase-order" type="application/xml">
+    <script id="demosMenuXML" type="application/xml">
 
 <demosMenu>
 	<menuItem>
-		<demos>
-			<demo>
-				<id>PieChart</id>
-				<name>PieChart</name>
-				<thumb>pieChart</thumb>
-				<customCaptureControls>false</customCaptureControls>
-				<captureFrameRate>300</captureFrameRate>
-				<gifPlaybackFrameRate>200</gifPlaybackFrameRate>
-				<toolTip>Standard pie chart with a reflection. Click the pie chart to open and close. Press reset for new data.</toolTip>
-				<toolTipShort>Click the pie chart to open and close. Press reset for new data.</toolTipShort>
-				<shortDemoName></shortDemoName>
-				<dependencies>
-					<path><![CDATA[common/ImageEffects]]></path>
-					<path><![CDATA[charting/PieChart]]></path>
-				</dependencies>
-			</demo>
-			<demo>
-				<id>PieChart</id>
-				<name>PieChart</name>
-				<thumb>pieChart</thumb>
-				<customCaptureControls>false</customCaptureControls>
-				<captureFrameRate>300</captureFrameRate>
-				<gifPlaybackFrameRate>200</gifPlaybackFrameRate>
-				<toolTip>Standard pie chart with a reflection. Click the pie chart to open and close. Press reset for new data.</toolTip>
-				<toolTipShort>Click the pie chart to open and close. Press reset for new data.</toolTipShort>
-				<shortDemoName></shortDemoName>
-				<dependencies>
-					<path><![CDATA[common/ImageEffects]]></path>
-					<path><![CDATA[charting/PieChart]]></path>
-				</dependencies>
-			</demo>
-		</demos>
+		<demo>
+			<id>PieChart</id>
+			<name>Pie Chart</name>
+			<shortName></shortName>
+			<toolTip>Standard pie chart with a reflection. Click the pie chart to open and close. Press reset for new data.</toolTip>
+			<toolTipShort>Click the pie chart to open and close. Press reset for new data.</toolTipShort>
+			<thumb>pieChart</thumb>
+			<dependencies>
+				<path><![CDATA[common/ImageEffects]]></path>
+				<path><![CDATA[charting/PieChart]]></path>
+			</dependencies>
+		</demo>
+		<demo>
+			<id>DonutChart</id>
+			<name>Donut Chart</name>
+			<shortName>Donut</shortName>
+			<toolTip>Click the donut chart to run open and close animations. Press reset for new data.</toolTip>
+			<toolTipShort>Click donut to open/close, press reset for new data.</toolTipShort>
+			<thumb>donutChart</thumb>
+			<dependencies>
+				<path><![CDATA[charting/PieChart]]></path>
+			</dependencies>
+		</demo>
 	</menuItem>
 	<menuItem>
-		<demos>
-			<demo>
-				<id>LineChart</id>
-				<name>LineChart</name>
-				<thumb>lineChart</thumb>
-				<customCaptureControls>false</customCaptureControls>
-				<captureFrameRate>300</captureFrameRate>
-				<gifPlaybackFrameRate>200</gifPlaybackFrameRate>
-				<toolTip>Click the line chart to run open and close animations. Press reset for new data.</toolTip>
-				<toolTipShort></toolTipShort>
-				<shortDemoName></shortDemoName>
-				<dependencies>
-					<path><![CDATA[charting/ChartBackground]]></path>
-					<path><![CDATA[charting/LineChart]]></path>
-				</dependencies>
-			</demo>
-			<demo>
-				<id>LineChart</id>
-				<name>LineChart</name>
-				<thumb>lineChart</thumb>
-				<customCaptureControls>false</customCaptureControls>
-				<captureFrameRate>300</captureFrameRate>
-				<gifPlaybackFrameRate>200</gifPlaybackFrameRate>
-				<toolTip>Click the line chart to run open and close animations. Press reset for new data.</toolTip>
-				<toolTipShort></toolTipShort>
-				<shortDemoName></shortDemoName>
-				<dependencies>
-					<path><![CDATA[charting/ChartBackground]]></path>
-					<path><![CDATA[charting/LineChart]]></path>
-				</dependencies>
-			</demo>
-		</demos>
+		<demo>
+			<id>BarChart</id>
+			<name>Bar Chart</name>
+			<shortName></shortName>
+			<toolTip>Bar chart with fake 3d. Click the bar chart to run open and close animations. Press reset for new data.</toolTip>
+			<toolTipShort>Click the bar chart to open/close, press reset for new data.</toolTipShort>
+			<thumb>barChart</thumb>
+			<dependencies>
+				<path><![CDATA[charting/ChartBackground]]></path>
+				<path><![CDATA[charting/BarChart]]></path>
+			</dependencies>
+		</demo>
+		<demo>
+			<id>LineChart</id>
+			<name>Line Chart</name>
+			<shortName></shortName>
+			<toolTip>Click the line chart to run open and close animations. Press reset for new data.</toolTip>
+			<toolTipShort></toolTipShort>
+			<thumb>lineChart</thumb>
+			<dependencies>
+				<path><![CDATA[charting/ChartBackground]]></path>
+				<path><![CDATA[charting/LineChart]]></path>
+			</dependencies>
+		</demo>
 	</menuItem>
 	<menuItem>
-		<demos>
-			<demo>
-				<id>Isometry</id>
-				<name>Isometry</name>
-				<thumb>isometry</thumb>
-				<customCaptureControls>false</customCaptureControls>
-				<captureFrameRate>400</captureFrameRate>
-				<gifPlaybackFrameRate>100</gifPlaybackFrameRate>
-				<toolTip>Isometric projection of the Devstate logo in a gentle breeze.</toolTip>
-				<toolTipShort></toolTipShort>
-				<shortDemoName></shortDemoName>
-				<dependencies>
-					<path><![CDATA[common/Isometric]]></path>
-				</dependencies>
-			</demo>
-		</demos>
+		<demo>
+			<id>Isometry</id>
+			<name>Isometry</name>
+			<shortName></shortName>
+			<toolTip>Isometric projection of the Devstate logo in a gentle breeze.</toolTip>
+			<toolTipShort></toolTipShort>
+			<thumb>isometry</thumb>
+			<dependencies>
+				<path><![CDATA[common/Isometric]]></path>
+			</dependencies>
+		</demo>
 	</menuItem>
 	<menuItem>
-		<demos>
-			<demo>
-				<id>BasicSlideShow</id>
-				<name>BasicSlideShow</name>
-				<thumb>basicSlideShow</thumb>
-				<customCaptureControls>true</customCaptureControls>
-				<captureFrameRate>300</captureFrameRate>
-				<gifPlaybackFrameRate>100</gifPlaybackFrameRate>
-				<toolTip>Click the left or right arrows to slide to next or previous image.</toolTip>
-				<toolTipShort></toolTipShort>
-				<shortDemoName>SlideShow</shortDemoName>
-				<dependencies>
-					<path><![CDATA[common/ImageEffects]]></path>
-					<path><![CDATA[common/ArrowButtons]]></path>
-					<path><![CDATA[slideShows/BasicSlideShow]]></path>
-				</dependencies>
-			</demo>
-		</demos>
+		<demo>
+			<id>BasicSlideShow</id>
+			<name>Basic Slide Show</name>
+			<shortName>Slide Show</shortName>
+			<toolTip>Click the left or right arrows to slide to next or previous image.</toolTip>
+			<toolTipShort></toolTipShort>
+			<thumb>basicSlideShow</thumb>
+			<dependencies>
+				<path><![CDATA[common/ImageEffects]]></path>
+				<path><![CDATA[common/ArrowButtons]]></path>
+				<path><![CDATA[slideShows/BasicSlideShow]]></path>
+			</dependencies>
+		</demo>
 	</menuItem>
 	<menuItem>
-		<demos>
-			<demo>
-				<id>ImageFader</id>
-				<name>ImageFader</name>
-				<thumb>imageFader</thumb>
-				<customCaptureControls>true</customCaptureControls>
-				<captureFrameRate>300</captureFrameRate>
-				<gifPlaybackFrameRate>100</gifPlaybackFrameRate>
-				<toolTip>Click an image to see a fade effect from one random image to another.</toolTip>
-				<toolTipShort></toolTipShort>
-				<shortDemoName>Fader</shortDemoName>
-				<dependencies>
-					<path><![CDATA[common/ImageEffects]]></path>
-					<path><![CDATA[slideShows/ImageEffectFader]]></path>
-				</dependencies>
-			</demo>
-		</demos>
+		<demo>
+			<id>ImageFader</id>
+			<name>Image Fader</name>
+			<shortName>Fader</shortName>
+			<toolTip>Click an image to see a fade effect from one random image to another.</toolTip>
+			<toolTipShort></toolTipShort>
+			<thumb>imageFader</thumb>
+			<dependencies>
+				<path><![CDATA[common/ImageEffects]]></path>
+				<path><![CDATA[slideShows/ImageEffectFader]]></path>
+			</dependencies>
+		</demo>
 	</menuItem>
 	<menuItem>
-		<demos>
-			<demo>
-				<id>BlockSetAnimator</id>
-				<name>BlockSetAnimator</name>
-				<thumb>blockSetAnimator</thumb>
-				<customCaptureControls>false</customCaptureControls>
-				<captureFrameRate>300</captureFrameRate>
-				<gifPlaybackFrameRate>100</gifPlaybackFrameRate>
-				<toolTip>Click the images or reset for a new random animation.</toolTip>
-				<toolTipShort></toolTipShort>
-				<shortDemoName>Blocks</shortDemoName>
-				<dependencies>
-					<path><![CDATA[common/BlockSetAnimator]]></path>
-				</dependencies>
-			</demo>
-		</demos>
+		<demo>
+			<id>BlockSetAnimator</id>
+			<name>Block Set Animator</name>
+			<shortName>Blocks</shortName>
+			<toolTip>Click the images or reset for a new random animation.</toolTip>
+			<toolTipShort></toolTipShort>
+			<thumb>blockSetAnimator</thumb>
+			<dependencies>
+				<path><![CDATA[common/BlockSetAnimator]]></path>
+			</dependencies>
+		</demo>
 	</menuItem>
 	<menuItem>
-		<demos>
-			<demo>
-				<id>TextEffect</id>
-				<name>TextEffect</name>
-				<thumb>textEffect</thumb>
-				<customCaptureControls>false</customCaptureControls>
-				<captureFrameRate>400</captureFrameRate>
-				<gifPlaybackFrameRate>100</gifPlaybackFrameRate>
-				<toolTip>Click the text or reset for a new random animation.</toolTip>
-				<toolTipShort></toolTipShort>
-				<shortDemoName></shortDemoName>
-				<dependencies>
-					<path><![CDATA[textEffects/TextChopper]]></path>
-					<path><![CDATA[common/BlockSetAnimator]]></path>
-				</dependencies>
-			</demo>
-		</demos>
+		<demo>
+			<id>TextEffect</id>
+			<name>Text Effect</name>
+			<shortName></shortName>
+			<toolTip>Click the text or reset for a new random animation.</toolTip>
+			<toolTipShort></toolTipShort>
+			<thumb>textEffect</thumb>
+			<dependencies>
+				<path><![CDATA[textEffects/TextChopper]]></path>
+				<path><![CDATA[common/BlockSetAnimator]]></path>
+			</dependencies>
+		</demo>
 	</menuItem>
 	<menuItem>
-		<demos>
-			<demo>
-				<id>ThumbnailCarousel</id>
-				<name>ThumbnailCarousel</name>
-				<thumb>thumbCarousel</thumb>
-				<customCaptureControls>true</customCaptureControls>
-				<captureFrameRate>300</captureFrameRate>
-				<gifPlaybackFrameRate>100</gifPlaybackFrameRate>
-				<toolTip>Click the arrows to rotate the carousel.</toolTip>
-				<toolTipShort></toolTipShort>
-				<shortDemoName>Carousel</shortDemoName>
-				<dependencies>
-					<path><![CDATA[common/ArrowButtons]]></path>
-					<path><![CDATA[menus/ThumbnailCarousel]]></path>
-				</dependencies>
-			</demo>
-		</demos>
+		<demo>
+			<id>ThumbnailCarousel</id>
+			<name>Thumbnail Carousel</name>
+			<shortName>Carousel</shortName>
+			<toolTip>Click the arrows to rotate the carousel.</toolTip>
+			<toolTipShort></toolTipShort>
+			<thumb>thumbCarousel</thumb>
+			<dependencies>
+				<path><![CDATA[common/ArrowButtons]]></path>
+				<path><![CDATA[menus/ThumbnailCarousel]]></path>
+			</dependencies>
+		</demo>
 	</menuItem>
 	<menuItem>
-		<demos>
-			<demo>
-				<id>SimpleCoverFlow</id>
-				<name>SimpleCoverFlow</name>
-				<thumb>coverFlow</thumb>
-				<customCaptureControls>true</customCaptureControls>
-				<captureFrameRate>300</captureFrameRate>
-				<gifPlaybackFrameRate>100</gifPlaybackFrameRate>
-				<toolTip>Click the arrows to slide the cover flow.  Unfortunately this demo renders poorly on some devices.</toolTip>
-				<toolTipShort>Click arrows to slide (renders poorly on some devices).</toolTipShort>
-				<shortDemoName>Coverflow</shortDemoName>
-				<dependencies>
-					<path><![CDATA[common/ArrowButtons]]></path>
-					<path><![CDATA[common/TransformRectangle]]></path>
-					<path><![CDATA[menus/SimpleCoverFlow]]></path>
-				</dependencies>
-			</demo>
-		</demos>
+		<demo>
+			<id>SimpleCoverFlow</id>
+			<name>Simple Cover Flow</name>
+			<shortName>Coverflow</shortName>
+			<toolTip>Click the arrows to slide the cover flow.  Unfortunately this demo renders poorly on some devices.</toolTip>
+			<toolTipShort>Click arrows to slide (renders poorly on some devices).</toolTipShort>
+			<thumb>coverFlow</thumb>
+			<dependencies>
+				<path><![CDATA[common/ArrowButtons]]></path>
+				<path><![CDATA[common/TransformRectangle]]></path>
+				<path><![CDATA[menus/SimpleCoverFlow]]></path>
+			</dependencies>
+		</demo>
 	</menuItem>
 	<menuItem>
-		<demos>
-			<demo>
-				<id>Wanderer</id>
-				<name>Wanderer</name>
-				<thumb>wanderer</thumb>
-				<customCaptureControls>true</customCaptureControls>
-				<captureFrameRate>300</captureFrameRate>
-				<gifPlaybackFrameRate>100</gifPlaybackFrameRate>
-				<toolTip>Animation with random wandering movement and smoothly transitioning random colors. The two colors are complementary.</toolTip>
-				<toolTipShort></toolTipShort>
-				<shortDemoName></shortDemoName>
-				<dependencies>
-					<path><![CDATA[common/Wanderer]]></path>
-				</dependencies>
-			</demo>
-		</demos>
+		<demo>
+			<id>Wanderer</id>
+			<name>Wanderer</name>
+			<shortName></shortName>
+			<toolTip>Animation with random wandering movement and smoothly transitioning random colors. The two colors are complementary.</toolTip>
+			<toolTipShort></toolTipShort>
+			<thumb>wanderer</thumb>
+			<dependencies>
+				<path><![CDATA[common/Wanderer]]></path>
+			</dependencies>
+		</demo>
 	</menuItem>
 </demosMenu>
 
