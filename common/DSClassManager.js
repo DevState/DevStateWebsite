@@ -10,12 +10,11 @@
     //TODO: repetition from main.js move to some general Util class?
     DSClassManager.prototype.getNodeValue = function(node, nodeName){
         return node.getElementsByTagName(nodeName)[0].childNodes[0].nodeValue;
-    }
+    };
 
 
     DSClassManager.prototype.createDemoResourceFromDemoNode = function(demoNode){
-        var name = this.getNodeValue(demoNode, "id");
-        var thumb = this.getNodeValue(demoNode, "thumb")+".png";//REMOVE png reference
+        var name = demoNode.getAttribute("id");
         var dependencyNode = demoNode.getElementsByTagName("dependencies")[0];
         var paths = dependencyNode.getElementsByTagName("path");
         var dependencies = [];
@@ -24,10 +23,9 @@
             dependencies[i] = paths[i].childNodes[0].nodeValue;
         }
         //console.log(dependencies);
-        return new DSDemoResource (name, thumb, dependencies);
-    }
+        return new DSDemoResource (name, dependencies);
+    };
 
-    //TODO consider moving elsewhere. Some central repository of demos is needed
     DSClassManager.prototype.setDemoResources = function() {
         this.demos = [];
         this.navigationItems = [];
@@ -43,7 +41,7 @@
                 demo = this.createDemoResourceFromDemoNode(demos[j]);
                 this.demos.push(demo);
                 subMenu.push(demo.name);
-                console.log("setDemoResources", demo.name);
+                //console.log("setDemoResources", demo.name);
             }
             if(subMenu.length>1){
                 this.navigationItems.push(new DSDemoNavigationItem(subMenu[0], subMenu.concat()));
@@ -51,47 +49,6 @@
                 this.navigationItems.push(new DSDemoNavigationItem(demo.name));
             }
         }
-        //console.log("DSClassManager.setDemoResources()", this.demos.length, this.navigationItems.length);
-
-        /*
-        this.demos.push(new DSDemoResource ("PieChart", "pieChart.png", ["common/ImageEffects", "charting/PieChart"]) );
-        this.navigationItems.push(new DSDemoNavigationItem("PieChart", ["PieChart", "DonutChart"]));
-
-        this.demos.push(new DSDemoResource ("DonutChart", "donutChart.png", ["charting/PieChart"]) );
-        this.demos.push(new DSDemoResource ("BarChart", "barChart.png", ["charting/ChartBackground","charting/BarChart"]) );
-
-        this.navigationItems.push(new DSDemoNavigationItem("BarChart", ["BarChart", "LineChart"]));
-        this.demos.push(new DSDemoResource ("LineChart", "lineChart.png", ["charting/ChartBackground","charting/LineChart"]) );
-        //this.navigationItems.push(new DSDemoNavigationItem("LineChart"));
-
-        this.demos.push(new DSDemoResource ("Isometry", "isometry.png", ["common/Isometric"]) );
-        this.navigationItems.push(new DSDemoNavigationItem("Isometry"));
-
-        this.demos.push(new DSDemoResource ("BasicSlideShow", "basicSlideShow.png",
-            ["common/ImageEffects", "common/ArrowButtons" , "slideShows/BasicSlideShow"]) );
-        this.navigationItems.push(new DSDemoNavigationItem("BasicSlideShow"));
-
-        this.demos.push(new DSDemoResource ("ImageFader", "imageFader.png",
-            ["common/ImageEffects", "slideShows/ImageEffectFader" ]) );
-        this.navigationItems.push(new DSDemoNavigationItem("ImageFader"));
-
-        this.demos.push(new DSDemoResource ("BlockSetAnimator", "blockSetAnimator.png", ["common/BlockSetAnimator"]) );
-        this.navigationItems.push(new DSDemoNavigationItem("BlockSetAnimator"));
-
-        this.demos.push(new DSDemoResource ("TextEffect", "textEffect.png", ["textEffects/TextChopper", "common/BlockSetAnimator"]) );
-        this.navigationItems.push(new DSDemoNavigationItem("TextEffect"));
-
-        this.demos.push(new DSDemoResource ("ThumbnailCarousel", "thumbCarousel.png", ["common/ArrowButtons" ,"menus/ThumbnailCarousel"]) );
-        this.navigationItems.push(new DSDemoNavigationItem("ThumbnailCarousel"));
-
-        this.demos.push(new DSDemoResource ("SimpleCoverFlow", "coverFlow.png",
-            ["common/ArrowButtons","common/TransformRectangle", "menus/SimpleCoverFlow"]) );
-        this.navigationItems.push(new DSDemoNavigationItem("SimpleCoverFlow"));
-
-        this.demos.push(new DSDemoResource ("Wanderer", "wanderer.png", ["common/Wanderer"]) );
-        this.navigationItems.push(new DSDemoNavigationItem("Wanderer"));
-
-            */
         this.currentDemoName = "";
     };
 
@@ -123,6 +80,9 @@
         for(var i=0;i<this.navigationItems.length;i++){
             item = this.navigationItems[i];
             if(item.demoName == demoName){
+                return item;
+            }
+            if(item.subMenu && item.subMenu.length>1 && item.subMenu.indexOf(demoName)){
                 return item;
             }
         }
@@ -229,21 +189,17 @@
 
     //====================:: Dev State Demo Resource ::==================================
 
-    var DSDemoResource = function(name, thumbnail, dependencies){
+    var DSDemoResource = function(name, dependencies){
         this.name = name;
-        this.thumbnail = "assets/demoThumbnails/"+thumbnail;
-        this.rawThumbnail = thumbnail;
         this.setDependencies(dependencies);
     };
 
     //use minified files on live server, locally load normal source files
     DSDemoResource.prototype.setDependencies = function(dependencies){
         this.dependencies = [];
-        this.rawDependencies = [];
         var jsExtension = (location.hostname && location.hostname.toLowerCase().indexOf("devstate")>-1) ? ".min.js" : ".js";
         for(var i=0;i<dependencies.length;i++){
             this.dependencies.push(dependencies[i]+jsExtension);
-            this.rawDependencies.push(dependencies[i]);
         }
     };
 
@@ -256,5 +212,5 @@
         this.subMenu = subMenu == undefined ? [] : subMenu;
     };
 
-    window.DSDemoResource = DSDemoResource;
+    window.DSDemoNavigationItem = DSDemoNavigationItem;
 }(window));

@@ -147,23 +147,26 @@ function setUpDemo(demoName){
     classManager.loadDemo(demoName, demoJSLoadHandler, demoJSLoadErrorHandler);
 }
 
-function getDemoToolTip(demo){
+function getDemoToolTip(demoNode){
+    //console.log("getDemoToolTip(demoNode)", demoNode, getNodeValue(demoNode, "toolTip"));
     //return contentRect.width < largeDemoSize ? demo.toolTipShort : demo.toolTip;
-    return contentRect.width < largeDemoSize ? "" : demo.toolTip;
+    return contentRect.width < largeDemoSize ? "" : getNodeValue(demoNode, "toolTip");
+}
+
+function getLightBoxDemoTitle(demoNode){
+    //console.log("getLightBoxDemoTitle(demoNode)", demoNode, getNodeValue(demoNode, "shortName"),  getNodeValue(demoNode, "name"));
+    var shortName = getNodeValue(demoNode, "shortName");
+    return (demoRect.width<largeDemoSize && shortName) ? shortName : getNodeValue(demoNode, "name"); ;
+}
+
+//TODO : merge with getLightBoxDemoTitle
+function getDemoBoxTitleStyle(){
+    return isHorizontalLayout() ? "demoTitle" : "demoTitleThin";
 }
 
 function getResetString(){
     //return contentRect.width < largeDemoSize ? demo.toolTipShort : demo.toolTip;
     return contentRect.height < largeDemoSize ? "F5" : "Reset";
-}
-
-function getLightBoxDemoTitle(demo){
-    return (demoRect.width<largeDemoSize && demo.shortDemoName!="") ? demo.shortDemoName : classManager.currentDemoName ;
-}
-
-//TODO : merge with getLightBoxDemoTitle
-function getDemoBoxTitleStyle(demo){
-    return isHorizontalLayout() ? "demoTitle" : "demoTitleThin";
 }
 
 function smallSize(){
@@ -172,6 +175,7 @@ function smallSize(){
 
 function demoJSLoadHandler(){
     currentDemo = new currentDemoClass(demoRect.x, demoRect.y, demoRect.width, demoRect.height, lightBox.contentDiv);
+    var demoNode = demosXML.getElementById(classManager.currentDemoName);
     currentDemo.run();
     var padding = 10;
     detailsDiv = document.createElement("div");
@@ -188,7 +192,7 @@ function demoJSLoadHandler(){
         detailsDiv.style.height = (contentRect.height-demoRect.height-padding*2) + "px";
     }
     detailsDiv.style.fontFamily = "Sans-serif";
-    var detailsHtml = "<h2 class='"+getDemoBoxTitleStyle()+"' >"+getLightBoxDemoTitle(currentDemo)+"</h2><p style='padding-top:20px'>"+getDemoToolTip(currentDemo)+"</p>";
+    var detailsHtml = "<h2 class='"+getDemoBoxTitleStyle()+"' >"+getLightBoxDemoTitle(demoNode)+"</h2><p style='padding-top:20px'>"+getDemoToolTip(demoNode)+"</p>";
     var subMenu = classManager.getSubmenuForDemoName(classManager.currentDemoName);
     if(subMenu.length > 0){
         detailsHtml +="<p class='lightboxSubMenu' >";
@@ -279,7 +283,14 @@ function parseDemosXML(){
 
 //TODO : move to DSUtils.js
 function getNodeValue(node, nodeName){
-    return node.getElementsByTagName(nodeName)[0].childNodes[0].nodeValue;
+    var child = node.getElementsByTagName(nodeName)[0];
+    if(!child){
+        return "";
+    }
+    if(!child || !child.childNodes || ! child.childNodes[0] || !child.childNodes[0].nodeValue){
+        return "";
+    }
+    return child.childNodes[0].nodeValue;
 }
 
 function setUpDemosMenuFromXML(){
@@ -289,7 +300,7 @@ function setUpDemosMenuFromXML(){
     for(var i = 0 ; i < menuItems.length; i++){
         demo = menuItems[i].getElementsByTagName("demo")[0];
         demosHtml += '<div class="item">';
-        demosHtml += '<a href="#'+getNodeValue(demo,"id")+'" onclick = "demoLinkClickHandler(event)">';
+        demosHtml += '<a href="#'+demo.getAttribute("id")+'" onclick = "demoLinkClickHandler(event)">';
         demosHtml += '<img src="assets/demoThumbnails/'+getNodeValue(demo,"thumb")+'.png" onmouseover="showGif(event)" onmouseout="showPng(event)">';
         demosHtml += '</a>';
         demosHtml += '</div>';

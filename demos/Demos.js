@@ -2,16 +2,12 @@
 
 	//================::ABSTRACT DEMO::===================
 
-	//constructor
-	AbstractDemo = function(x, y, width, height, demoContainer){
+	var AbstractDemo = function(x, y, width, height, demoContainer){
 		SimpleGeometry.Rectangle.call(this,x,y,width,height); //call super constructor.
 		this.demoContainer = demoContainer;
 		this.customCaptureControls = false;
 		this.captureFrameRate = 300; //frames for generated gifs are captured at this rate
 		this.gifPlaybackFrameRate = 100;//generated gifs play at this speed
-		this.toolTip = "";
-		this.toolTipShort = "";
-        this.shortDemoName = "";
         if(!demoContainer){
             console.log("AbstractDemo constructor, no demo container, cannot setUpDemo()");
             return;
@@ -69,8 +65,6 @@
 	
 	AbstractDemo.prototype.clear = function(){
 		this.context2d.clearRect(0, 0, this.canvas.width, this.canvas.height);
-		//this.fillStyle="#000000"
-		//this.context2d.fillRect(0, 0, this.canvas.width, this.canvas.height);
 	};
 	
 	AbstractDemo.prototype.loadImagesWithImageStore = function(urls){
@@ -151,10 +145,8 @@
 
 	//================::PIE CHART::===================
 	
-	PieChartDemo = function(x, y, width, height, demoContainer){
+	var PieChartDemo = function(x, y, width, height, demoContainer){
 		AbstractDemo.call(this, x, y, width, height, demoContainer); //call super constructor.
-		this.toolTip = "Standard pie chart with a reflection. Click the pie chart to open and close. Press reset for new data.";
-		this.toolTipShort = "Click the pie chart to open and close. Press reset for new data.";
 		this.gifPlaybackFrameRate = 200;
 	};
 	
@@ -220,11 +212,8 @@
 	
 	//================::DONUT CHART::===================
 	
-	DonutChartDemo = function(x, y, width, height, demoContainer){
+	var DonutChartDemo = function(x, y, width, height, demoContainer){
 		PieChartDemo.call(this, x, y, width, height, demoContainer); //call super constructor.
-		this.toolTip = "Click the donut chart to run open and close animations. Press reset for new data.";
-        this.toolTipShort = "Click donut to open/close, press reset for new data.";
-        this.shortDemoName = "Donut";
 	};
 	
 	//subclass extends superclass
@@ -250,9 +239,8 @@
 	
 	//================::LINE CHART::===================
 	
-	LineChartDemo = function(x, y, width, height, demoContainer){
+	 var LineChartDemo = function(x, y, width, height, demoContainer){
 		AbstractDemo.call(this, x, y, width, height, demoContainer); //call super constructor.
-		this.toolTip = "Click the line chart to run open and close animations. Press reset for new data.";
 		this.gifPlaybackFrameRate = 200;
 	};
 	
@@ -326,10 +314,8 @@
 	
 	//================::BAR CHART::===================
 	
-	BarChartDemo = function(x, y, width, height, demoContainer){
+	var BarChartDemo = function(x, y, width, height, demoContainer){
 		AbstractDemo.call(this, x, y, width, height, demoContainer); //call super constructor.
-		this.toolTip = "Bar chart with fake 3d. Click the bar chart to run open and close animations. Press reset for new data.";
-        this.toolTipShort = "Click the bar chart to open/close, press reset for new data.";
 		this.gifPlaybackFrameRate = 200;
 	};
 	
@@ -407,10 +393,8 @@
 	
 	//================::BASIC SLIDESHOW::===================
 
-	BasicSlideShowDemo = function(x, y, width, height, demoContainer){
+	var BasicSlideShowDemo = function(x, y, width, height, demoContainer){
 		AbstractDemo.call(this, x, y, width, height, demoContainer); //call super constructor.
-		this.toolTip = "Click the left or right arrows to slide to next or previous image.";
-		this.customCaptureControls = true;
         this.shortDemoName = "SlideShow";
 	};
 	
@@ -471,11 +455,9 @@
 
     //================::IMAGE FADER::===================
 
-    ImageFaderDemo = function(x, y, width, height, demoContainer){
+    var ImageFaderDemo = function(x, y, width, height, demoContainer){
         AbstractDemo.call(this, x, y, width, height, demoContainer); //call super constructor.
-        this.toolTip = "Click an image to see a fade effect from one random image to another.";
         this.customCaptureControls = true;
-        this.shortDemoName = "Fader";
     };
     //subclass extends superclass
     ImageFaderDemo.prototype = Object.create(AbstractDemo.prototype);
@@ -520,11 +502,9 @@
 	
 	//================::THUMBNAIL CAROUSEL::===================
 
-	ThumbnailCarouselDemo = function(x, y, width, height, demoContainer){
+	var ThumbnailCarouselDemo = function(x, y, width, height, demoContainer){
 		AbstractDemo.call(this, x, y, width, height, demoContainer); //call super constructor.
-		this.toolTip = "Click the arrows to rotate the carousel.";
 		this.customCaptureControls = true;
-        this.shortDemoName = "Carousel";
 	};
 	
 	//subclass extends superclass
@@ -597,12 +577,9 @@
 	
 	//================::SIMPLE COVER FLOW::===================
 
-	SimpleCoverFlowDemo = function(x, y, width, height, demoContainer){
+	var SimpleCoverFlowDemo = function(x, y, width, height, demoContainer){
 		AbstractDemo.call(this, x, y, width, height, demoContainer); //call super constructor.
-		this.toolTip = "Click the arrows to slide the cover flow.  Unfortunately this demo renders poorly on some devices.";
-        this.toolTipShort = "Click arrows to slide (renders poorly on some devices).";
 		this.customCaptureControls = true;
-        this.shortDemoName = "Coverflow";
 	};
 	
 	//subclass extends superclass
@@ -674,9 +651,8 @@
 	
 	//================::WANDERER::===================
 	
-	WandererDemo = function(x, y, width, height, demoContainer){
+	var WandererDemo = function(x, y, width, height, demoContainer){
 		AbstractDemo.call(this, x, y, width, height, demoContainer); //call super constructor.
-		this.toolTip = "Animation with random wandering movement and smoothly transitioning random colors. The two colors are complementary.";
 		this.customCaptureControls = true;
 	};
 	
@@ -778,10 +754,8 @@
 	
 	//================::BLOCK SET ANIMATOR::===================
 
-	BlockSetAnimatorDemo = function(x, y, width, height, demoContainer){
+	var BlockSetAnimatorDemo = function(x, y, width, height, demoContainer){
 		AbstractDemo.call(this, x, y, width, height, demoContainer); //call super constructor.
-		this.toolTip = "Click the images or reset for a new random animation.";
-        this.shortDemoName = "Blocks";
 	};
 	
 	//subclass extends superclass
@@ -894,9 +868,8 @@
 	
 	//================::TEXT EFFECT::===================
 
-	TextEffectDemo = function(x, y, width, height, demoContainer){
+	var TextEffectDemo = function(x, y, width, height, demoContainer){
 		AbstractDemo.call(this, x, y, width, height, demoContainer); //call super constructor.
-		this.toolTip = "Click the text or reset for a new random animation.";
         this.gifPlaybackFrameRate = 100;
         this.captureFrameRate = 400;
 	};
@@ -952,7 +925,6 @@
 
     var IsometryDemo = function(x, y, width, height, demoContainer){
         AbstractDemo.call(this, x, y, width, height, demoContainer); //call super constructor.
-        this.toolTip = "Isometric projection of the Devstate logo in a gentle breeze.";
         this.gifPlaybackFrameRate = 100;
         this.captureFrameRate = 400;
     };
