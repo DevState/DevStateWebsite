@@ -187,15 +187,18 @@
     DSDemoResource = function(name, thumbnail, dependencies){
         this.name = name;
         this.thumbnail = "assets/demoThumbnails/"+thumbnail;
+        this.rawThumbnail = thumbnail;
         this.setDependencies(dependencies);
     };
 
     //use minified files on live server, locally load normal source files
     DSDemoResource.prototype.setDependencies = function(dependencies){
         this.dependencies = [];
+        this.rawDependencies = [];
         var jsExtension = (location.hostname && location.hostname.toLowerCase().indexOf("devstate")>-1) ? ".min.js" : ".js";
         for(var i=0;i<dependencies.length;i++){
             this.dependencies.push(dependencies[i]+jsExtension);
+            this.rawDependencies.push(dependencies[i]);
         }
     };
 

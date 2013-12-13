@@ -12,6 +12,10 @@
 		this.toolTip = "";
 		this.toolTipShort = "";
         this.shortDemoName = "";
+        if(!demoContainer){
+            console.log("AbstractDemo constructor, no demo container, cannot setUpDemo()");
+            return;
+        }
 		this.setUpDemo();
 	};
 	

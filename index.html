@@ -37,23 +37,23 @@
     <link rel="stylesheet" type="text/css" href="css/devstate.min.css">
 
     <!-- Common javascript files -->
-    <script type="text/javascript" src="common/DSClassManager.min.js" ></script>
-    <script type="text/javascript" src="common/SimpleGeometry.min.js" ></script>
-    <script type="text/javascript" src="common/DSColors.min.js" ></script>
-    <script type="text/javascript" src="common/UnitAnimator.min.js" ></script>
-    <script type="text/javascript" src="common/SimpleLoaderGraphic.min.js" ></script>
-    <script type="text/javascript" src="common/ImageStore.min.js" ></script>
-    <script type="text/javascript" src="common/DSLightBox.min.js" ></script>
-    <script type="text/javascript" src="common/DSLightBox.min.js" ></script>
+    <!-- <script type="text/javascript" src="common/DSClassManager.min.js" ></script>
+     <script type="text/javascript" src="common/SimpleGeometry.min.js" ></script>
+     <script type="text/javascript" src="common/DSColors.min.js" ></script>
+     <script type="text/javascript" src="common/UnitAnimator.min.js" ></script>
+     <script type="text/javascript" src="common/SimpleLoaderGraphic.min.js" ></script>
+     <script type="text/javascript" src="common/ImageStore.min.js" ></script>
+     <script type="text/javascript" src="common/DSLightBox.min.js" ></script>
+     <script type="text/javascript" src="common/DSLightBox.min.js" ></script>-->
 
-    <!--<script type="text/javascript" src="common/DSClassManager.js" ></script>
-    <script type="text/javascript" src="common/SimpleGeometry.js" ></script>
-    <script type="text/javascript" src="common/DSColors.js" ></script>
-    <script type="text/javascript" src="common/UnitAnimator.js" ></script>
-    <script type="text/javascript" src="common/SimpleLoaderGraphic.js" ></script>
-    <script type="text/javascript" src="common/ImageStore.js" ></script>
-    <script type="text/javascript" src="common/DSLightBox.js" ></script>
-    <script type="text/javascript" src="common/DSLightBox.js" ></script>-->
+     <script type="text/javascript" src="common/DSClassManager.js" ></script>
+     <script type="text/javascript" src="common/SimpleGeometry.js" ></script>
+     <script type="text/javascript" src="common/DSColors.js" ></script>
+     <script type="text/javascript" src="common/UnitAnimator.js" ></script>
+     <script type="text/javascript" src="common/SimpleLoaderGraphic.js" ></script>
+     <script type="text/javascript" src="common/ImageStore.js" ></script>
+     <script type="text/javascript" src="common/DSLightBox.js" ></script>
+     <script type="text/javascript" src="common/DSLightBox.js" ></script>
 
     <!-- Demos -->
     <!--<script type="text/javascript" src="demos/Demos.min.js" ></script>
@@ -61,6 +61,248 @@
 
     <script type="text/javascript" src="demos/Demos.js" ></script>
     <script src="js/main.js"></script>
+
+
+
+    <!--    Data for the current demo thumbnails menu
+            - As explained here : https://developer.mozilla.org/en/docs/Using_XML_Data_Islands_in_Mozilla
+            - rather than loading from an external xml file, we embed the xml on this page. Ideally this info would be part of the html markup...
+            - Note <dependencies> do not have a .js extension, as the application loads .min.js files on the live site
+            - Note that <thumb> has no extension or path, the app will build the path (assets/thumbs/thumb) and add .png
+                or .gif (thumb and rollover)
+            - Note that a menu item can contain more than one demo (currently 2 is the maximum)
+            - To deactivate an item, simply comment it out
+            - To reposition an item in the html page, simply move it up or down this list
+            - The first demo in a menuItem will be displayed in the home page navigation
+      -->
+
+    <script id="purchase-order" type="application/xml">
+
+<demosMenu>
+	<menuItem>
+		<demos>
+			<demo>
+				<id>PieChart</id>
+				<name>PieChart</name>
+				<thumb>pieChart</thumb>
+				<customCaptureControls>false</customCaptureControls>
+				<captureFrameRate>300</captureFrameRate>
+				<gifPlaybackFrameRate>200</gifPlaybackFrameRate>
+				<toolTip>Standard pie chart with a reflection. Click the pie chart to open and close. Press reset for new data.</toolTip>
+				<toolTipShort>Click the pie chart to open and close. Press reset for new data.</toolTipShort>
+				<shortDemoName></shortDemoName>
+				<dependencies>
+					<path><![CDATA[common/ImageEffects]]></path>
+					<path><![CDATA[charting/PieChart]]></path>
+				</dependencies>
+			</demo>
+			<demo>
+				<id>PieChart</id>
+				<name>PieChart</name>
+				<thumb>pieChart</thumb>
+				<customCaptureControls>false</customCaptureControls>
+				<captureFrameRate>300</captureFrameRate>
+				<gifPlaybackFrameRate>200</gifPlaybackFrameRate>
+				<toolTip>Standard pie chart with a reflection. Click the pie chart to open and close. Press reset for new data.</toolTip>
+				<toolTipShort>Click the pie chart to open and close. Press reset for new data.</toolTipShort>
+				<shortDemoName></shortDemoName>
+				<dependencies>
+					<path><![CDATA[common/ImageEffects]]></path>
+					<path><![CDATA[charting/PieChart]]></path>
+				</dependencies>
+			</demo>
+		</demos>
+	</menuItem>
+	<menuItem>
+		<demos>
+			<demo>
+				<id>LineChart</id>
+				<name>LineChart</name>
+				<thumb>lineChart</thumb>
+				<customCaptureControls>false</customCaptureControls>
+				<captureFrameRate>300</captureFrameRate>
+				<gifPlaybackFrameRate>200</gifPlaybackFrameRate>
+				<toolTip>Click the line chart to run open and close animations. Press reset for new data.</toolTip>
+				<toolTipShort></toolTipShort>
+				<shortDemoName></shortDemoName>
+				<dependencies>
+					<path><![CDATA[charting/ChartBackground]]></path>
+					<path><![CDATA[charting/LineChart]]></path>
+				</dependencies>
+			</demo>
+			<demo>
+				<id>LineChart</id>
+				<name>LineChart</name>
+				<thumb>lineChart</thumb>
+				<customCaptureControls>false</customCaptureControls>
+				<captureFrameRate>300</captureFrameRate>
+				<gifPlaybackFrameRate>200</gifPlaybackFrameRate>
+				<toolTip>Click the line chart to run open and close animations. Press reset for new data.</toolTip>
+				<toolTipShort></toolTipShort>
+				<shortDemoName></shortDemoName>
+				<dependencies>
+					<path><![CDATA[charting/ChartBackground]]></path>
+					<path><![CDATA[charting/LineChart]]></path>
+				</dependencies>
+			</demo>
+		</demos>
+	</menuItem>
+	<menuItem>
+		<demos>
+			<demo>
+				<id>Isometry</id>
+				<name>Isometry</name>
+				<thumb>isometry</thumb>
+				<customCaptureControls>false</customCaptureControls>
+				<captureFrameRate>400</captureFrameRate>
+				<gifPlaybackFrameRate>100</gifPlaybackFrameRate>
+				<toolTip>Isometric projection of the Devstate logo in a gentle breeze.</toolTip>
+				<toolTipShort></toolTipShort>
+				<shortDemoName></shortDemoName>
+				<dependencies>
+					<path><![CDATA[common/Isometric]]></path>
+				</dependencies>
+			</demo>
+		</demos>
+	</menuItem>
+	<menuItem>
+		<demos>
+			<demo>
+				<id>BasicSlideShow</id>
+				<name>BasicSlideShow</name>
+				<thumb>basicSlideShow</thumb>
+				<customCaptureControls>true</customCaptureControls>
+				<captureFrameRate>300</captureFrameRate>
+				<gifPlaybackFrameRate>100</gifPlaybackFrameRate>
+				<toolTip>Click the left or right arrows to slide to next or previous image.</toolTip>
+				<toolTipShort></toolTipShort>
+				<shortDemoName>SlideShow</shortDemoName>
+				<dependencies>
+					<path><![CDATA[common/ImageEffects]]></path>
+					<path><![CDATA[common/ArrowButtons]]></path>
+					<path><![CDATA[slideShows/BasicSlideShow]]></path>
+				</dependencies>
+			</demo>
+		</demos>
+	</menuItem>
+	<menuItem>
+		<demos>
+			<demo>
+				<id>ImageFader</id>
+				<name>ImageFader</name>
+				<thumb>imageFader</thumb>
+				<customCaptureControls>true</customCaptureControls>
+				<captureFrameRate>300</captureFrameRate>
+				<gifPlaybackFrameRate>100</gifPlaybackFrameRate>
+				<toolTip>Click an image to see a fade effect from one random image to another.</toolTip>
+				<toolTipShort></toolTipShort>
+				<shortDemoName>Fader</shortDemoName>
+				<dependencies>
+					<path><![CDATA[common/ImageEffects]]></path>
+					<path><![CDATA[slideShows/ImageEffectFader]]></path>
+				</dependencies>
+			</demo>
+		</demos>
+	</menuItem>
+	<menuItem>
+		<demos>
+			<demo>
+				<id>BlockSetAnimator</id>
+				<name>BlockSetAnimator</name>
+				<thumb>blockSetAnimator</thumb>
+				<customCaptureControls>false</customCaptureControls>
+				<captureFrameRate>300</captureFrameRate>
+				<gifPlaybackFrameRate>100</gifPlaybackFrameRate>
+				<toolTip>Click the images or reset for a new random animation.</toolTip>
+				<toolTipShort></toolTipShort>
+				<shortDemoName>Blocks</shortDemoName>
+				<dependencies>
+					<path><![CDATA[common/BlockSetAnimator]]></path>
+				</dependencies>
+			</demo>
+		</demos>
+	</menuItem>
+	<menuItem>
+		<demos>
+			<demo>
+				<id>TextEffect</id>
+				<name>TextEffect</name>
+				<thumb>textEffect</thumb>
+				<customCaptureControls>false</customCaptureControls>
+				<captureFrameRate>400</captureFrameRate>
+				<gifPlaybackFrameRate>100</gifPlaybackFrameRate>
+				<toolTip>Click the text or reset for a new random animation.</toolTip>
+				<toolTipShort></toolTipShort>
+				<shortDemoName></shortDemoName>
+				<dependencies>
+					<path><![CDATA[textEffects/TextChopper]]></path>
+					<path><![CDATA[common/BlockSetAnimator]]></path>
+				</dependencies>
+			</demo>
+		</demos>
+	</menuItem>
+	<menuItem>
+		<demos>
+			<demo>
+				<id>ThumbnailCarousel</id>
+				<name>ThumbnailCarousel</name>
+				<thumb>thumbCarousel</thumb>
+				<customCaptureControls>true</customCaptureControls>
+				<captureFrameRate>300</captureFrameRate>
+				<gifPlaybackFrameRate>100</gifPlaybackFrameRate>
+				<toolTip>Click the arrows to rotate the carousel.</toolTip>
+				<toolTipShort></toolTipShort>
+				<shortDemoName>Carousel</shortDemoName>
+				<dependencies>
+					<path><![CDATA[common/ArrowButtons]]></path>
+					<path><![CDATA[menus/ThumbnailCarousel]]></path>
+				</dependencies>
+			</demo>
+		</demos>
+	</menuItem>
+	<menuItem>
+		<demos>
+			<demo>
+				<id>SimpleCoverFlow</id>
+				<name>SimpleCoverFlow</name>
+				<thumb>coverFlow</thumb>
+				<customCaptureControls>true</customCaptureControls>
+				<captureFrameRate>300</captureFrameRate>
+				<gifPlaybackFrameRate>100</gifPlaybackFrameRate>
+				<toolTip>Click the arrows to slide the cover flow.  Unfortunately this demo renders poorly on some devices.</toolTip>
+				<toolTipShort>Click arrows to slide (renders poorly on some devices).</toolTipShort>
+				<shortDemoName>Coverflow</shortDemoName>
+				<dependencies>
+					<path><![CDATA[common/ArrowButtons]]></path>
+					<path><![CDATA[common/TransformRectangle]]></path>
+					<path><![CDATA[menus/SimpleCoverFlow]]></path>
+				</dependencies>
+			</demo>
+		</demos>
+	</menuItem>
+	<menuItem>
+		<demos>
+			<demo>
+				<id>Wanderer</id>
+				<name>Wanderer</name>
+				<thumb>wanderer</thumb>
+				<customCaptureControls>true</customCaptureControls>
+				<captureFrameRate>300</captureFrameRate>
+				<gifPlaybackFrameRate>100</gifPlaybackFrameRate>
+				<toolTip>Animation with random wandering movement and smoothly transitioning random colors. The two colors are complementary.</toolTip>
+				<toolTipShort></toolTipShort>
+				<shortDemoName></shortDemoName>
+				<dependencies>
+					<path><![CDATA[common/Wanderer]]></path>
+				</dependencies>
+			</demo>
+		</demos>
+	</menuItem>
+</demosMenu>
+
+
+    </script>
+
 
 </head>
 
@@ -89,7 +331,7 @@
     </header>
 
     <aside id="about" class=" left">
-        <h3>Finest Html5 Canvas and WebGL <span class="orangeText">Workshops<span></h3>
+        <h3>Finest Html5 Canvas and WebGL <span class="orangeText">Workshops</span></h3>
         <ol>
             <li><p>Select demos below which your group wants to master</p></li>
             <li><p>We will create a custom workshop based on your selections</p></li>
@@ -102,7 +344,7 @@
             and <a href="http://www.sakri.net" target="_blank">Sakri Rosenstrom</a>
             share a combined 30 years of coding experience with a focus on graphics.
             Over the years we've enjoyed presenting at many conferences and decided to join forces as DevState to share our
-            skills and expertese in the form of workshops.  <a href="about.html">Read More...</a>
+            skills and expertise in the form of workshops.  <a href="about.html">Read More...</a>
     </aside>
     <div class="clearfix"></div>
 

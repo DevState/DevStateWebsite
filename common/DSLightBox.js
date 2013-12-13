@@ -7,7 +7,7 @@
 		this.beginCloseCallback = beginCloseCallback;
 		this.closeCompleteCallback = closeCompleteCallback;
         this.isMobile = isMobile;
-        console.log("DSLightBoxConstructor : ",this.isMobile);
+        //console.log("DSLightBoxConstructor : ",this.isMobile);
 		
 		this.contentDiv = document.createElement("div");
 		this.overlayDiv = document.createElement("div");
