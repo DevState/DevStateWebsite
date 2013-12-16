@@ -82,7 +82,7 @@
             if(item.demoName == demoName){
                 return item;
             }
-            if(item.subMenu && item.subMenu.length>1 && item.subMenu.indexOf(demoName)){
+            if(item.subMenu && item.subMenu.length>1 && item.subMenu.indexOf(demoName)>-1){
                 return item;
             }
         }
