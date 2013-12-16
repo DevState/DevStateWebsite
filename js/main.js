@@ -44,7 +44,7 @@ function getNodeValue(node, nodeName){
 //===============================::DEMOS / LIGHTBOX::===========================
 
 function forceHideDemo(){
-	if(lightBox && lightBox.isOpen()){
+	if(!lightBox==undefined && lightBox.isOpen()){
 		hideDemo(true);
 	}
 }
@@ -156,16 +156,14 @@ function setUpDemo(demoName){
     classManager.loadDemo(demoName, demoJSLoadHandler, demoJSLoadErrorHandler);
 }
 
-function getDemoToolTip(demoNode){
-    //console.log("getDemoToolTip(demoNode)", demoNode, getNodeValue(demoNode, "toolTip"));
-    //return contentRect.width < largeDemoSize ? demo.toolTipShort : demo.toolTip;
-    return contentRect.width < largeDemoSize ? "" : getNodeValue(demoNode, "toolTip");
+function getDemoToolTip(demoResource){
+    //console.log("getDemoToolTip(demoResource)", demoResource.toolTip));
+    return contentRect.width < largeDemoSize ? "" : demoResource.toolTip;
 }
 
-function getLightBoxDemoTitle(demoNode){
-    //console.log("getLightBoxDemoTitle(demoNode)", demoNode, getNodeValue(demoNode, "shortName"),  getNodeValue(demoNode, "name"));
-    var shortName = getNodeValue(demoNode, "shortName");
-    return (demoRect.width<largeDemoSize && shortName) ? shortName : getNodeValue(demoNode, "name");
+function getLightBoxDemoTitle(demoResource){
+    //console.log("getLightBoxDemoTitle(demoResource)", demoResource.shortName, demoResource.name);
+    return (demoRect.width<largeDemoSize && demoResource.shortName!="") ? demoResource.shortName : demoResource.name;
 }
 
 //TODO : merge with getLightBoxDemoTitle
@@ -184,7 +182,9 @@ function smallSize(){
 
 function demoJSLoadHandler(){
     currentDemo = new currentDemoClass(demoRect.x, demoRect.y, demoRect.width, demoRect.height, lightBox.contentDiv);
-    var demoNode = demosXML.getElementById(classManager.currentDemoName);
+    //var demoNode = demosXML.getElementById(classManager.currentDemoName); //wtf, Firefox doesn't support getElementById on xml documents?!
+    var demoResource = classManager.getDemoResourceByName(classManager.currentDemoName);
+    //console.log("demoJSLoadHandler", demoNode, classManager.currentDemoName);
     currentDemo.run();
     var padding = 10;
     detailsDiv = document.createElement("div");
@@ -201,7 +201,7 @@ function demoJSLoadHandler(){
         detailsDiv.style.height = (contentRect.height-demoRect.height-padding*2) + "px";
     }
     detailsDiv.style.fontFamily = "Sans-serif";
-    var detailsHtml = "<h2 class='"+getDemoBoxTitleStyle()+"' >"+getLightBoxDemoTitle(demoNode)+"</h2><p style='padding-top:20px'>"+getDemoToolTip(demoNode)+"</p>";
+    var detailsHtml = "<h2 class='"+getDemoBoxTitleStyle()+"' >"+getLightBoxDemoTitle(demoResource)+"</h2><p style='padding-top:20px'>"+getDemoToolTip(demoResource)+"</p>";
     var subMenu = classManager.getSubmenuForDemoName(classManager.currentDemoName);
     if(subMenu.length > 0){
         detailsHtml +="<p class='lightboxSubMenu' >";

@@ -15,6 +15,10 @@
 
     DSClassManager.prototype.createDemoResourceFromDemoNode = function(demoNode){
         var name = demoNode.getAttribute("id");
+        var shortName = getNodeValue(demoNode, "shortName");
+        var toolTip = getNodeValue(demoNode, "toolTip");
+        var toolTipShort = getNodeValue(demoNode, "toolTipShort");
+        var thumb = getNodeValue(demoNode, "thumb");
         var dependencyNode = demoNode.getElementsByTagName("dependencies")[0];
         var paths = dependencyNode.getElementsByTagName("path");
         var dependencies = [];
@@ -23,7 +27,7 @@
             dependencies[i] = paths[i].childNodes[0].nodeValue;
         }
         //console.log(dependencies);
-        return new DSDemoResource (name, dependencies);
+        return new DSDemoResource (name, shortName, toolTip, toolTipShort, thumb, dependencies);
     };
 
     DSClassManager.prototype.setDemoResources = function() {
@@ -189,8 +193,12 @@
 
     //====================:: Dev State Demo Resource ::==================================
 
-    var DSDemoResource = function(name, dependencies){
+    var DSDemoResource = function(name, shortName, toolTip, toolTipShort, thumb, dependencies){
         this.name = name;
+        this.shortName = shortName;
+        this.toolTip = toolTip;
+        this.toolTipShort = toolTipShort;
+        this.thumb = thumb;
         this.setDependencies(dependencies);
     };
 
