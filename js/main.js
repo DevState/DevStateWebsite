@@ -97,7 +97,6 @@ var largeDemoSize = 400;
 
 var classManager;
 var currentDemo;
-var currentDemoClass;
 var detailsDiv;
 var demoRect;
 var contentRect;
@@ -149,10 +148,9 @@ function showDemo(){
 	lightBox.open(contentRect);
 }
 
-
+var mainScope = this;
 
 function setUpDemo(demoName){
-    currentDemoClass = this[(demoName+"Demo")];
     classManager.loadDemo(demoName, demoJSLoadHandler, demoJSLoadErrorHandler);
 }
 
@@ -181,7 +179,7 @@ function smallSize(){
 }
 
 function demoJSLoadHandler(){
-    currentDemo = new currentDemoClass(demoRect.x, demoRect.y, demoRect.width, demoRect.height, lightBox.contentDiv);
+    currentDemo = new mainScope[(classManager.currentDemoName+"Demo")](demoRect.x, demoRect.y, demoRect.width, demoRect.height, lightBox.contentDiv);
     //var demoNode = demosXML.getElementById(classManager.currentDemoName); //wtf, Firefox doesn't support getElementById on xml documents?!
     var demoResource = classManager.getDemoResourceByName(classManager.currentDemoName);
     //console.log("demoJSLoadHandler", demoNode, classManager.currentDemoName);
