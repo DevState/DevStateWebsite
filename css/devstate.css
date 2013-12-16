@@ -304,6 +304,13 @@ header{
     color:#000000;
 }
 
+.progressLabel{
+    font-size:16px;
+    width: 100%;
+    text-align: center;
+    color: #CCCCCC;
+}
+
 /* ----------------------- DEMO LIGHBOX CONTENT END ------------------------- */
 
 .bottomDivider{

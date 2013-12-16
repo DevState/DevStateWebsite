@@ -95,11 +95,15 @@ var lightBoxVerticalLayoutHeight = 600;
 var smallDemoSize = 300;
 var largeDemoSize = 400;
 
+var mainScope = this;
+var demosXML;
 var classManager;
 var currentDemo;
+var lastClickedDemoName;//this isn't the greatest, try to remove or find a more elegant solution
 var detailsDiv;
 var demoRect;
 var contentRect;
+
 
 function showDemo(){
 	var size = viewportSize();
@@ -148,10 +152,13 @@ function showDemo(){
 	lightBox.open(contentRect);
 }
 
-var mainScope = this;
-
 function setUpDemo(demoName){
-    classManager.loadDemo(demoName, demoJSLoadHandler, demoJSLoadErrorHandler);
+    classManager.loadDemo(demoName, demoJSLoadHandler, demoJSLoadErrorHandler, demoJSLoadUpdateHandler);
+    lightBox.showLoadProgress();
+}
+
+function demoJSLoadUpdateHandler(string){
+    lightBox.updateProgress(string);
 }
 
 function getDemoToolTip(demoResource){
@@ -179,6 +186,7 @@ function smallSize(){
 }
 
 function demoJSLoadHandler(){
+    lightBox.hideLoadProgress();
     currentDemo = new mainScope[(classManager.currentDemoName+"Demo")](demoRect.x, demoRect.y, demoRect.width, demoRect.height, lightBox.contentDiv);
     //var demoNode = demosXML.getElementById(classManager.currentDemoName); //wtf, Firefox doesn't support getElementById on xml documents?!
     var demoResource = classManager.getDemoResourceByName(classManager.currentDemoName);
@@ -248,7 +256,7 @@ function lightBoxBeginClose(){
 	location.hash="";
 }
 
-var lastClickedDemoName;
+
 function demoLinkClickHandler(event){
     lastClickedDemoName = getDemoFromHash(event.currentTarget.hash);
     showDemo(lastClickedDemoName);
@@ -280,15 +288,7 @@ function getDemoFromHash(hash){
 }
 
 
-var demosXML;
-
-function parseDemosXML(){
-    var demosXMLSource = document.getElementById("demosMenuXML").textContent;
-    var parser = new DOMParser();
-    demosXML = parser.parseFromString(demosXMLSource, "application/xml");
-}
-
-function setUpDemosMenuFromXML(){
+function buildDemosMenu(){
     var menuItems = demosXML.getElementsByTagName( "menuItem");
     var demosHtml = "";
     var demo;
@@ -307,10 +307,13 @@ function setUpDemosMenuFromXML(){
 
 function init(){
 	//console.log("init()");
-    parseDemosXML();
+    var demosXMLSource = document.getElementById("demosMenuXML").textContent;
+    var parser = new DOMParser();
+    demosXML = parser.parseFromString(demosXMLSource, "application/xml");
+
     classManager = new DSClassManager(demosXML);
 
-	setUpDemosMenuFromXML();
+    buildDemosMenu();
 	lightBox = new DSLightBox(undefined, lightBoxOpenComplete, lightBoxBeginClose, undefined, isMobile());
     window.onscroll = function () {
         forceHideDemo();

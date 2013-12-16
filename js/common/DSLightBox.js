@@ -47,7 +47,26 @@
 
 		this.backgroundOpacity = .8;
 		this.borderThickness = 4;
+
+        //progress label
+        this.progressLabel = document.createElement("p");
+        this.progressLabel.className = "progressLabel";
+        this.progressLabel.innerHTML = "HI!";
+        this.progressLabel.style.display = "none";
 	};
+
+    DSLightBox.prototype.showLoadProgress = function(){
+        this.progressLabel.style.display = "block";
+    }
+
+    DSLightBox.prototype.updateProgress = function(string){
+        console.log("DSLightBox.udpdteProgress() : "+string);
+        this.progressLabel.innerHTML = string;
+    }
+
+    DSLightBox.prototype.hideLoadProgress = function(){
+        this.progressLabel.style.display = "none";
+    }
 	
 	DSLightBox.prototype.lightBoxOverlayDivClickHandler = function (event){
 		this.close(event);
@@ -105,6 +124,8 @@
 		
 		this.closeButton.style.left = (this.contentRect.getRight() - this.closeButton.width/2) + "px";
 		this.closeButton.style.top = (top + this.contentRect.getBottom() - this.closeButton.height/2) + "px";
+
+        this.progressLabel.style.top = this.contentRect.height/2;
 
         var _this = this;
         if(this.isMobile){

@@ -155,17 +155,19 @@
         this.loadedScripts.push(url);
     };
 
-    DSClassManager.prototype.loadDemo = function( name, callBack, errorCallBack ) {
+    DSClassManager.prototype.loadDemo = function( name, callBack, errorCallBack, updateCallBack ) {
         //console.log("DSClassManager.loadDemo()", name);
         this.currentLoadDemoResource = this.getDemoResourceByName(name);
         this.currentDemoName = name;
         this.loadDemoCallback = callBack;
         this.loadDemoErrorCallBack = errorCallBack;
+        this.updateCallBack = updateCallBack;
         if(!this.currentLoadDemoResource){
             console.log("DSClassManager.loadDemo() Error, no demo found");
             errorCallBack();
             return;
         }
+        this.currentLoadIndex = 0;
         this.loadNextDemoResourceJSFile();
     };
 
@@ -175,10 +177,12 @@
     };
 
     DSClassManager.prototype.loadNextDemoResourceJSFile = function() {
+        this.updateCallBack("loading js : "+this.currentLoadIndex+" / "+this.currentLoadDemoResource.dependencies.length);
         for(var i=0;i<this.currentLoadDemoResource.dependencies.length;i++){
             if(!this.scriptIsLoaded(this.currentLoadDemoResource.dependencies[i])){
                 var _this = this;
                 this.loadScript(this.currentLoadDemoResource.dependencies[i], function(){_this.loadNextDemoResourceJSFile()} , function(){_this.loadNextDemoResourceJSFileError()});
+                this.currentLoadIndex++;
                 return;
             }
         }
