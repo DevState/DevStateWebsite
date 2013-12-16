@@ -108,9 +108,9 @@
 
         var _this = this;
         if(this.isMobile){
-            this.animator.reset(100,25,function(){_this.fadeIn()} , function(){_this.openComplete()});
+            this.animator.reset(90,30,function(){_this.fadeIn()} , function(){_this.openComplete()});
         }else{
-            this.animator.reset(800,20,function(){_this.fadeIn()} , function(){_this.openComplete()});
+            this.animator.reset(500,20,function(){_this.fadeIn()} , function(){_this.openComplete()});
         }
 		this.animator.start();
         if(this.beginOpenCallback != undefined){
@@ -140,6 +140,9 @@
 
 	
 	DSLightBox.prototype.close = function(event){
+        if(this.animator.isAnimating()){
+            return;
+        }
         this.fadeOutBeginRect = this.contentRect.clone();
         this.fadeOutTargetRect = new SimpleGeometry.Rectangle(event.pageX-25, event.pageY-25, 50, 50);
 		this.closeButton.style.display = this.borderDiv.style.display = "none";
@@ -148,7 +151,7 @@
             return;
         }
 		var _this = this;
-		this.animator.reset(1000,20,function(){_this.fadeOut()} , function(){_this.closeComplete()});
+		this.animator.reset(500,20,function(){_this.fadeOut()} , function(){_this.closeComplete()});
 		this.animator.start();
 		if(this.beginCloseCallback != undefined){
 			this.beginCloseCallback();

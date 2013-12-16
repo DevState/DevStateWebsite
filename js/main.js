@@ -22,13 +22,23 @@ function isHorizontalLayout(){
     return size.width > size.height;
 }
 
-
 //http://stackoverflow.com/questions/1005153/auto-detect-mobile-browser-via-user-agent
 //not 100% sure this will work...
 function isMobile() {
     //console.log("BCHWMemoryGame.isMobile()", navigator.appVersion );
     var size = viewportSize();
     return navigator.appVersion.toLowerCase().indexOf("mobile") > -1 || Math.min(size.width, size.height)<400;//TODO: 400 is arbitrary number...
+}
+
+function getNodeValue(node, nodeName){
+    var child = node.getElementsByTagName(nodeName)[0];
+    if(!child){
+        return "";
+    }
+    if(!child || !child.childNodes || ! child.childNodes[0] || !child.childNodes[0].nodeValue){
+        return "";
+    }
+    return child.childNodes[0].nodeValue;
 }
 
 //===============================::DEMOS / LIGHTBOX::===========================
@@ -92,8 +102,7 @@ var detailsDiv;
 var demoRect;
 var contentRect;
 
-function showDemo(demoName){
-    //console.log("showDemo()", demoName);
+function showDemo(){
 	var size = viewportSize();
 	contentRect = new SimpleGeometry.Rectangle();
     if(size.width>largeDemoSize && size.height>largeDemoSize){
@@ -156,7 +165,7 @@ function getDemoToolTip(demoNode){
 function getLightBoxDemoTitle(demoNode){
     //console.log("getLightBoxDemoTitle(demoNode)", demoNode, getNodeValue(demoNode, "shortName"),  getNodeValue(demoNode, "name"));
     var shortName = getNodeValue(demoNode, "shortName");
-    return (demoRect.width<largeDemoSize && shortName) ? shortName : getNodeValue(demoNode, "name"); ;
+    return (demoRect.width<largeDemoSize && shortName) ? shortName : getNodeValue(demoNode, "name");
 }
 
 //TODO : merge with getLightBoxDemoTitle
@@ -249,7 +258,7 @@ function demoLinkClickHandler(event){
 
 //TODO : these two seem a bit risky...
 function showGif(event){
-    if(!isMobile()){
+    if(isMobile()){
         return;
     }
 	var path = event.target.src.split("/");
@@ -259,7 +268,7 @@ function showGif(event){
 }
 
 function showPng(event){
-    if(!isMobile()){
+    if(isMobile()){
         return;
     }
 	var path = event.target.src.split("/");
@@ -279,18 +288,6 @@ function parseDemosXML(){
     var demosXMLSource = document.getElementById("demosMenuXML").textContent;
     var parser = new DOMParser();
     demosXML = parser.parseFromString(demosXMLSource, "application/xml");
-}
-
-//TODO : move to DSUtils.js
-function getNodeValue(node, nodeName){
-    var child = node.getElementsByTagName(nodeName)[0];
-    if(!child){
-        return "";
-    }
-    if(!child || !child.childNodes || ! child.childNodes[0] || !child.childNodes[0].nodeValue){
-        return "";
-    }
-    return child.childNodes[0].nodeValue;
 }
 
 function setUpDemosMenuFromXML(){
@@ -333,7 +330,7 @@ function init(){
 
 var readyStateCheckInterval = setInterval( function() {
 	if (document.readyState === "complete") {
-		mailNode = document.getElementById( "subscriber" );
+		//mailNode = document.getElementById( "subscriber" );
         clearInterval(readyStateCheckInterval);
 		init();
     }
