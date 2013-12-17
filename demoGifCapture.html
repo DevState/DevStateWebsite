@@ -119,11 +119,11 @@
 			}
 			
 			function showDemo(demoName){
-                console.log("showDemo()")
+                console.log("openDemoLightBox()")
 				if(currentDemo){
 					currentDemo.tearDown();
 				}
-				//console.log("showDemo() ",demoName+"Demo");
+				//console.log("openDemoLightBox() ",demoName+"Demo");
 				currentDemo = new this[demoName+"Demo"](0,0,demoWidth,demoHeight, document.body);
 				currentDemo.run();
 				var toolTip = document.getElementById("toolTip");

@@ -192,9 +192,7 @@
         this.contentDiv.style.width = Math.round(this.contentRect.width)+"px";
         this.contentDiv.style.height = Math.round(this.contentRect.height)+"px";
     };
-	
 
-	
 	DSLightBox.prototype.closeComplete = function(){
 		//console.log("DSLightBox.closeComplete()");
 		this.closeButton.style.display = this.borderDiv.style.display = this.overlayDiv.style.display = this.contentDiv.style.display = "none";

@@ -68,9 +68,9 @@ function lightBoxOverlayDivClick(){
 
 function lightBoxNextDemoClickHandler(){
 	tearDownDemo();
-    var demoName = classManager.getNextDemoName();
-	setUpDemo(demoName);
-	location.hash = demoName;
+    demoNavigationModel.navigateToNext();
+	loadCurrentDemo();
+	location.hash = demoNavigationModel.currentDemoResource.name;
 	if(location.hostname && location.hostname.toLowerCase().indexOf("devstate")>-1){
 		ga("send", "event", "nextDemo");
 	}
@@ -78,9 +78,9 @@ function lightBoxNextDemoClickHandler(){
 
 function lightBoxPreviousDemoClickHandler(){
 	tearDownDemo();
-    var demoName = classManager.getPreviousDemoName();
-	setUpDemo(demoName);
-	location.hash = demoName;
+    demoNavigationModel.navigateToPrevious();
+	loadCurrentDemo();
+	location.hash = demoNavigationModel.currentDemoResource.name;
 	if(location.hostname && location.hostname.toLowerCase().indexOf("devstate")>-1){
 		ga("send", "event", "previousDemo");
 	}
@@ -88,15 +88,16 @@ function lightBoxPreviousDemoClickHandler(){
 
 function lightBoxResetDemoClickHandler(){
 	tearDownDemo();
-	setUpDemo(classManager.currentDemoName);
+	loadCurrentDemo();
 	if(location.hostname && location.hostname.toLowerCase().indexOf("devstate")>-1){
-		ga("send", "event", "resetDemo", classManager.currentDemoName);
+		ga("send", "event", "resetDemo", demoNavigationModel.currentDemoResource.name);
 	}
 }
 
 function lightBoxSubMenuClickHandler(demoName){
     tearDownDemo();
-    setUpDemo(demoName);
+    demoNavigationModel.navigateToDemoByName(demoName);
+    loadCurrentDemo();
 }
 
 //TODO : these should be renamed to lighbox proportions or so (lightBoxLongSide, lightBoxShortSide)
@@ -109,16 +110,15 @@ var smallDemoSize = 300;
 var largeDemoSize = 400;
 
 var mainScope = this;
-var demosXML;
-var classManager;
-var currentDemo;
-var lastClickedDemoName;//this isn't the greatest, try to remove or find a more elegant solution
+var classLoader;
+var demoNavigationModel;
+
 var detailsDiv;
 var demoRect;
 var contentRect;
 
 
-function showDemo(){
+function openDemoLightBox(){
 	var size = viewportSize();
 	contentRect = new SimpleGeometry.Rectangle();
     if(size.width>largeDemoSize && size.height>largeDemoSize){
@@ -148,13 +148,9 @@ function showDemo(){
 
     contentRect.x = size.width/2 - contentRect.width/2;
     contentRect.y = size.height/2 - contentRect.height/2;
-    /*
-    console.log("showDemo()", demoName);
-    console.log("size : ", size.width, size.height);
-    console.log(contentRect.toString());*/
 
     if(size.width < contentRect.width || size.height < contentRect.height){
-        //TODO : find a slightly better solution for this, maybe use
+        //TODO : find a better solution for this
         alert("Sorry, your screen or resolution is too small("+size.width+"x"+size.height+") to show this demo");
         if(location.hostname && location.hostname.toLowerCase().indexOf("devstate")>-1){
             ga("send", "event", "screenTooSmall", size.width+"x"+size.height);
@@ -165,8 +161,8 @@ function showDemo(){
 	lightBox.open(contentRect);
 }
 
-function setUpDemo(demoName){
-    classManager.loadDemo(demoName, demoJSLoadHandler, demoJSLoadErrorHandler, demoJSLoadUpdateHandler);
+function loadCurrentDemo(){
+    classLoader.loadDemo(demoNavigationModel.currentDemoResource, demoJSLoadHandler, demoJSLoadErrorHandler, demoJSLoadUpdateHandler);
     lightBox.showLoadProgress();
 }
 
@@ -200,10 +196,9 @@ function smallSize(){
 
 function demoJSLoadHandler(){
     lightBox.hideLoadProgress();
-    currentDemo = new mainScope[(classManager.currentDemoName+"Demo")](demoRect.x, demoRect.y, demoRect.width, demoRect.height, lightBox.contentDiv);
-    //var demoNode = demosXML.getElementById(classManager.currentDemoName); //wtf, Firefox doesn't support getElementById on xml documents?!
-    var demoResource = classManager.getDemoResourceByName(classManager.currentDemoName);
-    //console.log("demoJSLoadHandler", demoNode, classManager.currentDemoName);
+    currentDemo = new mainScope[(demoNavigationModel.currentDemoResource.name+"Demo")](demoRect.x, demoRect.y, demoRect.width, demoRect.height, lightBox.contentDiv);
+    //var demoNode = demosXML.getElementById(demoNavigationModel.currentDemoResource); //wtf, Firefox doesn't support getElementById on xml documents?!
+    //console.log("demoJSLoadHandler", demoNode, demoNavigationModel.currentDemoResource);
     currentDemo.run();
     var padding = 10;
     detailsDiv = document.createElement("div");
@@ -220,12 +215,13 @@ function demoJSLoadHandler(){
         detailsDiv.style.height = (contentRect.height-demoRect.height-padding*2) + "px";
     }
     detailsDiv.style.fontFamily = "Sans-serif";
-    var detailsHtml = "<h2 class='"+getDemoBoxTitleStyle()+"' >"+getLightBoxDemoTitle(demoResource)+"</h2><p style='padding-top:20px'>"+getDemoToolTip(demoResource)+"</p>";
-    var subMenu = classManager.getSubmenuForDemoName(classManager.currentDemoName);
-    if(subMenu.length > 0){
+    var detailsHtml = "<h2 class='"+getDemoBoxTitleStyle()+"' >"+getLightBoxDemoTitle(demoNavigationModel.currentDemoResource)+"</h2>";
+    detailsHtml += "<p style='padding-top:20px'>"+getDemoToolTip(demoNavigationModel.currentDemoResource)+"</p>";
+    var subMenu = demoNavigationModel.getCurrentNavigationItem();
+    if(subMenu.length > 1){
         detailsHtml +="<p class='lightboxSubMenu' >";
         for(var i=0; i< subMenu.length; i++){
-            detailsHtml +="<a href = 'javascript:void(0)' onclick = 'lightBoxSubMenuClickHandler(\""+subMenu[i]+"\")'>"+subMenu[i]+"</a>";
+            detailsHtml +="<a href = 'javascript:void(0)' onclick = 'lightBoxSubMenuClickHandler(\""+subMenu[i].name+"\")'>"+subMenu[i].name+"</a>";
         }
         detailsHtml +="</p>";
     }
@@ -235,7 +231,7 @@ function demoJSLoadHandler(){
     detailsDiv.innerHTML = detailsHtml;
     lightBox.setContent(smallSize() ? undefined : detailsDiv);
     if(location.hostname && location.hostname.toLowerCase().indexOf("devstate")>-1){
-        ga("send", "event", "DemoView", classManager.currentDemoName);
+        ga("send", "event", "DemoView", demoNavigationModel.currentDemoResource);
     }
 }
 
@@ -261,7 +257,7 @@ function hideDemo(forceClose){
 }
 
 function lightBoxOpenComplete(){
-	setUpDemo(lastClickedDemoName);
+	loadCurrentDemo(demoNavigationModel.currentDemoResource);
 }
 
 function lightBoxBeginClose(){
@@ -270,9 +266,13 @@ function lightBoxBeginClose(){
 }
 
 
+
+//========================:: DEMOS MENU RELATED ::==============================
+
 function demoLinkClickHandler(event){
-    lastClickedDemoName = getDemoFromHash(event.currentTarget.hash);
-    showDemo(lastClickedDemoName);
+    var demoName = getDemoNameFromHash(event.currentTarget.hash);
+    demoNavigationModel.navigateToDemoByName(demoName);
+    openDemoLightBox();
 }
 
 //TODO : these two seem a bit risky...
@@ -296,12 +296,12 @@ function showPng(event){
 	event.target.src = path.join("/");
 }
 
-function getDemoFromHash(hash){
+function getDemoNameFromHash(hash){
 	return hash.split("#")[1];
 }
 
 
-function buildDemosMenu(){
+function buildDemosMenu(demosXML){
     var menuItems = demosXML.getElementsByTagName( "menuItem");
     var demosHtml = "";
     var demo;
@@ -318,16 +318,22 @@ function buildDemosMenu(){
 }
 
 
+//========================:: STARTUP ::==============================
+
 function init(){
 	//console.log("init()");
     var demosXMLSource = document.getElementById("demosMenuXML").textContent;
     var parser = new DOMParser();
-    demosXML = parser.parseFromString(demosXMLSource, "application/xml");
+    var demosXML = parser.parseFromString(demosXMLSource, "application/xml");
 
-    classManager = new DSClassManager(demosXML);
+    var menuItems = demosXML.getElementsByTagName("menuItemNode");
 
-    buildDemosMenu();
+    demoNavigationModel = new DemoNavigationModel(demosXML);
+    classLoader = new DSClassLoader();
+
+    buildDemosMenu(demosXML);
 	lightBox = new DSLightBox(undefined, lightBoxOpenComplete, lightBoxBeginClose, undefined, isMobile());
+
     window.onscroll = function () {
         forceHideDemo();
     }
@@ -335,10 +341,10 @@ function init(){
 	if(!window.location.hash) {
 		return;
 	}
-	var demoName = getDemoFromHash(window.location.hash);
-	if(classManager.getDemoResourceByName(demoName)){
+	var demoName = getDemoNameFromHash(window.location.hash);
+	if(demoNavigationModel.getDemoResourceByName(demoName)){
         lastClickedDemoName = demoName;
-		showDemo(demoName);
+		openDemoLightBox(demoName);
 	}
 }
 

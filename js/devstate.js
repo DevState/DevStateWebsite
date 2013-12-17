@@ -1,131 +1,20 @@
+/**
+ * Created by sakri on 17-12-13.
+ * Loads individual scripts and demo dependencies
+ * keeps track of loads, does not load same script twice
+ */
 (function (window){
 
     //this should be a singleton, everything can be static?
-	var DSClassManager = function(demosXML){
+    var DSClassLoader = function(){
         this.loadedScripts=[];
-        this.demosXML = demosXML;
-        this.setDemoResources();
     };
 
-    //TODO: repetition from main.js move to some general Util class?
-    DSClassManager.prototype.getNodeValue = function(node, nodeName){
-        return node.getElementsByTagName(nodeName)[0].childNodes[0].nodeValue;
-    };
-
-
-    DSClassManager.prototype.createDemoResourceFromDemoNode = function(demoNode){
-        var name = demoNode.getAttribute("id");
-        var shortName = getNodeValue(demoNode, "shortName");
-        var toolTip = getNodeValue(demoNode, "toolTip");
-        var toolTipShort = getNodeValue(demoNode, "toolTipShort");
-        var thumb = getNodeValue(demoNode, "thumb");
-        var dependencyNode = demoNode.getElementsByTagName("dependencies")[0];
-        var paths = dependencyNode.getElementsByTagName("path");
-        var dependencies = [];
-        for(var i=0;i<paths.length;i++){
-            //console.log(paths[i], paths[i].childNodes[0], paths[i].childNodes[0].nodeValue);
-            dependencies[i] = paths[i].childNodes[0].nodeValue;
-        }
-        //console.log(dependencies);
-        return new DSDemoResource (name, shortName, toolTip, toolTipShort, thumb, dependencies);
-    };
-
-    DSClassManager.prototype.setDemoResources = function() {
-        this.demos = [];
-        this.navigationItems = [];
-
-        var menuItems = this.demosXML.getElementsByTagName( "menuItem");
-
-        var demo, menuItem, navigationItem, demoResource, subMenu, i, j, demos;
-        for(i = 0 ; i < menuItems.length; i++){
-            menuItem = menuItems[i];
-            subMenu = [];
-            demos = menuItem.getElementsByTagName("demo");
-            for(j=0; j<demos.length; j++){
-                demo = this.createDemoResourceFromDemoNode(demos[j]);
-                this.demos.push(demo);
-                subMenu.push(demo.name);
-                //console.log("setDemoResources", demo.name);
-            }
-            if(subMenu.length>1){
-                this.navigationItems.push(new DSDemoNavigationItem(subMenu[0], subMenu.concat()));
-            }else{
-                this.navigationItems.push(new DSDemoNavigationItem(demo.name));
-            }
-        }
-        this.currentDemoName = "";
-    };
-
-    DSClassManager.prototype.getNextDemoName = function(){
-        for(var i=0;i<this.navigationItems.length;i++){
-            if(this.currentDemoName==this.navigationItems[i].demoName || this.navigationItems[i].subMenu.indexOf(this.currentDemoName)>-1){
-                if(i<this.navigationItems.length-1){
-                    return this.navigationItems[i+1].demoName;
-                }
-            }
-        }
-        return this.navigationItems[0].demoName;//meh
-    };
-
-    DSClassManager.prototype.getPreviousDemoName = function(){
-        for(var i=0;i<this.navigationItems.length;i++){
-            if(this.currentDemoName==this.navigationItems[i].demoName || this.navigationItems[i].subMenu.indexOf(this.currentDemoName)>-1){
-                if(i>0){
-                    return this.navigationItems[i-1].demoName;
-                }
-            }
-        }
-        return this.navigationItems[this.navigationItems.length-1].demoName;//meh
-    };
-
-
-    DSClassManager.prototype.getNavigationItemForDemoName = function(demoName){
-        var item;
-        for(var i=0;i<this.navigationItems.length;i++){
-            item = this.navigationItems[i];
-            if(item.demoName == demoName){
-                return item;
-            }
-            if(item.subMenu && item.subMenu.length>1 && item.subMenu.indexOf(demoName)>-1){
-                return item;
-            }
-        }
-        return undefined;
-    };
-
-    DSClassManager.prototype.getSubmenuForDemoName = function(demoName){
-        //console.log("DSClassManager.getSubmenuForDemoName()", demoName);
-        var item = this.getNavigationItemForDemoName(demoName);
-        if(item){
-            return item.subMenu;
-        }
-        return [];
-    };
-
-    DSClassManager.prototype.getDemoResourceByName = function( name ) {
-        for(var i=0;i<this.demos.length;i++){
-            if(this.demos[i].name==name){
-                return this.demos[i];
-            }
-        }
-        return null;
-    };
-    DSClassManager.prototype.getDemoResourceForNavigationItem = function(item){
-        for(var i=0;i<this.demos.length;i++){
-            if(this.demos[i].name == item.demoName){
-                return this.demos[i];
-            }
-        }
-        return undefined;//meh
-    };
-
-
-    DSClassManager.prototype.scriptIsLoaded = function( url ) {
+    DSClassLoader.prototype.scriptIsLoaded = function( url ) {
         return this.loadedScripts.indexOf(url) > -1;
     };
 
-
-    DSClassManager.prototype.loadScript = function( url, callBack, errorCallBack ) {
+    DSClassLoader.prototype.loadScript = function( url, callBack, errorCallBack ) {
         if(this.scriptIsLoaded(url)){
             setTimeout(callBack,200);
             return;
@@ -146,7 +35,7 @@
                 callBack();
             };
             script.onerror = function(){
-                console.log("DSClassManager.loadScript ERROR");
+                console.log("DSClassLoader.loadScript ERROR");
                 errorCallBack();
             };
         }
@@ -155,15 +44,14 @@
         this.loadedScripts.push(url);
     };
 
-    DSClassManager.prototype.loadDemo = function( name, callBack, errorCallBack, updateCallBack ) {
-        //console.log("DSClassManager.loadDemo()", name);
-        this.currentLoadDemoResource = this.getDemoResourceByName(name);
-        this.currentDemoName = name;
+    DSClassLoader.prototype.loadDemo = function( demoResource, callBack, errorCallBack, updateCallBack ) {
+        //console.log("DSClassLoader.loadCurrentDemo()", name);
+        this.currentLoadDemoResource = demoResource;
         this.loadDemoCallback = callBack;
         this.loadDemoErrorCallBack = errorCallBack;
         this.updateCallBack = updateCallBack;
         if(!this.currentLoadDemoResource){
-            console.log("DSClassManager.loadDemo() Error, no demo found");
+            console.log("DSClassLoader.loadDemo() Error, no demo found");
             errorCallBack();
             return;
         }
@@ -171,29 +59,145 @@
         this.loadNextDemoResourceJSFile();
     };
 
-    DSClassManager.prototype.loadNextDemoResourceJSFileError = function() {
-        console.log("DSClassManager.loadNextDemoResourceJSFileError()");
+    DSClassLoader.prototype.loadNextDemoResourceJSFileError = function() {
+        //console.log("DSClassLoader.loadNextDemoResourceJSFileError()");
         this.loadDemoErrorCallBack();
     };
 
-    DSClassManager.prototype.loadNextDemoResourceJSFile = function() {
-        this.updateCallBack("loading js : "+this.currentLoadIndex+" / "+this.currentLoadDemoResource.dependencies.length);
+    DSClassLoader.prototype.loadNextDemoResourceJSFile = function() {
+        if(this.updateCallBack){
+            this.updateCallBack("loading js : "+this.currentLoadIndex+" / "+this.currentLoadDemoResource.dependencies.length);
+        }
+        var i, scope, path;
         for(var i=0;i<this.currentLoadDemoResource.dependencies.length;i++){
-            if(!this.scriptIsLoaded(this.currentLoadDemoResource.dependencies[i])){
-                var _this = this;
-                this.loadScript(this.currentLoadDemoResource.dependencies[i], function(){_this.loadNextDemoResourceJSFile()} , function(){_this.loadNextDemoResourceJSFileError()});
+            path = this.currentLoadDemoResource.dependencies[i];
+            if(!this.scriptIsLoaded(path)){
+                scope = this;
+                this.loadScript(path, function(){scope.loadNextDemoResourceJSFile()} , function(){scope.loadNextDemoResourceJSFileError()});
                 this.currentLoadIndex++;
                 return;
             }
         }
         this.loadDemoCallback();
         this.loadDemoCallback = null;
+        this.updateCallBack = null;
         this.loadDemoErrorCallBack = null;
         this.currentLoadDemoResource = null;
     };
 
+    window.DSClassLoader = DSClassLoader;
 
-	window.DSClassManager = DSClassManager;
+}(window));
+/**
+ * Created by sakri on 23-10-13.
+ * Loads individual scripts and demo dependencies
+ * keeps track of loads, does not load same script twice
+ * Contains code for DSDemoResource
+ */
+
+(function (window){
+
+    //this should be a singleton, everything can be static?
+	var DemoNavigationModel = function(demosXML){
+        this.parseDemosXML(demosXML);
+    };
+
+    //=============::PARSING::================
+
+    //TODO: repetition from main.js move to some general Util class?
+    DemoNavigationModel.prototype.getNodeValue = function(node, nodeName){
+        return node.getElementsByTagName(nodeName)[0].childNodes[0].nodeValue;
+    };
+
+
+    DemoNavigationModel.prototype.createDemoResourceFromDemoXMLNode = function(demoNode){
+        var name = demoNode.getAttribute("id");
+        var shortName = getNodeValue(demoNode, "shortName");
+        var toolTip = getNodeValue(demoNode, "toolTip");
+        var toolTipShort = getNodeValue(demoNode, "toolTipShort");
+        var thumb = getNodeValue(demoNode, "thumb");
+        var dependencyNode = demoNode.getElementsByTagName("dependencies")[0];
+        var paths = dependencyNode.getElementsByTagName("path");
+        var dependencies = [];
+        for(var i=0;i<paths.length;i++){
+            //console.log(paths[i], paths[i].childNodes[0], paths[i].childNodes[0].nodeValue);
+            dependencies[i] = paths[i].childNodes[0].nodeValue;
+        }
+        //console.log(dependencies);
+        return new DSDemoResource (name, shortName, toolTip, toolTipShort, thumb, dependencies);
+    };
+
+    DemoNavigationModel.prototype.parseDemosXML = function(demosXML) {
+        this.demos = [];
+        this.navigationItems = [];//2 dimensional array, items can have subnavigations [ [demoA] , [demoB, demoC], [demoD] ]
+
+        var menuItems = demosXML.getElementsByTagName("menuItem");
+
+        var demo, menuItemNode, navigationItem, demoResource, subMenu, i, j, demos;
+        for(i = 0 ; i < menuItems.length; i++){
+            menuItemNode = menuItems[i];
+            subMenu = [];
+            demos = menuItemNode.getElementsByTagName("demo");
+            for(j=0; j<demos.length; j++){
+                demo = this.createDemoResourceFromDemoXMLNode(demos[j]);
+                this.demos.push(demo);
+                subMenu.push(demo);
+            }
+            this.navigationItems.push(subMenu);
+        }
+        console.log("DemoNavigationModel.prototype.parseDemosXML");
+        console.log(this.demos.length);
+        console.log(this.navigationItems.length);
+        this.currentNavigationIndex  = 0;
+        this.currentDemoResource = "";
+    };
+
+    //=============::NAVIGATION RELATED::================
+
+    DemoNavigationModel.prototype.navigateToNext = function(){
+        this.currentNavigationIndex = ++this.currentNavigationIndex % this.navigationItems.length;
+        this.currentDemoResource = this.navigationItems[this.currentNavigationIndex][0];
+        return this.currentDemoResource;
+    };
+
+    DemoNavigationModel.prototype.navigateToPrevious = function(){
+        this.currentNavigationIndex = --this.currentNavigationIndex  >-1 ? this.currentNavigationIndex : this.navigationItems.length-1;
+        this.currentDemoResource = this.navigationItems[this.currentNavigationIndex][0];
+        return this.currentDemoResource;
+    };
+
+    DemoNavigationModel.prototype.navigateToDemoByName = function(demoName){
+        var demo = this.getDemoResourceByName(demoName);
+        if(!demo){
+            return undefined;
+        }
+        for(var i=0;i<this.navigationItems.length;i++){
+            if(this.navigationItems[i].indexOf(demo)>-1){
+                this.currentNavigationIndex = i;
+                this.currentDemoResource = demo;
+                return this.currentDemoResource;
+            }
+        }
+        return undefined;//failsafe, should never happen
+    };
+
+    DemoNavigationModel.prototype.getDemoResourceByName = function(demoName){
+        for(var i=0;i<this.demos.length;i++){
+            if(this.demos[i].name == demoName){
+                return this.demos[i];
+            }
+        }
+        return undefined;
+    }
+
+    DemoNavigationModel.prototype.getCurrentNavigationItem = function(){
+        return this.navigationItems[this.currentNavigationIndex];
+    }
+
+
+	window.DemoNavigationModel = DemoNavigationModel;
+
+
 
     //====================:: Dev State Demo Resource ::==================================
 
@@ -217,14 +221,7 @@
 
     window.DSDemoResource = DSDemoResource;
 
-    //====================:: Dev State Demos Navigation Item ::==================================
 
-     var DSDemoNavigationItem = function(demoName, subMenu){
-        this.demoName = demoName;
-        this.subMenu = subMenu == undefined ? [] : subMenu;
-    };
-
-    window.DSDemoNavigationItem = DSDemoNavigationItem;
 }(window));
 (function (window){
 
@@ -1149,9 +1146,7 @@
         this.contentDiv.style.width = Math.round(this.contentRect.width)+"px";
         this.contentDiv.style.height = Math.round(this.contentRect.height)+"px";
     };
-	
 
-	
 	DSLightBox.prototype.closeComplete = function(){
 		//console.log("DSLightBox.closeComplete()");
 		this.closeButton.style.display = this.borderDiv.style.display = this.overlayDiv.style.display = this.contentDiv.style.display = "none";
@@ -1382,9 +1377,9 @@ function lightBoxOverlayDivClick(){
 
 function lightBoxNextDemoClickHandler(){
 	tearDownDemo();
-    var demoName = classManager.getNextDemoName();
-	setUpDemo(demoName);
-	location.hash = demoName;
+    demoNavigationModel.navigateToNext();
+	loadCurrentDemo();
+	location.hash = demoNavigationModel.currentDemoResource.name;
 	if(location.hostname && location.hostname.toLowerCase().indexOf("devstate")>-1){
 		ga("send", "event", "nextDemo");
 	}
@@ -1392,9 +1387,9 @@ function lightBoxNextDemoClickHandler(){
 
 function lightBoxPreviousDemoClickHandler(){
 	tearDownDemo();
-    var demoName = classManager.getPreviousDemoName();
-	setUpDemo(demoName);
-	location.hash = demoName;
+    demoNavigationModel.navigateToPrevious();
+	loadCurrentDemo();
+	location.hash = demoNavigationModel.currentDemoResource.name;
 	if(location.hostname && location.hostname.toLowerCase().indexOf("devstate")>-1){
 		ga("send", "event", "previousDemo");
 	}
@@ -1402,15 +1397,16 @@ function lightBoxPreviousDemoClickHandler(){
 
 function lightBoxResetDemoClickHandler(){
 	tearDownDemo();
-	setUpDemo(classManager.currentDemoName);
+	loadCurrentDemo();
 	if(location.hostname && location.hostname.toLowerCase().indexOf("devstate")>-1){
-		ga("send", "event", "resetDemo", classManager.currentDemoName);
+		ga("send", "event", "resetDemo", demoNavigationModel.currentDemoResource.name);
 	}
 }
 
 function lightBoxSubMenuClickHandler(demoName){
     tearDownDemo();
-    setUpDemo(demoName);
+    demoNavigationModel.navigateToDemoByName(demoName);
+    loadCurrentDemo();
 }
 
 //TODO : these should be renamed to lighbox proportions or so (lightBoxLongSide, lightBoxShortSide)
@@ -1423,16 +1419,15 @@ var smallDemoSize = 300;
 var largeDemoSize = 400;
 
 var mainScope = this;
-var demosXML;
-var classManager;
-var currentDemo;
-var lastClickedDemoName;//this isn't the greatest, try to remove or find a more elegant solution
+var classLoader;
+var demoNavigationModel;
+
 var detailsDiv;
 var demoRect;
 var contentRect;
 
 
-function showDemo(){
+function openDemoLightBox(){
 	var size = viewportSize();
 	contentRect = new SimpleGeometry.Rectangle();
     if(size.width>largeDemoSize && size.height>largeDemoSize){
@@ -1462,13 +1457,9 @@ function showDemo(){
 
     contentRect.x = size.width/2 - contentRect.width/2;
     contentRect.y = size.height/2 - contentRect.height/2;
-    /*
-    console.log("showDemo()", demoName);
-    console.log("size : ", size.width, size.height);
-    console.log(contentRect.toString());*/
 
     if(size.width < contentRect.width || size.height < contentRect.height){
-        //TODO : find a slightly better solution for this, maybe use
+        //TODO : find a better solution for this
         alert("Sorry, your screen or resolution is too small("+size.width+"x"+size.height+") to show this demo");
         if(location.hostname && location.hostname.toLowerCase().indexOf("devstate")>-1){
             ga("send", "event", "screenTooSmall", size.width+"x"+size.height);
@@ -1479,8 +1470,8 @@ function showDemo(){
 	lightBox.open(contentRect);
 }
 
-function setUpDemo(demoName){
-    classManager.loadDemo(demoName, demoJSLoadHandler, demoJSLoadErrorHandler, demoJSLoadUpdateHandler);
+function loadCurrentDemo(){
+    classLoader.loadDemo(demoNavigationModel.currentDemoResource, demoJSLoadHandler, demoJSLoadErrorHandler, demoJSLoadUpdateHandler);
     lightBox.showLoadProgress();
 }
 
@@ -1514,10 +1505,9 @@ function smallSize(){
 
 function demoJSLoadHandler(){
     lightBox.hideLoadProgress();
-    currentDemo = new mainScope[(classManager.currentDemoName+"Demo")](demoRect.x, demoRect.y, demoRect.width, demoRect.height, lightBox.contentDiv);
-    //var demoNode = demosXML.getElementById(classManager.currentDemoName); //wtf, Firefox doesn't support getElementById on xml documents?!
-    var demoResource = classManager.getDemoResourceByName(classManager.currentDemoName);
-    //console.log("demoJSLoadHandler", demoNode, classManager.currentDemoName);
+    currentDemo = new mainScope[(demoNavigationModel.currentDemoResource.name+"Demo")](demoRect.x, demoRect.y, demoRect.width, demoRect.height, lightBox.contentDiv);
+    //var demoNode = demosXML.getElementById(demoNavigationModel.currentDemoResource); //wtf, Firefox doesn't support getElementById on xml documents?!
+    //console.log("demoJSLoadHandler", demoNode, demoNavigationModel.currentDemoResource);
     currentDemo.run();
     var padding = 10;
     detailsDiv = document.createElement("div");
@@ -1534,12 +1524,13 @@ function demoJSLoadHandler(){
         detailsDiv.style.height = (contentRect.height-demoRect.height-padding*2) + "px";
     }
     detailsDiv.style.fontFamily = "Sans-serif";
-    var detailsHtml = "<h2 class='"+getDemoBoxTitleStyle()+"' >"+getLightBoxDemoTitle(demoResource)+"</h2><p style='padding-top:20px'>"+getDemoToolTip(demoResource)+"</p>";
-    var subMenu = classManager.getSubmenuForDemoName(classManager.currentDemoName);
-    if(subMenu.length > 0){
+    var detailsHtml = "<h2 class='"+getDemoBoxTitleStyle()+"' >"+getLightBoxDemoTitle(demoNavigationModel.currentDemoResource)+"</h2>";
+    detailsHtml += "<p style='padding-top:20px'>"+getDemoToolTip(demoNavigationModel.currentDemoResource)+"</p>";
+    var subMenu = demoNavigationModel.getCurrentNavigationItem();
+    if(subMenu.length > 1){
         detailsHtml +="<p class='lightboxSubMenu' >";
         for(var i=0; i< subMenu.length; i++){
-            detailsHtml +="<a href = 'javascript:void(0)' onclick = 'lightBoxSubMenuClickHandler(\""+subMenu[i]+"\")'>"+subMenu[i]+"</a>";
+            detailsHtml +="<a href = 'javascript:void(0)' onclick = 'lightBoxSubMenuClickHandler(\""+subMenu[i].name+"\")'>"+subMenu[i].name+"</a>";
         }
         detailsHtml +="</p>";
     }
@@ -1549,7 +1540,7 @@ function demoJSLoadHandler(){
     detailsDiv.innerHTML = detailsHtml;
     lightBox.setContent(smallSize() ? undefined : detailsDiv);
     if(location.hostname && location.hostname.toLowerCase().indexOf("devstate")>-1){
-        ga("send", "event", "DemoView", classManager.currentDemoName);
+        ga("send", "event", "DemoView", demoNavigationModel.currentDemoResource);
     }
 }
 
@@ -1575,7 +1566,7 @@ function hideDemo(forceClose){
 }
 
 function lightBoxOpenComplete(){
-	setUpDemo(lastClickedDemoName);
+	loadCurrentDemo(demoNavigationModel.currentDemoResource);
 }
 
 function lightBoxBeginClose(){
@@ -1584,9 +1575,13 @@ function lightBoxBeginClose(){
 }
 
 
+
+//========================:: DEMOS MENU RELATED ::==============================
+
 function demoLinkClickHandler(event){
-    lastClickedDemoName = getDemoFromHash(event.currentTarget.hash);
-    showDemo(lastClickedDemoName);
+    var demoName = getDemoNameFromHash(event.currentTarget.hash);
+    demoNavigationModel.navigateToDemoByName(demoName);
+    openDemoLightBox();
 }
 
 //TODO : these two seem a bit risky...
@@ -1610,12 +1605,12 @@ function showPng(event){
 	event.target.src = path.join("/");
 }
 
-function getDemoFromHash(hash){
+function getDemoNameFromHash(hash){
 	return hash.split("#")[1];
 }
 
 
-function buildDemosMenu(){
+function buildDemosMenu(demosXML){
     var menuItems = demosXML.getElementsByTagName( "menuItem");
     var demosHtml = "";
     var demo;
@@ -1632,16 +1627,22 @@ function buildDemosMenu(){
 }
 
 
+//========================:: STARTUP ::==============================
+
 function init(){
 	//console.log("init()");
     var demosXMLSource = document.getElementById("demosMenuXML").textContent;
     var parser = new DOMParser();
-    demosXML = parser.parseFromString(demosXMLSource, "application/xml");
+    var demosXML = parser.parseFromString(demosXMLSource, "application/xml");
 
-    classManager = new DSClassManager(demosXML);
+    var menuItems = demosXML.getElementsByTagName("menuItemNode");
 
-    buildDemosMenu();
+    demoNavigationModel = new DemoNavigationModel(demosXML);
+    classLoader = new DSClassLoader();
+
+    buildDemosMenu(demosXML);
 	lightBox = new DSLightBox(undefined, lightBoxOpenComplete, lightBoxBeginClose, undefined, isMobile());
+
     window.onscroll = function () {
         forceHideDemo();
     }
@@ -1649,10 +1650,10 @@ function init(){
 	if(!window.location.hash) {
 		return;
 	}
-	var demoName = getDemoFromHash(window.location.hash);
-	if(classManager.getDemoResourceByName(demoName)){
+	var demoName = getDemoNameFromHash(window.location.hash);
+	if(demoNavigationModel.getDemoResourceByName(demoName)){
         lastClickedDemoName = demoName;
-		showDemo(demoName);
+		openDemoLightBox(demoName);
 	}
 }
 

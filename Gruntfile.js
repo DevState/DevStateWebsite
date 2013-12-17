@@ -11,7 +11,8 @@ module.exports = function(grunt) {
         concat: {
             dist: {
                 src: [
-                    "js/common/DSClassManager.js",
+                    "js/common/DSClassLoader.js",
+                    "js/common/DemoNavigationModel.js",
                     "js/common/SimpleGeometry.js",
                     "js/common/DSColors.js",
                     "js/common/UnitAnimator.js",
